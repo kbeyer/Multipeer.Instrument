@@ -10,6 +10,10 @@
 #import "MixBoardTableCell.h"
 #import "GameManager.h"
 #import "Player.h"
+
+#define kFirechatNS @"https://sizzling-fire-5489.firebaseio.com/"
+
+
 #import "UIActionSheet+Blocks.h"
 
 @interface MPIMixBoardViewController ()

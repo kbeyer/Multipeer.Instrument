@@ -9,6 +9,7 @@
 #import "SessionController.h"
 #import "GameManager.h"
 #import "Message.h"
+#import "EventLogger.h"
 
 @interface MPISessionController () // Class extension
 @property (nonatomic, strong) MCPeerID *peerID;
@@ -108,6 +109,9 @@ static NSString * const kMCSessionServiceType = @"gm-shared";
                              error:&error]) {
         NSLog(@"[Error] sending data %@", error);
     }
+    
+    // log to server
+    [[MPIEventLogger instance] log : msg];
 }
 
 #pragma mark - Private methods

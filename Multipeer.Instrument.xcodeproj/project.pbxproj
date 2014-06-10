@@ -24,6 +24,12 @@
 		088B9F161947609C006A27E4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 088B9F0D1947609C006A27E4 /* Images.xcassets */; };
 		088B9F1A19476166006A27E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F1719476166006A27E4 /* main.m */; };
 		088B9F1E19476187006A27E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 088B9F1C19476187006A27E4 /* Main.storyboard */; };
+		088B9F2019477D7F006A27E4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F1F19477D7F006A27E4 /* CFNetwork.framework */; };
+		088B9F2219477D87006A27E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2119477D87006A27E4 /* Security.framework */; };
+		088B9F2419477D95006A27E4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2319477D95006A27E4 /* SystemConfiguration.framework */; };
+		088B9F2619477DAA006A27E4 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2519477DAA006A27E4 /* libicucore.dylib */; };
+		088B9F2819477DB7006A27E4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2719477DB7006A27E4 /* libc++.dylib */; };
+		088B9F2E1947AAF4006A27E4 /* EventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F2D1947AAF4006A27E4 /* EventLogger.m */; };
 		27382F9E18D15B2700BAAFB9 /* Organ Run.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */; };
 		27382F9F18D15B2700BAAFB9 /* Southern Rock Drums.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */; };
 		27382FA018D15B2700BAAFB9 /* Southern Rock Organ.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */; };
@@ -83,6 +89,14 @@
 		088B9F1819476166006A27E4 /* Multipeer.Instrument-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Multipeer.Instrument-Info.plist"; path = "Source/Multipeer.Instrument-Info.plist"; sourceTree = SOURCE_ROOT; };
 		088B9F1919476166006A27E4 /* Multipeer.Instrument-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Multipeer.Instrument-Prefix.pch"; path = "Source/Multipeer.Instrument-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		088B9F1D19476187006A27E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Source/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		088B9F1F19477D7F006A27E4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		088B9F2119477D87006A27E4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		088B9F2319477D95006A27E4 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		088B9F2519477DAA006A27E4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		088B9F2719477DB7006A27E4 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		088B9F29194786E2006A27E4 /* Multipeer.Instrument-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Multipeer.Instrument-Bridging-Header.h"; sourceTree = "<group>"; };
+		088B9F2D1947AAF4006A27E4 /* EventLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLogger.m; sourceTree = "<group>"; };
+		088B9F2F1947AB10006A27E4 /* EventLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventLogger.h; sourceTree = "<group>"; };
 		27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Organ Run.m4a"; path = "Resources/Organ Run.m4a"; sourceTree = "<group>"; };
 		27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Drums.m4a"; path = "Resources/Southern Rock Drums.m4a"; sourceTree = "<group>"; };
 		27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Organ.m4a"; path = "Resources/Southern Rock Organ.m4a"; sourceTree = "<group>"; };
@@ -105,6 +119,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				088B9F2819477DB7006A27E4 /* libc++.dylib in Frameworks */,
+				088B9F2619477DAA006A27E4 /* libicucore.dylib in Frameworks */,
+				088B9F2419477D95006A27E4 /* SystemConfiguration.framework in Frameworks */,
+				088B9F2219477D87006A27E4 /* Security.framework in Frameworks */,
+				088B9F2019477D7F006A27E4 /* CFNetwork.framework in Frameworks */,
 				273F28A218CF7B7500F595C2 /* MultipeerConnectivity.framework in Frameworks */,
 				273F284C18CD1A0C00F595C2 /* CoreGraphics.framework in Frameworks */,
 				273F284E18CD1A0C00F595C2 /* UIKit.framework in Frameworks */,
@@ -153,6 +172,11 @@
 		273F284818CD1A0C00F595C2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				088B9F2719477DB7006A27E4 /* libc++.dylib */,
+				088B9F2519477DAA006A27E4 /* libicucore.dylib */,
+				088B9F2319477D95006A27E4 /* SystemConfiguration.framework */,
+				088B9F2119477D87006A27E4 /* Security.framework */,
+				088B9F1F19477D7F006A27E4 /* CFNetwork.framework */,
 				273F28A118CF7B7500F595C2 /* MultipeerConnectivity.framework */,
 				273F284918CD1A0C00F595C2 /* Foundation.framework */,
 				273F284B18CD1A0C00F595C2 /* CoreGraphics.framework */,
@@ -172,6 +196,8 @@
 				088B9F001947609C006A27E4 /* AudioManager.m */,
 				088B9F011947609C006A27E4 /* GameManager.h */,
 				088B9F021947609C006A27E4 /* GameManager.m */,
+				088B9F2D1947AAF4006A27E4 /* EventLogger.m */,
+				088B9F2F1947AB10006A27E4 /* EventLogger.h */,
 				088B9F031947609C006A27E4 /* HomeViewController.h */,
 				088B9F041947609C006A27E4 /* HomeViewController.m */,
 				088B9F051947609C006A27E4 /* MixBoardTableCell.h */,
@@ -182,6 +208,7 @@
 				088B9F0C1947609C006A27E4 /* SessionController.m */,
 				088B9F0D1947609C006A27E4 /* Images.xcassets */,
 				273F285018CD1A0C00F595C2 /* Supporting Files */,
+				088B9F29194786E2006A27E4 /* Multipeer.Instrument-Bridging-Header.h */,
 			);
 			path = Multipeer.Instrument;
 			sourceTree = "<group>";
@@ -404,6 +431,7 @@
 				088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */,
 				088B9F151947609C006A27E4 /* SessionController.m in Sources */,
 				088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */,
+				088B9F2E1947AAF4006A27E4 /* EventLogger.m in Sources */,
 				088B9EF919476048006A27E4 /* Game.m in Sources */,
 				088B9F0F1947609C006A27E4 /* AudioManager.m in Sources */,
 				088B9EF819476048006A27E4 /* BaseModel.m in Sources */,
@@ -535,11 +563,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/Multipeer.Instrument-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Multipeer.Instrument-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Multipeer.Instrument/Multipeer.Instrument-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -550,11 +582,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/Multipeer.Instrument-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Multipeer.Instrument-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Multipeer.Instrument/Multipeer.Instrument-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
