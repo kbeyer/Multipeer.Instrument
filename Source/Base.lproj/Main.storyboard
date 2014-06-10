@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.17" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1Ww-dx-4Dv">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.11"/>
+    </dependencies>
+    <scenes>
+        <!--Mix Board View Controller-->
+        <scene sceneID="yEu-L6-jVY">
+            <objects>
+                <tableViewController id="1Ww-dx-4Dv" customClass="MPIMixBoardViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="158" sectionHeaderHeight="22" sectionFooterHeight="22" id="Ywc-TE-0xf">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="XgU-I3-7ts">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="83"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J7E-e9-pu4">
+                                    <rect key="frame" x="20" y="11" width="46" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tnE-jN-A1E">
+                                    <rect key="frame" x="74" y="7" width="226" height="30"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJA-ej-Ngo">
+                                    <rect key="frame" x="229" y="45" width="71" height="30"/>
+                                    <state key="normal" title="Invite">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="discoverClicked:" destination="1Ww-dx-4Dv" eventType="touchUpInside" id="CD6-ID-UJM"/>
+                                    </connections>
+                                </button>
+                                <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9CZ-fY-bdO">
+                                    <rect key="frame" x="20" y="44" width="51" height="31"/>
+                                    <connections>
+                                        <action selector="advertiseChanged:" destination="1Ww-dx-4Dv" eventType="valueChanged" id="6Tv-qb-k6P"/>
+                                    </connections>
+                                </switch>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </view>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PlayerCell" rowHeight="158" id="EPx-hf-x0v" customClass="MPIMixBoardTableCell">
+                                <rect key="frame" x="0.0" y="105" width="320" height="158"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EPx-hf-x0v" id="AaE-wG-Jfj">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="157"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Participant Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hSd-p0-MO8">
+                                            <rect key="frame" x="20" y="11" width="223" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <slider opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Lmz-ax-QZZ">
+                                            <rect key="frame" x="18" y="50" width="284" height="34"/>
+                                            <connections>
+                                                <action selector="volumeSliderChanged:" destination="EPx-hf-x0v" eventType="valueChanged" id="V7Z-aF-j2X"/>
+                                            </connections>
+                                        </slider>
+                                        <slider opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Gzu-AM-xL1">
+                                            <rect key="frame" x="18" y="91" width="284" height="34"/>
+                                            <connections>
+                                                <action selector="colorSliderChanged:" destination="EPx-hf-x0v" eventType="valueChanged" id="mGk-6U-sLv"/>
+                                            </connections>
+                                        </slider>
+                                        <switch opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IQ2-be-NUn">
+                                            <rect key="frame" x="251" y="11" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="flashSwitchChanged:" destination="EPx-hf-x0v" eventType="valueChanged" id="LRz-M2-gcQ"/>
+                                            </connections>
+                                        </switch>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="colorSlider" destination="Gzu-AM-xL1" id="MNC-AQ-dqi"/>
+                                    <outlet property="flashSwitch" destination="IQ2-be-NUn" id="0JT-7u-feG"/>
+                                    <outlet property="nameLabel" destination="hSd-p0-MO8" id="fSb-oY-Uq5"/>
+                                    <outlet property="soundSlider" destination="Lmz-ax-QZZ" id="g0O-Dp-KCL"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="1Ww-dx-4Dv" id="u8B-84-AvD"/>
+                            <outlet property="delegate" destination="1Ww-dx-4Dv" id="eFI-NM-0EK"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="nameInput" destination="tnE-jN-A1E" id="JHN-KL-htp"/>
+                        <outlet property="participantTableView" destination="Ywc-TE-0xf" id="kcn-Td-M8g"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nmu-56-mz6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="495" y="213"/>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

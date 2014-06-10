@@ -1,0 +1,6 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/Mantle" "${PODS_ROOT}/Headers/TestFlightSDK" "${PODS_ROOT}/Headers/TheAmazingAudioEngine" "${PODS_ROOT}/Headers/UIActionSheet+Blocks"
+LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/TestFlightSDK"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/Mantle" -isystem "${PODS_ROOT}/Headers/TestFlightSDK" -isystem "${PODS_ROOT}/Headers/TheAmazingAudioEngine" -isystem "${PODS_ROOT}/Headers/UIActionSheet+Blocks"
+OTHER_LDFLAGS = -ObjC -lTestFlight -lz -framework Accelerate -framework AudioToolbox -framework Foundation -framework UIKit
+PODS_ROOT = ${SRCROOT}/Pods

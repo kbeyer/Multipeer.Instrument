@@ -1,0 +1,635 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EE919476034006A27E4 /* PropertyUtil.m */; };
+		088B9EF719476048006A27E4 /* ActionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEC19476048006A27E4 /* ActionMessage.m */; };
+		088B9EF819476048006A27E4 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEE19476048006A27E4 /* BaseModel.m */; };
+		088B9EF919476048006A27E4 /* Game.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EF019476048006A27E4 /* Game.m */; };
+		088B9EFA19476048006A27E4 /* JoinRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EF219476048006A27E4 /* JoinRequest.m */; };
+		088B9EFB19476048006A27E4 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EF419476048006A27E4 /* Message.m */; };
+		088B9EFC19476048006A27E4 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EF619476048006A27E4 /* Player.m */; };
+		088B9F0E1947609C006A27E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EFE1947609C006A27E4 /* AppDelegate.m */; };
+		088B9F0F1947609C006A27E4 /* AudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F001947609C006A27E4 /* AudioManager.m */; };
+		088B9F101947609C006A27E4 /* GameManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F021947609C006A27E4 /* GameManager.m */; };
+		088B9F111947609C006A27E4 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F041947609C006A27E4 /* HomeViewController.m */; };
+		088B9F121947609C006A27E4 /* MixBoardTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F061947609C006A27E4 /* MixBoardTableCell.m */; };
+		088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F081947609C006A27E4 /* MixBoardViewController.m */; };
+		088B9F151947609C006A27E4 /* SessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F0C1947609C006A27E4 /* SessionController.m */; };
+		088B9F161947609C006A27E4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 088B9F0D1947609C006A27E4 /* Images.xcassets */; };
+		088B9F1A19476166006A27E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F1719476166006A27E4 /* main.m */; };
+		088B9F1E19476187006A27E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 088B9F1C19476187006A27E4 /* Main.storyboard */; };
+		27382F9E18D15B2700BAAFB9 /* Organ Run.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */; };
+		27382F9F18D15B2700BAAFB9 /* Southern Rock Drums.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */; };
+		27382FA018D15B2700BAAFB9 /* Southern Rock Organ.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */; };
+		273F284A18CD1A0C00F595C2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F284918CD1A0C00F595C2 /* Foundation.framework */; };
+		273F284C18CD1A0C00F595C2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F284B18CD1A0C00F595C2 /* CoreGraphics.framework */; };
+		273F284E18CD1A0C00F595C2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F284D18CD1A0C00F595C2 /* UIKit.framework */; };
+		273F285418CD1A0C00F595C2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 273F285218CD1A0C00F595C2 /* InfoPlist.strings */; };
+		273F286918CD1A0C00F595C2 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F286818CD1A0C00F595C2 /* XCTest.framework */; };
+		273F286A18CD1A0C00F595C2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F284918CD1A0C00F595C2 /* Foundation.framework */; };
+		273F286B18CD1A0C00F595C2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F284D18CD1A0C00F595C2 /* UIKit.framework */; };
+		273F287318CD1A0C00F595C2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 273F287118CD1A0C00F595C2 /* InfoPlist.strings */; };
+		273F28A218CF7B7500F595C2 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F28A118CF7B7500F595C2 /* MultipeerConnectivity.framework */; };
+		D8A028ACED704B81BB4C9757 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7588624F7C30411A8F5FC352 /* libPods.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		273F286C18CD1A0C00F595C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F283E18CD1A0C00F595C2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 273F284518CD1A0C00F595C2;
+			remoteInfo = Multipeer.Instrument;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		088B9EE819476034006A27E4 /* PropertyUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = PropertyUtil.h; path = Source/Util/PropertyUtil.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9EE919476034006A27E4 /* PropertyUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PropertyUtil.m; path = Source/Util/PropertyUtil.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9EEB19476048006A27E4 /* ActionMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ActionMessage.h; path = Source/Models/ActionMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9EEC19476048006A27E4 /* ActionMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ActionMessage.m; path = Source/Models/ActionMessage.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9EED19476048006A27E4 /* BaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = BaseModel.h; path = Source/Models/BaseModel.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9EEE19476048006A27E4 /* BaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = BaseModel.m; path = Source/Models/BaseModel.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9EEF19476048006A27E4 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Game.h; path = Source/Models/Game.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9EF019476048006A27E4 /* Game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = Game.m; path = Source/Models/Game.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9EF119476048006A27E4 /* JoinRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = JoinRequest.h; path = Source/Models/JoinRequest.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9EF219476048006A27E4 /* JoinRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = JoinRequest.m; path = Source/Models/JoinRequest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9EF319476048006A27E4 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Message.h; path = Source/Models/Message.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9EF419476048006A27E4 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = Message.m; path = Source/Models/Message.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9EF519476048006A27E4 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Player.h; path = Source/Models/Player.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9EF619476048006A27E4 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = Player.m; path = Source/Models/Player.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9EFD1947609C006A27E4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9EFE1947609C006A27E4 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9EFF1947609C006A27E4 /* AudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = AudioManager.h; path = Source/AudioManager.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9F001947609C006A27E4 /* AudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = AudioManager.m; path = Source/AudioManager.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9F011947609C006A27E4 /* GameManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GameManager.h; path = Source/GameManager.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9F021947609C006A27E4 /* GameManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GameManager.m; path = Source/GameManager.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9F031947609C006A27E4 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = HomeViewController.h; path = Source/HomeViewController.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9F041947609C006A27E4 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = HomeViewController.m; path = Source/HomeViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9F051947609C006A27E4 /* MixBoardTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MixBoardTableCell.h; path = Source/MixBoardTableCell.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9F061947609C006A27E4 /* MixBoardTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MixBoardTableCell.m; path = Source/MixBoardTableCell.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9F071947609C006A27E4 /* MixBoardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MixBoardViewController.h; path = Source/MixBoardViewController.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9F081947609C006A27E4 /* MixBoardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MixBoardViewController.m; path = Source/MixBoardViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9F0B1947609C006A27E4 /* SessionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SessionController.h; path = Source/SessionController.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		088B9F0C1947609C006A27E4 /* SessionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = SessionController.m; path = Source/SessionController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9F0D1947609C006A27E4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Source/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		088B9F1719476166006A27E4 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = main.m; path = Source/main.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		088B9F1819476166006A27E4 /* Multipeer.Instrument-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Multipeer.Instrument-Info.plist"; path = "Source/Multipeer.Instrument-Info.plist"; sourceTree = SOURCE_ROOT; };
+		088B9F1919476166006A27E4 /* Multipeer.Instrument-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Multipeer.Instrument-Prefix.pch"; path = "Source/Multipeer.Instrument-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		088B9F1D19476187006A27E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Source/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Organ Run.m4a"; path = "Resources/Organ Run.m4a"; sourceTree = "<group>"; };
+		27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Drums.m4a"; path = "Resources/Southern Rock Drums.m4a"; sourceTree = "<group>"; };
+		27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Organ.m4a"; path = "Resources/Southern Rock Organ.m4a"; sourceTree = "<group>"; };
+		273F284618CD1A0C00F595C2 /* Multipeer.Instrument.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Multipeer.Instrument.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		273F284918CD1A0C00F595C2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		273F284B18CD1A0C00F595C2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		273F284D18CD1A0C00F595C2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		273F285318CD1A0C00F595C2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		273F286718CD1A0C00F595C2 /* Multipeer.InstrumentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Multipeer.InstrumentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		273F286818CD1A0C00F595C2 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		273F287018CD1A0C00F595C2 /* Multipeer.InstrumentTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Multipeer.InstrumentTests-Info.plist"; sourceTree = "<group>"; };
+		273F287218CD1A0C00F595C2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		273F28A118CF7B7500F595C2 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
+		7588624F7C30411A8F5FC352 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F25DFFAD55C14DA389E169B0 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		273F284318CD1A0C00F595C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				273F28A218CF7B7500F595C2 /* MultipeerConnectivity.framework in Frameworks */,
+				273F284C18CD1A0C00F595C2 /* CoreGraphics.framework in Frameworks */,
+				273F284E18CD1A0C00F595C2 /* UIKit.framework in Frameworks */,
+				273F284A18CD1A0C00F595C2 /* Foundation.framework in Frameworks */,
+				D8A028ACED704B81BB4C9757 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		273F286418CD1A0C00F595C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				273F286918CD1A0C00F595C2 /* XCTest.framework in Frameworks */,
+				273F286B18CD1A0C00F595C2 /* UIKit.framework in Frameworks */,
+				273F286A18CD1A0C00F595C2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		273F283D18CD1A0C00F595C2 = {
+			isa = PBXGroup;
+			children = (
+				088B9F1C19476187006A27E4 /* Main.storyboard */,
+				273F289E18CE623E00F595C2 /* Resources */,
+				273F288E18CE1B7E00F595C2 /* Util */,
+				273F288418CDFD0700F595C2 /* Models */,
+				273F284F18CD1A0C00F595C2 /* Multipeer.Instrument */,
+				273F286E18CD1A0C00F595C2 /* Multipeer.InstrumentTests */,
+				273F284818CD1A0C00F595C2 /* Frameworks */,
+				273F284718CD1A0C00F595C2 /* Products */,
+				F25DFFAD55C14DA389E169B0 /* Pods.xcconfig */,
+			);
+			sourceTree = "<group>";
+		};
+		273F284718CD1A0C00F595C2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				273F284618CD1A0C00F595C2 /* Multipeer.Instrument.app */,
+				273F286718CD1A0C00F595C2 /* Multipeer.InstrumentTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		273F284818CD1A0C00F595C2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				273F28A118CF7B7500F595C2 /* MultipeerConnectivity.framework */,
+				273F284918CD1A0C00F595C2 /* Foundation.framework */,
+				273F284B18CD1A0C00F595C2 /* CoreGraphics.framework */,
+				273F284D18CD1A0C00F595C2 /* UIKit.framework */,
+				273F286818CD1A0C00F595C2 /* XCTest.framework */,
+				7588624F7C30411A8F5FC352 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		273F284F18CD1A0C00F595C2 /* Multipeer.Instrument */ = {
+			isa = PBXGroup;
+			children = (
+				088B9EFD1947609C006A27E4 /* AppDelegate.h */,
+				088B9EFE1947609C006A27E4 /* AppDelegate.m */,
+				088B9EFF1947609C006A27E4 /* AudioManager.h */,
+				088B9F001947609C006A27E4 /* AudioManager.m */,
+				088B9F011947609C006A27E4 /* GameManager.h */,
+				088B9F021947609C006A27E4 /* GameManager.m */,
+				088B9F031947609C006A27E4 /* HomeViewController.h */,
+				088B9F041947609C006A27E4 /* HomeViewController.m */,
+				088B9F051947609C006A27E4 /* MixBoardTableCell.h */,
+				088B9F061947609C006A27E4 /* MixBoardTableCell.m */,
+				088B9F071947609C006A27E4 /* MixBoardViewController.h */,
+				088B9F081947609C006A27E4 /* MixBoardViewController.m */,
+				088B9F0B1947609C006A27E4 /* SessionController.h */,
+				088B9F0C1947609C006A27E4 /* SessionController.m */,
+				088B9F0D1947609C006A27E4 /* Images.xcassets */,
+				273F285018CD1A0C00F595C2 /* Supporting Files */,
+			);
+			path = Multipeer.Instrument;
+			sourceTree = "<group>";
+		};
+		273F285018CD1A0C00F595C2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				088B9F1719476166006A27E4 /* main.m */,
+				088B9F1819476166006A27E4 /* Multipeer.Instrument-Info.plist */,
+				088B9F1919476166006A27E4 /* Multipeer.Instrument-Prefix.pch */,
+				273F285218CD1A0C00F595C2 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		273F286E18CD1A0C00F595C2 /* Multipeer.InstrumentTests */ = {
+			isa = PBXGroup;
+			children = (
+				273F286F18CD1A0C00F595C2 /* Supporting Files */,
+			);
+			path = Multipeer.InstrumentTests;
+			sourceTree = "<group>";
+		};
+		273F286F18CD1A0C00F595C2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				273F287018CD1A0C00F595C2 /* Multipeer.InstrumentTests-Info.plist */,
+				273F287118CD1A0C00F595C2 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		273F288418CDFD0700F595C2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				088B9EEB19476048006A27E4 /* ActionMessage.h */,
+				088B9EEC19476048006A27E4 /* ActionMessage.m */,
+				088B9EED19476048006A27E4 /* BaseModel.h */,
+				088B9EEE19476048006A27E4 /* BaseModel.m */,
+				088B9EEF19476048006A27E4 /* Game.h */,
+				088B9EF019476048006A27E4 /* Game.m */,
+				088B9EF119476048006A27E4 /* JoinRequest.h */,
+				088B9EF219476048006A27E4 /* JoinRequest.m */,
+				088B9EF319476048006A27E4 /* Message.h */,
+				088B9EF419476048006A27E4 /* Message.m */,
+				088B9EF519476048006A27E4 /* Player.h */,
+				088B9EF619476048006A27E4 /* Player.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		273F288E18CE1B7E00F595C2 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				088B9EE819476034006A27E4 /* PropertyUtil.h */,
+				088B9EE919476034006A27E4 /* PropertyUtil.m */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
+		273F289E18CE623E00F595C2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */,
+				27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */,
+				27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		273F284518CD1A0C00F595C2 /* Multipeer.Instrument */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 273F287818CD1A0C00F595C2 /* Build configuration list for PBXNativeTarget "Multipeer.Instrument" */;
+			buildPhases = (
+				50281228880048F4AEAA19D7 /* Check Pods Manifest.lock */,
+				273F284218CD1A0C00F595C2 /* Sources */,
+				273F284318CD1A0C00F595C2 /* Frameworks */,
+				273F284418CD1A0C00F595C2 /* Resources */,
+				043E1D0EE25E40669EE5A7EB /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Multipeer.Instrument;
+			productName = Multipeer.Instrument;
+			productReference = 273F284618CD1A0C00F595C2 /* Multipeer.Instrument.app */;
+			productType = "com.apple.product-type.application";
+		};
+		273F286618CD1A0C00F595C2 /* Multipeer.InstrumentTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 273F287B18CD1A0C00F595C2 /* Build configuration list for PBXNativeTarget "Multipeer.InstrumentTests" */;
+			buildPhases = (
+				273F286318CD1A0C00F595C2 /* Sources */,
+				273F286418CD1A0C00F595C2 /* Frameworks */,
+				273F286518CD1A0C00F595C2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				273F286D18CD1A0C00F595C2 /* PBXTargetDependency */,
+			);
+			name = Multipeer.InstrumentTests;
+			productName = Multipeer.InstrumentTests;
+			productReference = 273F286718CD1A0C00F595C2 /* Multipeer.InstrumentTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		273F283E18CD1A0C00F595C2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = DAP;
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = "Kyle Beyer";
+				TargetAttributes = {
+					273F284518CD1A0C00F595C2 = {
+						DevelopmentTeam = 5WC776V3SZ;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+					273F286618CD1A0C00F595C2 = {
+						TestTargetID = 273F284518CD1A0C00F595C2;
+					};
+				};
+			};
+			buildConfigurationList = 273F284118CD1A0C00F595C2 /* Build configuration list for PBXProject "Multipeer.Instrument" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 273F283D18CD1A0C00F595C2;
+			productRefGroup = 273F284718CD1A0C00F595C2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				273F284518CD1A0C00F595C2 /* Multipeer.Instrument */,
+				273F286618CD1A0C00F595C2 /* Multipeer.InstrumentTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		273F284418CD1A0C00F595C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				088B9F1E19476187006A27E4 /* Main.storyboard in Resources */,
+				273F285418CD1A0C00F595C2 /* InfoPlist.strings in Resources */,
+				088B9F161947609C006A27E4 /* Images.xcassets in Resources */,
+				27382F9E18D15B2700BAAFB9 /* Organ Run.m4a in Resources */,
+				27382F9F18D15B2700BAAFB9 /* Southern Rock Drums.m4a in Resources */,
+				27382FA018D15B2700BAAFB9 /* Southern Rock Organ.m4a in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		273F286518CD1A0C00F595C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				273F287318CD1A0C00F595C2 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		043E1D0EE25E40669EE5A7EB /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		50281228880048F4AEAA19D7 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		273F284218CD1A0C00F595C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				088B9F121947609C006A27E4 /* MixBoardTableCell.m in Sources */,
+				088B9EFC19476048006A27E4 /* Player.m in Sources */,
+				088B9F101947609C006A27E4 /* GameManager.m in Sources */,
+				088B9EFB19476048006A27E4 /* Message.m in Sources */,
+				088B9EF719476048006A27E4 /* ActionMessage.m in Sources */,
+				088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */,
+				088B9F151947609C006A27E4 /* SessionController.m in Sources */,
+				088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */,
+				088B9EF919476048006A27E4 /* Game.m in Sources */,
+				088B9F0F1947609C006A27E4 /* AudioManager.m in Sources */,
+				088B9EF819476048006A27E4 /* BaseModel.m in Sources */,
+				088B9F1A19476166006A27E4 /* main.m in Sources */,
+				088B9F111947609C006A27E4 /* HomeViewController.m in Sources */,
+				088B9F0E1947609C006A27E4 /* AppDelegate.m in Sources */,
+				088B9EFA19476048006A27E4 /* JoinRequest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		273F286318CD1A0C00F595C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		273F286D18CD1A0C00F595C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 273F284518CD1A0C00F595C2 /* Multipeer.Instrument */;
+			targetProxy = 273F286C18CD1A0C00F595C2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		088B9F1C19476187006A27E4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				088B9F1D19476187006A27E4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		273F285218CD1A0C00F595C2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				273F285318CD1A0C00F595C2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		273F287118CD1A0C00F595C2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				273F287218CD1A0C00F595C2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		273F287618CD1A0C00F595C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		273F287718CD1A0C00F595C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		273F287918CD1A0C00F595C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F25DFFAD55C14DA389E169B0 /* Pods.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/Multipeer.Instrument-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Multipeer.Instrument-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		273F287A18CD1A0C00F595C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F25DFFAD55C14DA389E169B0 /* Pods.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/Multipeer.Instrument-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Multipeer.Instrument-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		273F287C18CD1A0C00F595C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Multipeer.Instrument.app/Multipeer.Instrument";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Multipeer.Instrument/Multipeer.Instrument-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Multipeer.InstrumentTests/Multipeer.InstrumentTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		273F287D18CD1A0C00F595C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Multipeer.Instrument.app/Multipeer.Instrument";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Multipeer.Instrument/Multipeer.Instrument-Prefix.pch";
+				INFOPLIST_FILE = "Multipeer.InstrumentTests/Multipeer.InstrumentTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		273F284118CD1A0C00F595C2 /* Build configuration list for PBXProject "Multipeer.Instrument" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				273F287618CD1A0C00F595C2 /* Debug */,
+				273F287718CD1A0C00F595C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		273F287818CD1A0C00F595C2 /* Build configuration list for PBXNativeTarget "Multipeer.Instrument" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				273F287918CD1A0C00F595C2 /* Debug */,
+				273F287A18CD1A0C00F595C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		273F287B18CD1A0C00F595C2 /* Build configuration list for PBXNativeTarget "Multipeer.InstrumentTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				273F287C18CD1A0C00F595C2 /* Debug */,
+				273F287D18CD1A0C00F595C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 273F283E18CD1A0C00F595C2 /* Project object */;
+}
