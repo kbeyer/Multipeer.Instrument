@@ -1,5 +1,5 @@
 //
-//  MPISessionControlelr.m
+//  SessionController.m
 //  Multipeer.Instrument
 //
 //  Created by Kyle Beyer on 6/10/14.
@@ -209,11 +209,6 @@ static NSString * const kMCSessionServiceType = @"gm-shared";
 
 - (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
 {
-    // Decode the incoming data to a UTF8 encoded string
-    //NSString *receivedMessage = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    //NSLog(@"didReceiveData %@ from %@", receivedMessage, peerID.displayName);
-    
-    
     // first unarchive
     id obj = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     
@@ -247,7 +242,8 @@ static NSString * const kMCSessionServiceType = @"gm-shared";
     }
     else
     {
-        // No error so this is a completed transfer.  The resources is located in a temporary location and should be copied to a permenant location immediately.
+        // No error so this is a completed transfer.
+        // The resources is located in a temporary location and should be copied to a permenant location immediately.
         // Write to documents directory
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *copyPath = [NSString stringWithFormat:@"%@/%@", [paths firstObject], resourceName];
