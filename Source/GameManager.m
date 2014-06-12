@@ -8,6 +8,8 @@
 
 #import "GameManager.h"
 #import "AudioManager.h"
+#import "ActionMessage.h"
+#import "EventLogger.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface MPIGameManager()
@@ -64,6 +66,13 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self notifyPlayersChange];
     });
+    
+    // log session state change event
+    MPIActionMessage* msg = [[MPIActionMessage alloc] init];
+    msg.type = @"session change";
+    
+    // log to server
+    [[MPIEventLogger instance] log : (MPIMessage*)msg];
 }
 
 
