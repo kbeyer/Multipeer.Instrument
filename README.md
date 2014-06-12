@@ -48,11 +48,12 @@ To see the instrumented events via the Node app, start Node first, then the app.
 Directory Structure
 ===================
 
+```
 /Frameworks -> External frameworks
 /Node       -> Implementation of Node app for logging instrumented events
 /Pods       -> Cocoapods project, associated files, and configuration
 /Resources  -> iOS app resources
 /Source     -> iOS application source code
-
+```
 
 
