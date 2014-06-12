@@ -3,7 +3,10 @@ var http = require('http'),
     path = require('path'),
     MongoClient = require('mongodb').MongoClient,
     Server = require('mongodb').Server,
-    CollectionDriver = require('./collectionDriver').CollectionDriver;
+    CollectionDriver = require('./collectionDriver').CollectionDriver,
+    socketio = require('socket.io');
+
+var io;
  
 var app = express();
 app.set('port', process.env.PORT || 3000);
@@ -28,7 +31,7 @@ mongoClient.open(function (err, mongoClient) { //C
 app.use(express.static(path.join(__dirname, 'public')));
  
 app.get('/', function (req, res) {
-  res.send('<html><body><h1>Alive.</h1></body></html>');
+  res.render('dashboard', {});
 });
  
 app.get('/:collection', function (req, res) { //A
@@ -67,6 +70,8 @@ app.post('/:collection', function (req, res) { //A
     if (err) { res.send(400, err); } 
     else { res.send(201, docs); } //B
   });
+
+  io.emit('news', object);
 });
 
 app.put('/:collection/:entity', function (req, res) { //A
@@ -103,6 +108,18 @@ app.use(function (req, res) {
   res.render('404', {url: req.url});
 });
 
-http.createServer(app).listen(app.get('port'), function () {
+var server = http.createServer(app);
+io = socketio(server);
+
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+
+server.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+
