@@ -15,7 +15,7 @@ typedef NS_ENUM(NSUInteger, MPILoggerLevel);
 @interface MPIEvent : MTLModel<MTLJSONSerializing>
 
 // logger level for which the event was created
-@property (nonatomic, assign) MPILoggerLevel level;
+@property (nonatomic, assign) MPILoggerLevel logLevel;
 // the device from which the event was created
 @property (nonatomic, copy) NSString* deviceID;
 // tags are used as non-herarchical categories for events

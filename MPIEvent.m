@@ -43,7 +43,8 @@
              @"end": @"end",
              @"tags": @"tags",
              @"data": @"data",
-             @"deviceID": @"deviceID"
+             @"deviceID": @"device_id",
+             @"logLevel": @"log_level"
              };
 }
 
@@ -66,7 +67,7 @@
     self = [super init];
     if (self) {
         // initialize all properties
-        _level = level;
+        _logLevel = level;
         _source = source;
         _description = description;
         _tags = tags;
