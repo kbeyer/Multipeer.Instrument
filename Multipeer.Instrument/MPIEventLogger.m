@@ -9,15 +9,21 @@
 #import "MPIEventLogger.h"
 #import "MPIEvent.h"
 
+// kDefaultLogLevel is used both as default level when starting the Logger
+// AND as the default level when calling log without a level specified
+static MPILoggerLevel const kDefaultLogLevel = MPILoggerLevelInfo;
+
+// kBaseURL is used as the root for events sent to MPILogToAPI destination
 static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
 
 @interface MPIEventLogger()
+// track previous log level for restarting
+@property (nonatomic, assign) MPILoggerLevel previousLogLevel;
 @end
 
 @implementation MPIEventLogger
 
 - (id)init {
-    
     self = [super init];
     if (self) {
         // initial configuration
@@ -28,7 +34,7 @@ static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
 
 - (void)configure {
     _logDestination = MPILogToAPI;
-    _defaultLogLevel = MPILoggerLevelInfo;
+    _maxLogLevel = kDefaultLogLevel;
 }
 
 + (MPIEventLogger *)instance
@@ -43,6 +49,26 @@ static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
     return sharedInstance;
 }
 
+/*
+ * Helper function to stop processing log requests
+ */
+- (void)stop {
+    _previousLogLevel = _maxLogLevel;
+    _maxLogLevel = MPILoggerLevelOff;
+}
+/*
+ * Helper function to either restart logging at previously defined level
+ */
+- (void)start {
+    [self start:_previousLogLevel];
+}
+/*
+ * Restart at specific level or change the level
+ */
+- (void)start:(MPILoggerLevel)newLevel {
+    _maxLogLevel = _previousLogLevel = newLevel;
+}
+
 
 /*
  * Simple version of log requires only source and description
@@ -54,7 +80,7 @@ static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
  * @param description - friendly display text for the Event
  */
 - (void)log:(NSString*)source description:(NSString*)description {
-    return [self log:_defaultLogLevel source:source description:description
+    return [self log:kDefaultLogLevel source:source description:description
                  tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
                 start:[[NSDate alloc] init]
                   end:[[NSDate alloc] init]

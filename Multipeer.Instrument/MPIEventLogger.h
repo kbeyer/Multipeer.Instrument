@@ -28,9 +28,17 @@ typedef NS_ENUM(NSUInteger, MPILoggerLevel) {
 
 + (MPIEventLogger*)instance;
 
-
-@property (readwrite) MPILoggerLevel defaultLogLevel;
+// the maxLogLevel will be used to filter which log requests are processed
+@property (readwrite) MPILoggerLevel maxLogLevel;
+// the destination will determine where log events are sent
 @property (readwrite) MPILogDestination logDestination;
+
+// helper function to stop processing log requests
+- (void)stop;
+// helper function to either restart logging at previously defined level
+- (void)start;
+// restart at specific level or change the level
+- (void)start:(MPILoggerLevel)newLevel;
 
 // overload the log method to support various levels of detail to specified
 // for creation of the MPIEvent object
