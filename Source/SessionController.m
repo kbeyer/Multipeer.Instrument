@@ -39,18 +39,24 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     if (self)
     {
         /*
-        // REMOVE: temp functions to test logging
+        // TEST: temp functions to test logging
         [[MPIEventLogger instance] stop];
         [[MPIEventLogger instance] start:MPILoggerLevelDebug];
         [[MPIEventLogger instance] debug:kLogSource description:@"debug level test"];
+        [[MPIEventLogger instance] info:kLogSource description:@"IGNORE ME"];
         [[MPIEventLogger instance] start:MPILoggerLevelError];
         [[MPIEventLogger instance] error:kLogSource description:@"error level test"];
+        [[MPIEventLogger instance] warn:kLogSource description:@"SHOW ME"];
         [[MPIEventLogger instance] start:MPILoggerLevelInfo];
         [[MPIEventLogger instance] info:kLogSource description:@"info level test"];
+        [[MPIEventLogger instance] warn:kLogSource description:@"IGNORE ME"];
+        [[MPIEventLogger instance] debug:kLogSource description:@"SHOW ME"];
         [[MPIEventLogger instance] start:MPILoggerLevelWarn];
         [[MPIEventLogger instance] warn:kLogSource description:@"warn level test"];
+        [[MPIEventLogger instance] error:kLogSource description:@"IGNORE ME"];
+        [[MPIEventLogger instance] info:kLogSource description:@"SHOW ME"];
         [[MPIEventLogger instance] stop];
-         */
+        */
         
         // setup logger at INFO level and to console and API
         [[MPIEventLogger instance] start:MPILoggerLevelInfo destination:MPILogToALL];

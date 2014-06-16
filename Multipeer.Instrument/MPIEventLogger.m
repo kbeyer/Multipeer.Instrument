@@ -136,6 +136,12 @@ description:(NSString*)description
        end:(NSDate*)end
       data:(NSDictionary*)data {
     
+    // ignore requests to log events that are below current max level
+    if (_maxLogLevel < level) {
+        return;
+    }
+    
+    // create event object with device id set to current device name
     NSString* deviceName = [[UIDevice currentDevice] name];
     MPIEvent* evt = [[MPIEvent alloc] init:level source:source description:description tags:tags start:start end:end data:data deviceID:deviceName];
     
@@ -352,6 +358,7 @@ description:(NSString*)description
 
 
 
+#pragma mark - send to API
 
 - (void)persist:(MPIEvent*)evt {
     // validate event parameter
