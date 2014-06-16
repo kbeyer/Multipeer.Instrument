@@ -38,6 +38,23 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     
     if (self)
     {
+        /*
+        // REMOVE: temp functions to test logging
+        [[MPIEventLogger instance] stop];
+        [[MPIEventLogger instance] start:MPILoggerLevelDebug];
+        [[MPIEventLogger instance] debug:kLogSource description:@"debug level test"];
+        [[MPIEventLogger instance] start:MPILoggerLevelError];
+        [[MPIEventLogger instance] error:kLogSource description:@"error level test"];
+        [[MPIEventLogger instance] start:MPILoggerLevelInfo];
+        [[MPIEventLogger instance] info:kLogSource description:@"info level test"];
+        [[MPIEventLogger instance] start:MPILoggerLevelWarn];
+        [[MPIEventLogger instance] warn:kLogSource description:@"warn level test"];
+        [[MPIEventLogger instance] stop];
+         */
+        
+        // setup logger at INFO level and to console and API
+        [[MPIEventLogger instance] start:MPILoggerLevelInfo destination:MPILogToALL];
+        
         // check if this device has a saved peer ID
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSData *peerIDData = [userDefaults dataForKey:kLocalPeerIDKey];

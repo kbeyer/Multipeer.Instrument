@@ -13,6 +13,10 @@
 // AND as the default level when calling log without a level specified
 static MPILoggerLevel const kDefaultLogLevel = MPILoggerLevelInfo;
 
+// kDefaultLogDestination is used to configure where events should be logged
+// in the case it is not configured explicitly
+static MPILogDestination const kDefaultLogDestination = MPILogToALL;
+
 // kBaseURL is used as the root for events sent to MPILogToAPI destination
 static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
 
@@ -33,7 +37,7 @@ static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
 }
 
 - (void)configure {
-    _logDestination = MPILogToAPI;
+    _logDestination = kDefaultLogDestination;
     _maxLogLevel = kDefaultLogLevel;
 }
 
@@ -68,7 +72,17 @@ static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
 - (void)start:(MPILoggerLevel)newLevel {
     _maxLogLevel = _previousLogLevel = newLevel;
 }
+/*
+ * Restart at specific level and destination
+ */
+- (void)start:(MPILoggerLevel)newLevel destination:(MPILogDestination)newDestination {
+    _maxLogLevel = _previousLogLevel = newLevel;
+    _logDestination = newDestination;
+}
 
+
+
+#pragma mark - log overloads
 
 /*
  * Simple version of log requires only source and description
@@ -139,6 +153,204 @@ description:(NSString*)description
             break;
     }
 }
+
+
+#pragma mark - debug overloads
+
+/*
+ * Overloads for DEBUG level
+ */
+- (void)debug:(NSString *)source description:(NSString *)description {
+     return [self debug:source description:description
+                 tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                start:[[NSDate alloc] init]
+                  end:[[NSDate alloc] init]
+                 data:nil];
+ }
+- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+    return [self debug:source description:description
+                tags:tags
+               start:[[NSDate alloc] init]
+                 end:[[NSDate alloc] init]
+                data:nil];
+}
+- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+    return [self debug:source description:description
+                tags:tags
+               start:start
+                 end:[[NSDate alloc] init]
+                data:nil];
+}
+- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+    return [self debug:source description:description
+                tags:tags
+               start:start
+                 end:end
+                data:nil];
+}
+- (void)debug:(NSString*)source
+description:(NSString*)description
+       tags:(NSArray*)tags
+      start:(NSDate*)start
+        end:(NSDate*)end
+       data:(NSDictionary*)data {
+    return [self log:MPILoggerLevelDebug
+              source:source
+         description:description
+                  tags:tags
+                 start:start
+                   end:end
+                  data:data];
+}
+
+#pragma mark - info overloads
+
+/*
+ * Overloads for INFO level
+ */
+- (void)info:(NSString *)source description:(NSString *)description {
+    return [self info:source description:description
+                  tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                 start:[[NSDate alloc] init]
+                   end:[[NSDate alloc] init]
+                  data:nil];
+}
+- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+    return [self info:source description:description
+                  tags:tags
+                 start:[[NSDate alloc] init]
+                   end:[[NSDate alloc] init]
+                  data:nil];
+}
+- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+    return [self info:source description:description
+                  tags:tags
+                 start:start
+                   end:[[NSDate alloc] init]
+                  data:nil];
+}
+- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+    return [self info:source description:description
+                  tags:tags
+                 start:start
+                   end:end
+                  data:nil];
+}
+- (void)info:(NSString*)source
+  description:(NSString*)description
+         tags:(NSArray*)tags
+        start:(NSDate*)start
+          end:(NSDate*)end
+         data:(NSDictionary*)data {
+    return [self log:MPILoggerLevelInfo
+              source:source
+         description:description
+                tags:tags
+               start:start
+                 end:end
+                data:data];
+}
+
+
+#pragma mark - warn overloads
+
+/*
+ * Overloads for WARN level
+ */
+- (void)warn:(NSString *)source description:(NSString *)description {
+    return [self warn:source description:description
+                 tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                start:[[NSDate alloc] init]
+                  end:[[NSDate alloc] init]
+                 data:nil];
+}
+- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+    return [self warn:source description:description
+                 tags:tags
+                start:[[NSDate alloc] init]
+                  end:[[NSDate alloc] init]
+                 data:nil];
+}
+- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+    return [self warn:source description:description
+                 tags:tags
+                start:start
+                  end:[[NSDate alloc] init]
+                 data:nil];
+}
+- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+    return [self warn:source description:description
+                 tags:tags
+                start:start
+                  end:end
+                 data:nil];
+}
+- (void)warn:(NSString*)source
+ description:(NSString*)description
+        tags:(NSArray*)tags
+       start:(NSDate*)start
+         end:(NSDate*)end
+        data:(NSDictionary*)data {
+    return [self log:MPILoggerLevelWarn
+              source:source
+         description:description
+                tags:tags
+               start:start
+                 end:end
+                data:data];
+}
+
+
+#pragma mark - error overloads
+
+/*
+ * Overloads for ERROR level
+ */
+- (void)error:(NSString *)source description:(NSString *)description {
+    return [self error:source description:description
+                 tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                start:[[NSDate alloc] init]
+                  end:[[NSDate alloc] init]
+                 data:nil];
+}
+- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+    return [self error:source description:description
+                 tags:tags
+                start:[[NSDate alloc] init]
+                  end:[[NSDate alloc] init]
+                 data:nil];
+}
+- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+    return [self error:source description:description
+                 tags:tags
+                start:start
+                  end:[[NSDate alloc] init]
+                 data:nil];
+}
+- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+    return [self error:source description:description
+                 tags:tags
+                start:start
+                  end:end
+                 data:nil];
+}
+- (void)error:(NSString*)source
+ description:(NSString*)description
+        tags:(NSArray*)tags
+       start:(NSDate*)start
+         end:(NSDate*)end
+        data:(NSDictionary*)data {
+    return [self log:MPILoggerLevelError
+              source:source
+         description:description
+                tags:tags
+               start:start
+                 end:end
+                data:data];
+}
+
+
+
 
 
 - (void)persist:(MPIEvent*)evt {
