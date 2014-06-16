@@ -1,5 +1,5 @@
 //
-//  EventLogger.h
+//  MPIEventLogger.h
 //  Multipeer.Instrument
 //
 //  Created by Kyle Beyer on 6/10/14.
@@ -12,6 +12,8 @@
 
 + (MPIEventLogger*)instance;
 
+
+@property (readwrite) BOOL enablePersistence;
 
 - (void)log:(id)msg;
 

@@ -9,7 +9,7 @@
 #import "GameManager.h"
 #import "AudioManager.h"
 #import "ActionMessage.h"
-#import "EventLogger.h"
+#import "MPIEventLogger.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface MPIGameManager()
@@ -68,11 +68,11 @@
     });
     
     // log session state change event
-    MPIActionMessage* msg = [[MPIActionMessage alloc] init];
-    msg.type = @"session change";
+    //MPIActionMessage* msg = [[MPIActionMessage alloc] init];
+    //msg.type = @"session change";
     
     // log to server
-    [[MPIEventLogger instance] log : (MPIMessage*)msg];
+    //[[MPIEventLogger instance] log : (MPIMessage*)msg];
 }
 
 

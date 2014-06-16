@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kyle Beyer. All rights reserved.
 //
 
-#import "EventLogger.h"
+#import "MPIEventLogger.h"
 #import "Message.h"
 
 static NSString* const kBaseURL = @"http://localhost:3000";
@@ -27,7 +27,7 @@ static NSString* const kBaseURL = @"http://localhost:3000";
 }
 
 - (void)configure {
-
+    _enablePersistence = false;
 }
 
 + (MPIEventLogger *)instance
@@ -43,7 +43,13 @@ static NSString* const kBaseURL = @"http://localhost:3000";
 }
 
 - (void)log:(id)msg {
-    [self persist:msg];
+    if ([msg isKindOfClass:[NSString class]]) {
+        NSLog(@"[MPIEvent] %@", msg);
+    } else if ([msg isKindOfClass:[MPIMessage class]]) {
+        //
+        // TODO: check for persistence enabled
+        [self persist:msg];
+    }
 }
 
 - (void)persist:(MPIMessage*)msg {
@@ -63,6 +69,13 @@ static NSString* const kBaseURL = @"http://localhost:3000";
     NSDictionary* json = [MTLJSONAdapter JSONDictionaryFromModel:msg];
     
     NSData* data = [NSJSONSerialization dataWithJSONObject:json options:0 error:NULL]; //3
+    
+    // if persistence is disabled ... show on console
+    if (!_enablePersistence) {
+        NSLog(@"[MPIEvent] \n%@", msg);
+        return;
+    }
+    
     request.HTTPBody = data;
     
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"]; //4

@@ -29,7 +29,7 @@
 		088B9F2419477D95006A27E4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2319477D95006A27E4 /* SystemConfiguration.framework */; };
 		088B9F2619477DAA006A27E4 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2519477DAA006A27E4 /* libicucore.dylib */; };
 		088B9F2819477DB7006A27E4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2719477DB7006A27E4 /* libc++.dylib */; };
-		088B9F2E1947AAF4006A27E4 /* EventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F2D1947AAF4006A27E4 /* EventLogger.m */; };
+		088B9F2E1947AAF4006A27E4 /* MPIEventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F2D1947AAF4006A27E4 /* MPIEventLogger.m */; };
 		27382F9E18D15B2700BAAFB9 /* Organ Run.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */; };
 		27382F9F18D15B2700BAAFB9 /* Southern Rock Drums.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */; };
 		27382FA018D15B2700BAAFB9 /* Southern Rock Organ.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */; };
@@ -95,8 +95,8 @@
 		088B9F2519477DAA006A27E4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		088B9F2719477DB7006A27E4 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		088B9F29194786E2006A27E4 /* Multipeer.Instrument-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Multipeer.Instrument-Bridging-Header.h"; sourceTree = "<group>"; };
-		088B9F2D1947AAF4006A27E4 /* EventLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLogger.m; sourceTree = "<group>"; };
-		088B9F2F1947AB10006A27E4 /* EventLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventLogger.h; sourceTree = "<group>"; };
+		088B9F2D1947AAF4006A27E4 /* MPIEventLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIEventLogger.m; path = Multipeer.Instrument/MPIEventLogger.m; sourceTree = "<group>"; };
+		088B9F2F1947AB10006A27E4 /* MPIEventLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MPIEventLogger.h; path = Multipeer.Instrument/MPIEventLogger.h; sourceTree = "<group>"; };
 		27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Organ Run.m4a"; path = "Resources/Organ Run.m4a"; sourceTree = "<group>"; };
 		27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Drums.m4a"; path = "Resources/Southern Rock Drums.m4a"; sourceTree = "<group>"; };
 		27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Organ.m4a"; path = "Resources/Southern Rock Organ.m4a"; sourceTree = "<group>"; };
@@ -145,9 +145,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08C1BE36194F400700E2EFA5 /* MPIEventLogger */ = {
+			isa = PBXGroup;
+			children = (
+				088B9F2D1947AAF4006A27E4 /* MPIEventLogger.m */,
+				088B9F2F1947AB10006A27E4 /* MPIEventLogger.h */,
+			);
+			name = MPIEventLogger;
+			sourceTree = "<group>";
+		};
 		273F283D18CD1A0C00F595C2 = {
 			isa = PBXGroup;
 			children = (
+				08C1BE36194F400700E2EFA5 /* MPIEventLogger */,
 				088B9F1C19476187006A27E4 /* Main.storyboard */,
 				273F289E18CE623E00F595C2 /* Resources */,
 				273F288E18CE1B7E00F595C2 /* Util */,
@@ -196,8 +206,6 @@
 				088B9F001947609C006A27E4 /* AudioManager.m */,
 				088B9F011947609C006A27E4 /* GameManager.h */,
 				088B9F021947609C006A27E4 /* GameManager.m */,
-				088B9F2D1947AAF4006A27E4 /* EventLogger.m */,
-				088B9F2F1947AB10006A27E4 /* EventLogger.h */,
 				088B9F031947609C006A27E4 /* HomeViewController.h */,
 				088B9F041947609C006A27E4 /* HomeViewController.m */,
 				088B9F051947609C006A27E4 /* MixBoardTableCell.h */,
@@ -431,7 +439,7 @@
 				088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */,
 				088B9F151947609C006A27E4 /* SessionController.m in Sources */,
 				088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */,
-				088B9F2E1947AAF4006A27E4 /* EventLogger.m in Sources */,
+				088B9F2E1947AAF4006A27E4 /* MPIEventLogger.m in Sources */,
 				088B9EF919476048006A27E4 /* Game.m in Sources */,
 				088B9F0F1947609C006A27E4 /* AudioManager.m in Sources */,
 				088B9EF819476048006A27E4 /* BaseModel.m in Sources */,
