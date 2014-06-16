@@ -9,7 +9,7 @@
 #import "MPIEventLogger.h"
 #import "MPIEvent.h"
 
-static NSString* const kBaseURL = @"http://localhost:3000";
+static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
 
 @interface MPIEventLogger()
 @end
@@ -27,7 +27,7 @@ static NSString* const kBaseURL = @"http://localhost:3000";
 }
 
 - (void)configure {
-    _logDestination = MPILogToConsole;
+    _logDestination = MPILogToAPI;
     _defaultLogLevel = MPILoggerLevelInfo;
 }
 
@@ -106,6 +106,10 @@ description:(NSString*)description
             break;
         case MPILogToAPI:
             [self persist:evt];
+            break;
+        case MPILogToALL:
+            [self persist:evt];
+            NSLog(@"[MPIEvent] %@", evt);
             break;
     }
 }

@@ -11,7 +11,8 @@
 
 typedef NS_ENUM(NSUInteger, MPILogDestination) {
     MPILogToConsole,
-    MPILogToAPI
+    MPILogToAPI,
+    MPILogToALL
 };
 
 typedef NS_ENUM(NSUInteger, MPILoggerLevel) {

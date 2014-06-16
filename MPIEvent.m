@@ -9,6 +9,7 @@
 #import "MPIEvent.h"
 #import "MPIEventLogger.h"
 #import "MTLValueTransformer.h"
+#import "NSValueTransformer+MTLPredefinedTransformerAdditions.h"
 
 @implementation MPIEvent
 
@@ -17,6 +18,21 @@
     dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
     return dateFormatter;
+}
+
++ (NSValueTransformer *)startJSONTransformer {
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+        return [self.dateFormatter dateFromString:str];
+    } reverseBlock:^(NSDate *date) {
+        return [self.dateFormatter stringFromDate:date];
+    }];
+}
++ (NSValueTransformer *)endJSONTransformer {
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+        return [self.dateFormatter dateFromString:str];
+    } reverseBlock:^(NSDate *date) {
+        return [self.dateFormatter stringFromDate:date];
+    }];
 }
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
