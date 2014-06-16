@@ -7,14 +7,37 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MPIEvent.h"
+
+typedef NS_ENUM(NSUInteger, MPILogDestination) {
+    MPILogToConsole,
+    MPILogToAPI
+};
+
+typedef NS_ENUM(NSUInteger, MPILoggerLevel) {
+    MPILoggerLevelOff,
+    MPILoggerLevelDebug,
+    MPILoggerLevelInfo,
+    MPILoggerLevelWarn,
+    MPILoggerLevelError,
+    MPILoggerLevelFatal = MPILoggerLevelOff,
+};
 
 @interface MPIEventLogger : NSObject
 
 + (MPIEventLogger*)instance;
 
 
-@property (readwrite) BOOL enablePersistence;
+@property (readwrite) MPILoggerLevel defaultLogLevel;
+@property (readwrite) MPILogDestination logDestination;
 
-- (void)log:(id)msg;
+// overload the log method to support various levels of detail to specified
+// for creation of the MPIEvent object
+- (void)log:(NSString*)source description:(NSString*)description;
+- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description;
+- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
+- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
+- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
+- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
 
 @end

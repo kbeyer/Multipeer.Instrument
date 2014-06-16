@@ -72,7 +72,7 @@
     //msg.type = @"session change";
     
     // log to server
-    //[[MPIEventLogger instance] log : (MPIMessage*)msg];
+    //[[MPIEventLogger instance] log:kLogSource description:(MPIMessage*)msg];
 }
 
 
