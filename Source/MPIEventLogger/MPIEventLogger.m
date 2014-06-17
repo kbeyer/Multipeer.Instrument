@@ -20,6 +20,11 @@ static MPILogDestination const kDefaultLogDestination = MPILogDestinationALL;
 // kBaseURL is used as the root for events sent to MPILogToAPI destination
 static NSString* const kBaseURL = @"http://k6beventlogger.herokuapp.com/api/v1/";
 
+@interface MPIEventLogger()
+// re-usable url session for API calls
+@property (nonatomic, strong) NSURLSession *urlSession;
+@end
+
 @implementation MPIEventLogger
 
 - (id)init {
@@ -28,6 +33,8 @@ static NSString* const kBaseURL = @"http://k6beventlogger.herokuapp.com/api/v1/"
         // initial configuration
         _logDestination = kDefaultLogDestination;
         _logLevel = kDefaultLogLevel;
+        NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _urlSession = [NSURLSession sessionWithConfiguration:config];
     }
     return self;
 }
@@ -357,10 +364,7 @@ description:(NSString*)description
     //set content type
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
-    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession* session = [NSURLSession sessionWithConfiguration:config];
-    
-    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask* dataTask = [_urlSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (!error) {
             //NSArray* responseArray = @[[NSJSONSerialization JSONObjectWithData:data options:0 error:NULL]];
             NSLog(@"request completed");
