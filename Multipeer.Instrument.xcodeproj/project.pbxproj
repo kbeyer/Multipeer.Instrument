@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		083BF3D819507D8900C66DDD /* MPIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF3D519507D8900C66DDD /* MPIEvent.m */; };
+		083BF3D919507D8900C66DDD /* MPIEventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF3D719507D8900C66DDD /* MPIEventLogger.m */; };
 		088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EE919476034006A27E4 /* PropertyUtil.m */; };
 		088B9EF719476048006A27E4 /* ActionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEC19476048006A27E4 /* ActionMessage.m */; };
 		088B9EF819476048006A27E4 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEE19476048006A27E4 /* BaseModel.m */; };
@@ -29,8 +31,6 @@
 		088B9F2419477D95006A27E4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2319477D95006A27E4 /* SystemConfiguration.framework */; };
 		088B9F2619477DAA006A27E4 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2519477DAA006A27E4 /* libicucore.dylib */; };
 		088B9F2819477DB7006A27E4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2719477DB7006A27E4 /* libc++.dylib */; };
-		088B9F2E1947AAF4006A27E4 /* MPIEventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9F2D1947AAF4006A27E4 /* MPIEventLogger.m */; };
-		08C1BE39194F659000E2EFA5 /* MPIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C1BE38194F659000E2EFA5 /* MPIEvent.m */; };
 		27382F9E18D15B2700BAAFB9 /* Organ Run.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */; };
 		27382F9F18D15B2700BAAFB9 /* Southern Rock Drums.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */; };
 		27382FA018D15B2700BAAFB9 /* Southern Rock Organ.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */; };
@@ -57,6 +57,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		083BF3D419507D8900C66DDD /* MPIEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPIEvent.h; path = Source/MPIEventLogger/MPIEvent.h; sourceTree = "<group>"; };
+		083BF3D519507D8900C66DDD /* MPIEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIEvent.m; path = Source/MPIEventLogger/MPIEvent.m; sourceTree = "<group>"; };
+		083BF3D619507D8900C66DDD /* MPIEventLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPIEventLogger.h; path = Source/MPIEventLogger/MPIEventLogger.h; sourceTree = "<group>"; };
+		083BF3D719507D8900C66DDD /* MPIEventLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIEventLogger.m; path = Source/MPIEventLogger/MPIEventLogger.m; sourceTree = "<group>"; };
 		088B9EE819476034006A27E4 /* PropertyUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = PropertyUtil.h; path = Source/Util/PropertyUtil.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		088B9EE919476034006A27E4 /* PropertyUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PropertyUtil.m; path = Source/Util/PropertyUtil.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		088B9EEB19476048006A27E4 /* ActionMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ActionMessage.h; path = Source/Models/ActionMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -96,10 +100,6 @@
 		088B9F2519477DAA006A27E4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		088B9F2719477DB7006A27E4 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		088B9F29194786E2006A27E4 /* Multipeer.Instrument-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Multipeer.Instrument-Bridging-Header.h"; sourceTree = "<group>"; };
-		088B9F2D1947AAF4006A27E4 /* MPIEventLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIEventLogger.m; path = Multipeer.Instrument/MPIEventLogger.m; sourceTree = "<group>"; };
-		088B9F2F1947AB10006A27E4 /* MPIEventLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MPIEventLogger.h; path = Multipeer.Instrument/MPIEventLogger.h; sourceTree = "<group>"; };
-		08C1BE37194F635200E2EFA5 /* MPIEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPIEvent.h; sourceTree = "<group>"; };
-		08C1BE38194F659000E2EFA5 /* MPIEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPIEvent.m; sourceTree = "<group>"; };
 		27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Organ Run.m4a"; path = "Resources/Organ Run.m4a"; sourceTree = "<group>"; };
 		27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Drums.m4a"; path = "Resources/Southern Rock Drums.m4a"; sourceTree = "<group>"; };
 		27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Organ.m4a"; path = "Resources/Southern Rock Organ.m4a"; sourceTree = "<group>"; };
@@ -151,10 +151,10 @@
 		08C1BE36194F400700E2EFA5 /* MPIEventLogger */ = {
 			isa = PBXGroup;
 			children = (
-				088B9F2D1947AAF4006A27E4 /* MPIEventLogger.m */,
-				088B9F2F1947AB10006A27E4 /* MPIEventLogger.h */,
-				08C1BE37194F635200E2EFA5 /* MPIEvent.h */,
-				08C1BE38194F659000E2EFA5 /* MPIEvent.m */,
+				083BF3D419507D8900C66DDD /* MPIEvent.h */,
+				083BF3D519507D8900C66DDD /* MPIEvent.m */,
+				083BF3D619507D8900C66DDD /* MPIEventLogger.h */,
+				083BF3D719507D8900C66DDD /* MPIEventLogger.m */,
 			);
 			name = MPIEventLogger;
 			sourceTree = "<group>";
@@ -437,15 +437,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				088B9F121947609C006A27E4 /* MixBoardTableCell.m in Sources */,
+				083BF3D919507D8900C66DDD /* MPIEventLogger.m in Sources */,
 				088B9EFC19476048006A27E4 /* Player.m in Sources */,
 				088B9F101947609C006A27E4 /* GameManager.m in Sources */,
+				083BF3D819507D8900C66DDD /* MPIEvent.m in Sources */,
 				088B9EFB19476048006A27E4 /* Message.m in Sources */,
 				088B9EF719476048006A27E4 /* ActionMessage.m in Sources */,
 				088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */,
-				08C1BE39194F659000E2EFA5 /* MPIEvent.m in Sources */,
 				088B9F151947609C006A27E4 /* SessionController.m in Sources */,
 				088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */,
-				088B9F2E1947AAF4006A27E4 /* MPIEventLogger.m in Sources */,
 				088B9EF919476048006A27E4 /* Game.m in Sources */,
 				088B9F0F1947609C006A27E4 /* AudioManager.m in Sources */,
 				088B9EF819476048006A27E4 /* BaseModel.m in Sources */,
