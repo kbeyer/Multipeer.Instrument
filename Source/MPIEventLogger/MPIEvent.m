@@ -44,7 +44,8 @@
              @"tags": @"tags",
              @"data": @"data",
              @"deviceID": @"device_id",
-             @"logLevel": @"log_level"
+             @"logLevel": @"log_level",
+             @"fnName": @"fn_name"
              };
 }
 
@@ -62,7 +63,8 @@
             start:(NSDate*)start
             end:(NSDate*)end
             data:(NSDictionary*)data
-            deviceID:(NSString *)deviceID {
+            deviceID:(NSString *)deviceID
+            fnName:(NSString *)fnName {
     
     self = [super init];
     if (self) {
@@ -75,6 +77,7 @@
         _end = end;
         _data = data;
         _deviceID = deviceID;
+        _fnName = fnName;
     }
     return self;
 }

@@ -30,6 +30,8 @@ typedef NS_ENUM(NSUInteger, MPILoggerLevel);
 @property (nonatomic, copy) NSDictionary* data;
 // a string to identify the source of the event (e.g. - device name)
 @property (nonatomic, copy) NSString* source;
+// a string to reprent the function from which the event was logged
+@property (nonatomic, copy) NSString* fnName;
 
 // implement validation for event data
 - (BOOL)isValid;
@@ -42,6 +44,7 @@ description:(NSString*)description
      start:(NSDate*)start
        end:(NSDate*)end
       data:(NSDictionary*)data
-  deviceID:(NSString*)deviceID;
+  deviceID:(NSString*)deviceID
+    fnName:(NSString*)fnName;
 
 @end

@@ -26,7 +26,7 @@
 
 @implementation MPISessionController
 
-static NSString * const kLogSource = @"SessionController";
+static NSString * const kLogDefaultTag = @"SessionController";
 static NSString * const kLocalPeerIDKey = @"mpi-local-peerid";
 static NSString * const kMCSessionServiceType = @"mpi-shared";
 
@@ -38,28 +38,35 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     
     if (self)
     {
+        
+        MPIEventLogger* logger = [MPIEventLogger sharedInstance];
+        NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+        
         /*
         // TEST: temp functions to test logging
-        [[MPIEventLogger instance] stop];
-        [[MPIEventLogger instance] start:MPILoggerLevelDebug];
-        [[MPIEventLogger instance] debug:kLogSource description:@"debug level test"];
-        [[MPIEventLogger instance] info:kLogSource description:@"IGNORE ME"];
-        [[MPIEventLogger instance] start:MPILoggerLevelError];
-        [[MPIEventLogger instance] error:kLogSource description:@"error level test"];
-        [[MPIEventLogger instance] warn:kLogSource description:@"SHOW ME"];
-        [[MPIEventLogger instance] start:MPILoggerLevelInfo];
-        [[MPIEventLogger instance] info:kLogSource description:@"info level test"];
-        [[MPIEventLogger instance] warn:kLogSource description:@"IGNORE ME"];
-        [[MPIEventLogger instance] debug:kLogSource description:@"SHOW ME"];
-        [[MPIEventLogger instance] start:MPILoggerLevelWarn];
-        [[MPIEventLogger instance] warn:kLogSource description:@"warn level test"];
-        [[MPIEventLogger instance] error:kLogSource description:@"IGNORE ME"];
-        [[MPIEventLogger instance] info:kLogSource description:@"SHOW ME"];
-        [[MPIEventLogger instance] stop];
-        */
+        logger.logLevel = MPILoggerLevelDebug;
+        [logger debug:source description:@"debug level test"];
+        [logger info:source description:@"IGNORE ME"];
+        logger.logLevel = MPILoggerLevelError;
+        [logger error:source description:@"error level test"];
+        [logger warn:source description:@"SHOW ME"];
+        logger.logLevel = MPILoggerLevelInfo;
+        [logger info:source description:@"info level test"];
+        [logger warn:source description:@"IGNORE ME"];
+        [logger debug:source description:@"SHOW ME"];
+        logger.logLevel = MPILoggerLevelWarn;
+        [logger warn:source description:@"warn level test"];
+        [logger error:source description:@"IGNORE ME"];
+        [logger info:source description:@"SHOW ME"];
+        logger.logDestination = MPILogDestinationConsole;
+        [logger info:source description:@"CONSOLE ONLY"];
+        logger.logDestination = MPILogDestinationAPI;
+        [logger info:source description:@"API ONLY"];
+         */
         
         // setup logger at INFO level and to console and API
-        [[MPIEventLogger instance] start:MPILoggerLevelInfo destination:MPILogToALL];
+        logger.logLevel = MPILoggerLevelInfo;
+        logger.logDestination = MPILogDestinationALL;
         
         // check if this device has a saved peer ID
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -74,12 +81,12 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
             [userDefaults setObject:peerIDData forKey:kLocalPeerIDKey];
             [userDefaults synchronize];
             
-            [[MPIEventLogger instance] log:kLogSource description:@"created and saved peerID"];
+            [[MPIEventLogger sharedInstance] log:source description:@"created and saved peerID"];
         } else {
             // get existing peerID from defaults
             _peerID = [NSKeyedUnarchiver unarchiveObjectWithData:peerIDData];
             
-            [[MPIEventLogger instance] log:kLogSource description:@"retrieved existing peerID"];
+            [[MPIEventLogger sharedInstance] log:source description:@"retrieved existing peerID"];
         }
         
         
@@ -155,8 +162,9 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     }
     
     // log to server
-    [[MPIEventLogger instance] log:MPILoggerLevelInfo
-                            source:kLogSource
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] log:MPILoggerLevelInfo
+                            source:source
                        description:@"sending message"
                               tags:[[NSArray alloc] initWithObjects:@"Message", nil]
                              start:[[NSDate alloc]init]
@@ -173,7 +181,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     _session = [[MCSession alloc] initWithPeer:self.peerID];
     self.session.delegate = self;
     
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"created session for peerID: %@", self.peerID.displayName]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"created session for peerID: %@", self.peerID.displayName]];
     
     
     // Create the service advertiser
@@ -182,7 +191,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
                                                              serviceType:kMCSessionServiceType];
     self.serviceAdvertiser.delegate = self;
     
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"created advertiser for peerID: %@", self.peerID.displayName]];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"created advertiser for peerID: %@", self.peerID.displayName]];
     
     
     // Create the service browser
@@ -190,14 +199,15 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
                                                        serviceType:kMCSessionServiceType];
     self.serviceBrowser.delegate = self;
     
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"created browser for peerID: %@", self.peerID.displayName]];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"created browser for peerID: %@", self.peerID.displayName]];
     
 }
 
 - (void)teardownSession
 {
     
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"teardown session for peerID: %@", self.peerID.displayName]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"teardown session for peerID: %@", self.peerID.displayName]];
     
     [self.session disconnect];
     [self.connectingPeersOrderedSet removeAllObjects];
@@ -207,7 +217,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 - (void)startServices
 {
     
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"start services for peerID: %@", self.peerID.displayName]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"start services for peerID: %@", self.peerID.displayName]];
     
     [self setupSession];
     [self.serviceAdvertiser startAdvertisingPeer];
@@ -217,7 +228,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 - (void)stopServices
 {
     
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"stop services for peerID: %@", self.peerID.displayName]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"stop services for peerID: %@", self.peerID.displayName]];
     
     [self.serviceBrowser stopBrowsingForPeers];
     [self.serviceAdvertiser stopAdvertisingPeer];
@@ -252,7 +264,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
     
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"Peer [%@] changed state to %@", peerID.displayName, [self stringForPeerConnectionState:state]]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"Peer [%@] changed state to %@", peerID.displayName, [self stringForPeerConnectionState:state]]];
     
     switch (state)
     {
@@ -347,19 +360,20 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 {
     NSString *remotePeerName = nearbyPeerID.displayName;
     
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"Browser found (name: %@)", remotePeerName]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"Browser found (name: %@)", remotePeerName]];
     
     MCPeerID *myPeerID = self.session.myPeerID;
     
     if ([self sha1:myPeerID.displayName] > [self sha1:remotePeerName])
     {
-        [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"Inviting %@", remotePeerName]];
+        [[MPIEventLogger sharedInstance] info:source description:[NSString stringWithFormat:@"Inviting %@", remotePeerName]];
         
         [browser invitePeer:nearbyPeerID toSession:self.session withContext:nil timeout:10.0];
     }
     else
     {
-        [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"Not inviting(my sha1: %@, remote sha1: %@)", [self sha1:myPeerID.displayName], [self sha1:remotePeerName]]];
+        [[MPIEventLogger sharedInstance] info:source description:[NSString stringWithFormat:@"Not inviting(my sha1: %@, remote sha1: %@)", [self sha1:myPeerID.displayName], [self sha1:remotePeerName]]];
     }
     
     [self updateDelegate];
@@ -367,7 +381,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 
 - (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"lostPeer %@", peerID.displayName]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] info:source description:[NSString stringWithFormat:@"lostPeer %@", peerID.displayName]];
     
     [self.connectingPeersOrderedSet removeObject:peerID];
     [self.disconnectedPeersOrderedSet addObject:peerID];
@@ -377,14 +392,16 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 
 - (void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error
 {
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"didNotStartBrowsingForPeers: %@", error]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] warn:source description:[NSString stringWithFormat:@"didNotStartBrowsingForPeers: %@", error]];
 }
 
 #pragma mark - MCNearbyServiceAdvertiserDelegate protocol conformance
 
 - (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void(^)(BOOL accept, MCSession *session))invitationHandler
 {
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"didReceiveInvitationFromPeer %@", peerID.displayName]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"didReceiveInvitationFromPeer %@", peerID.displayName]];
     
     /*
     [UIActionSheet showInView:self.view withTitle:[NSString stringWithFormat:NSLocalizedString(@"Received Invitation from %@", @"Received Invitation from {Peer}"), peerID.displayName]
@@ -426,7 +443,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 
 - (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didNotStartAdvertisingPeer:(NSError *)error
 {
-    [[MPIEventLogger instance] log:kLogSource description:[NSString stringWithFormat:@"didNotStartAdvertisingForPeers: %@", error]];
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+    [[MPIEventLogger sharedInstance] warn:source description:[NSString stringWithFormat:@"didNotStartAdvertisingForPeers: %@", error]];
 }
 
 /*

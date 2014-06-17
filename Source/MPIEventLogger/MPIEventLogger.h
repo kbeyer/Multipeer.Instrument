@@ -9,38 +9,38 @@
 #import <Foundation/Foundation.h>
 #import "MPIEvent.h"
 
+// available log destinations
 typedef NS_ENUM(NSUInteger, MPILogDestination) {
-    MPILogToConsole,
-    MPILogToAPI,
-    MPILogToALL
+    MPILogDestinationConsole,
+    MPILogDestinationAPI,
+    MPILogDestinationALL
 };
 
+// available logging levels
 typedef NS_ENUM(NSUInteger, MPILoggerLevel) {
     MPILoggerLevelOff,
     MPILoggerLevelDebug,
     MPILoggerLevelInfo,
     MPILoggerLevelWarn,
     MPILoggerLevelError,
-    MPILoggerLevelFatal = MPILoggerLevelOff,
+    MPILoggerLevelFatal
 };
 
 @interface MPIEventLogger : NSObject
 
-+ (MPIEventLogger*)instance;
+// Single shared instance is created on first call to sharedInstance
++ (MPIEventLogger*)sharedInstance;
 
-// the maxLogLevel will be used to filter which log requests are processed
-@property (readwrite) MPILoggerLevel maxLogLevel;
-// the destination will determine where log events are sent
+// The logLevel will be used to filter which log requests are processed
+// To stop processing events, set to MPILoggerLevelOff
+// The default logLevel (if not explicitly set) is MPILoggerLevelInfo
+// This can be changed at any time and will apply to all future log requests after a change
+@property (readwrite) MPILoggerLevel logLevel;
+
+// The destination will determine where log events are sent
+// To send to all destinations, use MPILogDestinationALL (the default)
+// This can be changed at any time and will apply to all future events after a change
 @property (readwrite) MPILogDestination logDestination;
-
-// helper function to stop processing log requests
-- (void)stop;
-// helper function to either restart logging at previously defined level
-- (void)start;
-// restart at specific level or change the level
-- (void)start:(MPILoggerLevel)newLevel;
-// restart at specific level or change the level and the destination
-- (void)start:(MPILoggerLevel)newLevel destination:(MPILogDestination)newDestination;
 
 // overload the log method to support various levels of detail to specified
 // for creation of the MPIEvent object

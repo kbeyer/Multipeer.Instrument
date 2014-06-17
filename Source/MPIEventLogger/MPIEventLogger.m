@@ -15,15 +15,10 @@ static MPILoggerLevel const kDefaultLogLevel = MPILoggerLevelInfo;
 
 // kDefaultLogDestination is used to configure where events should be logged
 // in the case it is not configured explicitly
-static MPILogDestination const kDefaultLogDestination = MPILogToALL;
+static MPILogDestination const kDefaultLogDestination = MPILogDestinationALL;
 
 // kBaseURL is used as the root for events sent to MPILogToAPI destination
-static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
-
-@interface MPIEventLogger()
-// track previous log level for restarting
-@property (nonatomic, assign) MPILoggerLevel previousLogLevel;
-@end
+static NSString* const kBaseURL = @"http://k6beventlogger.herokuapp.com/api/v1/";
 
 @implementation MPIEventLogger
 
@@ -31,17 +26,14 @@ static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
     self = [super init];
     if (self) {
         // initial configuration
-        [self configure];
+        _logDestination = kDefaultLogDestination;
+        _logLevel = kDefaultLogLevel;
     }
     return self;
 }
 
-- (void)configure {
-    _logDestination = kDefaultLogDestination;
-    _maxLogLevel = kDefaultLogLevel;
-}
 
-+ (MPIEventLogger *)instance
++ (MPIEventLogger *)sharedInstance
 {
     static MPIEventLogger* sharedInstance = nil;
     
@@ -52,34 +44,6 @@ static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
     
     return sharedInstance;
 }
-
-/*
- * Helper function to stop processing log requests
- */
-- (void)stop {
-    _previousLogLevel = _maxLogLevel;
-    _maxLogLevel = MPILoggerLevelOff;
-}
-/*
- * Helper function to either restart logging at previously defined level
- */
-- (void)start {
-    [self start:_previousLogLevel];
-}
-/*
- * Restart at specific level or change the level
- */
-- (void)start:(MPILoggerLevel)newLevel {
-    _maxLogLevel = _previousLogLevel = newLevel;
-}
-/*
- * Restart at specific level and destination
- */
-- (void)start:(MPILoggerLevel)newLevel destination:(MPILogDestination)newDestination {
-    _maxLogLevel = _previousLogLevel = newLevel;
-    _logDestination = newDestination;
-}
-
 
 
 #pragma mark - log overloads
@@ -95,23 +59,23 @@ static NSString* const kBaseURL = @"http://multipeernode.herokuapp.com/";
  */
 - (void)log:(NSString*)source description:(NSString*)description {
     return [self log:kDefaultLogLevel source:source description:description
-                 tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                 tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description {
     return [self log:level source:source description:description
-                 tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                 tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self log:level source:source description:description
                  tags:tags
                 start:[[NSDate alloc] init]
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
@@ -137,23 +101,31 @@ description:(NSString*)description
       data:(NSDictionary*)data {
     
     // ignore requests to log events that are below current max level
-    if (_maxLogLevel < level) {
+    if (_logLevel < level) {
         return;
     }
     
     // create event object with device id set to current device name
     NSString* deviceName = [[UIDevice currentDevice] name];
-    MPIEvent* evt = [[MPIEvent alloc] init:level source:source description:description tags:tags start:start end:end data:data deviceID:deviceName];
+    MPIEvent* evt = [[MPIEvent alloc] init:level
+                                    source:source
+                               description:description
+                                      tags:tags
+                                     start:start
+                                       end:end
+                                      data:data
+                                  deviceID:deviceName
+                                    fnName:nil];
     
     // log to specified destination
     switch(_logDestination){
-        case MPILogToConsole:
+        case MPILogDestinationConsole:
             NSLog(@"[MPIEvent] %@", evt);
             break;
-        case MPILogToAPI:
+        case MPILogDestinationAPI:
             [self persist:evt];
             break;
-        case MPILogToALL:
+        case MPILogDestinationALL:
             [self persist:evt];
             NSLog(@"[MPIEvent] %@", evt);
             break;
@@ -168,23 +140,23 @@ description:(NSString*)description
  */
 - (void)debug:(NSString *)source description:(NSString *)description {
      return [self debug:source description:description
-                 tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                 tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
  }
 - (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self debug:source description:description
                 tags:tags
                start:[[NSDate alloc] init]
-                 end:[[NSDate alloc] init]
+                 end:nil
                 data:nil];
 }
 - (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self debug:source description:description
                 tags:tags
                start:start
-                 end:[[NSDate alloc] init]
+                 end:nil
                 data:nil];
 }
 - (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
@@ -216,23 +188,23 @@ description:(NSString*)description
  */
 - (void)info:(NSString *)source description:(NSString *)description {
     return [self info:source description:description
-                  tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                  tags:[[NSArray alloc] init]
                  start:[[NSDate alloc] init]
-                   end:[[NSDate alloc] init]
+                   end:nil
                   data:nil];
 }
 - (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self info:source description:description
                   tags:tags
                  start:[[NSDate alloc] init]
-                   end:[[NSDate alloc] init]
+                   end:nil
                   data:nil];
 }
 - (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self info:source description:description
                   tags:tags
                  start:start
-                   end:[[NSDate alloc] init]
+                   end:nil
                   data:nil];
 }
 - (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
@@ -265,23 +237,23 @@ description:(NSString*)description
  */
 - (void)warn:(NSString *)source description:(NSString *)description {
     return [self warn:source description:description
-                 tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                 tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self warn:source description:description
                  tags:tags
                 start:[[NSDate alloc] init]
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self warn:source description:description
                  tags:tags
                 start:start
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
@@ -314,23 +286,23 @@ description:(NSString*)description
  */
 - (void)error:(NSString *)source description:(NSString *)description {
     return [self error:source description:description
-                 tags:[[NSArray alloc] initWithObjects:@"Undefined", nil]
+                 tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self error:source description:description
                  tags:tags
                 start:[[NSDate alloc] init]
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self error:source description:description
                  tags:tags
                 start:start
-                  end:[[NSDate alloc] init]
+                  end:nil
                  data:nil];
 }
 - (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
@@ -368,7 +340,7 @@ description:(NSString*)description
         return; //validation
     }
     
-    NSString* messagesPath = [kBaseURL stringByAppendingPathComponent:@"messages"];
+    NSString* messagesPath = [kBaseURL stringByAppendingPathComponent:@"events"];
     
     NSURL* url = [NSURL URLWithString:messagesPath]; //create url
     
