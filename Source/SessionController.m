@@ -65,7 +65,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
          */
         
         // setup logger at INFO level and to console and API
-        logger.logLevel = MPILoggerLevelInfo;
+        logger.logLevel = MPILoggerLevelFatal;
         logger.logDestination = MPILogDestinationALL;
         
         // check if this device has a saved peer ID
