@@ -352,7 +352,7 @@ description:(NSString*)description
     NSURL* url = [NSURL URLWithString:messagesPath]; //create url
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
-    request.HTTPMethod = @"POST"; //2
+    request.HTTPMethod = @"POST";
     
     // serialize as JSON dictionary
     NSDictionary* json = [MTLJSONAdapter JSONDictionaryFromModel:evt];
@@ -363,6 +363,10 @@ description:(NSString*)description
     
     //set content type
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    // TEST : some of the request seem to be dropped ... testing with new session every time
+    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    _urlSession = [NSURLSession sessionWithConfiguration:config];
     
     NSURLSessionDataTask* dataTask = [_urlSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (!error) {
