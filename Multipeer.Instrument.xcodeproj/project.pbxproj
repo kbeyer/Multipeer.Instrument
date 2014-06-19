@@ -164,6 +164,29 @@
 			path = Source/Reachability;
 			sourceTree = "<group>";
 		};
+		08943D701953546400D226AE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				088B9F1C19476187006A27E4 /* Main.storyboard */,
+				088B9F031947609C006A27E4 /* HomeViewController.h */,
+				088B9F041947609C006A27E4 /* HomeViewController.m */,
+				088B9F051947609C006A27E4 /* MixBoardTableCell.h */,
+				088B9F061947609C006A27E4 /* MixBoardTableCell.m */,
+				088B9F071947609C006A27E4 /* MixBoardViewController.h */,
+				088B9F081947609C006A27E4 /* MixBoardViewController.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		08943D71195354AB00D226AE /* Multipeer */ = {
+			isa = PBXGroup;
+			children = (
+				088B9F0B1947609C006A27E4 /* SessionController.h */,
+				088B9F0C1947609C006A27E4 /* SessionController.m */,
+			);
+			name = Multipeer;
+			sourceTree = "<group>";
+		};
 		08C1BE36194F400700E2EFA5 /* MPIEventLogger */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,11 +203,12 @@
 			children = (
 				08943D6A19533B1900D226AE /* Reachability */,
 				08C1BE36194F400700E2EFA5 /* MPIEventLogger */,
-				088B9F1C19476187006A27E4 /* Main.storyboard */,
 				273F289E18CE623E00F595C2 /* Resources */,
 				273F288E18CE1B7E00F595C2 /* Util */,
+				08943D701953546400D226AE /* Views */,
 				273F288418CDFD0700F595C2 /* Models */,
-				273F284F18CD1A0C00F595C2 /* Multipeer.Instrument */,
+				08943D71195354AB00D226AE /* Multipeer */,
+				273F284F18CD1A0C00F595C2 /* App */,
 				273F286E18CD1A0C00F595C2 /* Multipeer.InstrumentTests */,
 				273F284818CD1A0C00F595C2 /* Frameworks */,
 				273F284718CD1A0C00F595C2 /* Products */,
@@ -219,7 +243,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		273F284F18CD1A0C00F595C2 /* Multipeer.Instrument */ = {
+		273F284F18CD1A0C00F595C2 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				088B9EFD1947609C006A27E4 /* AppDelegate.h */,
@@ -228,18 +252,11 @@
 				088B9F001947609C006A27E4 /* AudioManager.m */,
 				088B9F011947609C006A27E4 /* GameManager.h */,
 				088B9F021947609C006A27E4 /* GameManager.m */,
-				088B9F031947609C006A27E4 /* HomeViewController.h */,
-				088B9F041947609C006A27E4 /* HomeViewController.m */,
-				088B9F051947609C006A27E4 /* MixBoardTableCell.h */,
-				088B9F061947609C006A27E4 /* MixBoardTableCell.m */,
-				088B9F071947609C006A27E4 /* MixBoardViewController.h */,
-				088B9F081947609C006A27E4 /* MixBoardViewController.m */,
-				088B9F0B1947609C006A27E4 /* SessionController.h */,
-				088B9F0C1947609C006A27E4 /* SessionController.m */,
 				088B9F0D1947609C006A27E4 /* Images.xcassets */,
 				273F285018CD1A0C00F595C2 /* Supporting Files */,
 				088B9F29194786E2006A27E4 /* Multipeer.Instrument-Bridging-Header.h */,
 			);
+			name = App;
 			path = Multipeer.Instrument;
 			sourceTree = "<group>";
 		};
