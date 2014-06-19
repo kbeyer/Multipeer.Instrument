@@ -41,7 +41,6 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     
     if (self)
     {
-        
         MPIEventLogger* logger = [MPIEventLogger sharedInstance];
         NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
         
@@ -122,6 +121,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     
     return self;
 }
+
 
 #pragma mark - Memory management
 
@@ -330,8 +330,16 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         
         NSString* description = [NSString stringWithFormat:@"HEY! %@ changed my %@", peerID.displayName, action];
         NSArray* tags = [[NSArray alloc] initWithObjects:@"Message", action, nil];
-        [[MPIEventLogger sharedInstance] warn:source description:description tags:tags start:start end:end data:obj];
+        MPIEventPersistence status = [[MPIEventLogger sharedInstance] warn:source description:description tags:tags start:start end:end data:obj];
         
+        // re-route if OFFLINE
+        if (status == MPIEventPersistenceOffline) {
+            NSLog(@"EventLogger API is not reachable.  Re-routing through peer with reachability.");
+            //
+            // TODO: route message through session
+            //
+            // NOTE: will need to track if any peers have reachability
+        }
         
         // OLD
         //NSLog(@"didReceiveData %@:%@ from %@", msg.type, msg.val, peerID.displayName);
