@@ -41,35 +41,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     
     if (self)
     {
-        MPIEventLogger* logger = [MPIEventLogger sharedInstance];
+        // capture function name for event logging
         NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
-        
-        /*
-        // TEST: temp functions to test logging
-        logger.logLevel = MPILoggerLevelDebug;
-        [logger debug:source description:@"debug level test"];
-        [logger info:source description:@"IGNORE ME"];
-        logger.logLevel = MPILoggerLevelError;
-        [logger error:source description:@"error level test"];
-        [logger warn:source description:@"SHOW ME"];
-        logger.logLevel = MPILoggerLevelInfo;
-        [logger info:source description:@"info level test"];
-        [logger warn:source description:@"IGNORE ME"];
-        [logger debug:source description:@"SHOW ME"];
-        logger.logLevel = MPILoggerLevelWarn;
-        [logger warn:source description:@"warn level test"];
-        [logger error:source description:@"IGNORE ME"];
-        [logger info:source description:@"SHOW ME"];
-        logger.logDestination = MPILogDestinationConsole;
-        [logger info:source description:@"CONSOLE ONLY"];
-        logger.logDestination = MPILogDestinationAPI;
-        [logger info:source description:@"API ONLY"];
-         */
-         
-        
-        // setup logger at INFO level and to console and API
-        logger.logLevel = MPILoggerLevelError;
-        logger.logDestination = MPILogDestinationALL;
         
         // check if this device has a saved peer ID
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

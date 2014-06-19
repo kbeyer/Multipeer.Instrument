@@ -9,15 +9,16 @@
 #import "AppDelegate.h"
 #import "GameManager.h"
 #import "TestFlight.h"
+#import "MPIEventLogger.h"
 
 @implementation MPIAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    // configure MPIEventLogger
+    [self setupEventLogger];
     
-    // initial pubnub connect
-    //[[MPIPubNubManager pubnub] connect];
+    
     
     // initial game launch
     [MPIGameManager instance];
@@ -25,6 +26,39 @@
     //[TestFlight takeOff:@"ba6904ec-9673-47ca-a275-e1bd8ddeda07"];
     
     return YES;
+}
+
+- (void)setupEventLogger
+{
+    MPIEventLogger* logger = [MPIEventLogger sharedInstance];
+    
+    
+    /*
+     NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+     // TEST: temp functions to test logging
+     logger.logLevel = MPILoggerLevelDebug;
+     [logger debug:source description:@"debug level test"];
+     [logger info:source description:@"IGNORE ME"];
+     logger.logLevel = MPILoggerLevelError;
+     [logger error:source description:@"error level test"];
+     [logger warn:source description:@"SHOW ME"];
+     logger.logLevel = MPILoggerLevelInfo;
+     [logger info:source description:@"info level test"];
+     [logger warn:source description:@"IGNORE ME"];
+     [logger debug:source description:@"SHOW ME"];
+     logger.logLevel = MPILoggerLevelWarn;
+     [logger warn:source description:@"warn level test"];
+     [logger error:source description:@"IGNORE ME"];
+     [logger info:source description:@"SHOW ME"];
+     logger.logDestination = MPILogDestinationConsole;
+     [logger info:source description:@"CONSOLE ONLY"];
+     logger.logDestination = MPILogDestinationAPI;
+     [logger info:source description:@"API ONLY"];
+     */
+    
+    // setup logger at INFO level and to console and API
+    logger.logLevel = MPILoggerLevelFatal;
+    logger.logDestination = MPILogDestinationALL;
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
