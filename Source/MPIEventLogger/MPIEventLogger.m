@@ -10,6 +10,13 @@
 #import "MPIEvent.h"
 #import "Reachability.h"
 
+/* Override for NSLog */
+void MPILog(NSString *source, NSString* description)
+{
+    [[MPIEventLogger sharedInstance] log:source description:description];
+}
+
+
 // kDefaultLogLevel is used both as default level when starting the Logger
 // AND as the default level when calling log without a level specified
 static MPILoggerLevel const kDefaultLogLevel = MPILoggerLevelInfo;
@@ -55,7 +62,6 @@ static NSString* const kApiHost = @"k6beventlogger.herokuapp.com";
     
     return sharedInstance;
 }
-
 
 #pragma mark - log overloads
 
@@ -132,14 +138,14 @@ description:(NSString*)description
     // log to specified destination
     switch(_logDestination){
         case MPILogDestinationConsole:
-            NSLog(@"[MPIEvent][%@] %@", source, description);
+            printf("%s\n",[[NSString stringWithFormat:@"[MPIEvent][%@] %@", source, description] UTF8String]);
             break;
         case MPILogDestinationAPI:
             status = [self persist:evt];
             break;
         case MPILogDestinationALL:
             status = [self persist:evt];
-            NSLog(@"[MPIEvent][%@] %@", source, description);
+            printf("%s\n",[[NSString stringWithFormat:@"[MPIEvent][%@] %@", source, description] UTF8String]);
             break;
     }
     return status;
@@ -349,7 +355,7 @@ description:(NSString*)description
     // validate event parameter
     if (!evt || !evt.isValid) {
         
-        NSLog(@"[MPIEvent] INVALID. %@", evt);
+        printf("%s\n",[[NSString stringWithFormat:@"[MPIEvent] INVALID. %@", evt] UTF8String]);
         return MPIEventPersistenceError; //validation
     }
     
@@ -383,7 +389,7 @@ description:(NSString*)description
     NSURLSessionDataTask* dataTask = [_urlSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (!error) {
             //NSArray* responseArray = @[[NSJSONSerialization JSONObjectWithData:data options:0 error:NULL]];
-            NSLog(@"request completed");
+            //NSLog(@"request completed");
         }
     }];
     [dataTask resume];
@@ -400,13 +406,13 @@ description:(NSString*)description
     // Set the blocks
     reach.reachableBlock = ^(Reachability*reach)
     {
-        NSLog(@"REACHABLE!");
+        printf("%s\n",[[NSString stringWithFormat:@"REACHABLE!"] UTF8String]);
         _apiIsReachable = YES;
     };
     
     reach.unreachableBlock = ^(Reachability*reach)
     {
-        NSLog(@"UNREACHABLE!");
+        printf("%s\n",[[NSString stringWithFormat:@"REACHABLE!"] UTF8String]);
         _apiIsReachable = NO;
     };
     

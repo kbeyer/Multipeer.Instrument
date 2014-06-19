@@ -13,4 +13,8 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import "MPIEventLogger.h"
+
+    #define NSLog(__FORMAT__, ...) MPILog([NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithFormat:(@"[Line %d] " __FORMAT__), __LINE__, ##__VA_ARGS__])
+
 #endif
