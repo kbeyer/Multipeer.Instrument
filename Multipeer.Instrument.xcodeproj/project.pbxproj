@@ -31,6 +31,8 @@
 		088B9F2419477D95006A27E4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2319477D95006A27E4 /* SystemConfiguration.framework */; };
 		088B9F2619477DAA006A27E4 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2519477DAA006A27E4 /* libicucore.dylib */; };
 		088B9F2819477DB7006A27E4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2719477DB7006A27E4 /* libc++.dylib */; };
+		08943D6E19533B1900D226AE /* LICENCE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08943D6B19533B1900D226AE /* LICENCE.txt */; };
+		08943D6F19533B1900D226AE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 08943D6D19533B1900D226AE /* Reachability.m */; };
 		27382F9E18D15B2700BAAFB9 /* Organ Run.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */; };
 		27382F9F18D15B2700BAAFB9 /* Southern Rock Drums.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */; };
 		27382FA018D15B2700BAAFB9 /* Southern Rock Organ.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */; };
@@ -100,6 +102,9 @@
 		088B9F2519477DAA006A27E4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		088B9F2719477DB7006A27E4 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		088B9F29194786E2006A27E4 /* Multipeer.Instrument-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Multipeer.Instrument-Bridging-Header.h"; sourceTree = "<group>"; };
+		08943D6B19533B1900D226AE /* LICENCE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENCE.txt; sourceTree = "<group>"; };
+		08943D6C19533B1900D226AE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		08943D6D19533B1900D226AE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Organ Run.m4a"; path = "Resources/Organ Run.m4a"; sourceTree = "<group>"; };
 		27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Drums.m4a"; path = "Resources/Southern Rock Drums.m4a"; sourceTree = "<group>"; };
 		27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Organ.m4a"; path = "Resources/Southern Rock Organ.m4a"; sourceTree = "<group>"; };
@@ -148,6 +153,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08943D6A19533B1900D226AE /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				08943D6B19533B1900D226AE /* LICENCE.txt */,
+				08943D6C19533B1900D226AE /* Reachability.h */,
+				08943D6D19533B1900D226AE /* Reachability.m */,
+			);
+			name = Reachability;
+			path = Source/Reachability;
+			sourceTree = "<group>";
+		};
 		08C1BE36194F400700E2EFA5 /* MPIEventLogger */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +178,7 @@
 		273F283D18CD1A0C00F595C2 = {
 			isa = PBXGroup;
 			children = (
+				08943D6A19533B1900D226AE /* Reachability */,
 				08C1BE36194F400700E2EFA5 /* MPIEventLogger */,
 				088B9F1C19476187006A27E4 /* Main.storyboard */,
 				273F289E18CE623E00F595C2 /* Resources */,
@@ -383,6 +400,7 @@
 				273F285418CD1A0C00F595C2 /* InfoPlist.strings in Resources */,
 				088B9F161947609C006A27E4 /* Images.xcassets in Resources */,
 				27382F9E18D15B2700BAAFB9 /* Organ Run.m4a in Resources */,
+				08943D6E19533B1900D226AE /* LICENCE.txt in Resources */,
 				27382F9F18D15B2700BAAFB9 /* Southern Rock Drums.m4a in Resources */,
 				27382FA018D15B2700BAAFB9 /* Southern Rock Organ.m4a in Resources */,
 			);
@@ -452,6 +470,7 @@
 				088B9F1A19476166006A27E4 /* main.m in Sources */,
 				088B9F111947609C006A27E4 /* HomeViewController.m in Sources */,
 				088B9F0E1947609C006A27E4 /* AppDelegate.m in Sources */,
+				08943D6F19533B1900D226AE /* Reachability.m in Sources */,
 				088B9EFA19476048006A27E4 /* JoinRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
