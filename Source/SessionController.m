@@ -376,7 +376,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     
     MCPeerID *myPeerID = self.session.myPeerID;
     
-    if ([self sha1:myPeerID.displayName] > [self sha1:remotePeerName])
+    if (YES || [self sha1:myPeerID.displayName] > [self sha1:remotePeerName])
     {
         [[MPIEventLogger sharedInstance] info:source description:[NSString stringWithFormat:@"Inviting %@", remotePeerName]];
         

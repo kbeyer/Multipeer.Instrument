@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, MPILoggerLevel);
 @property (nonatomic, copy) NSDate* end;
 // any metadata (or custom details) for the event can be stored in the data property
 @property (nonatomic, copy) NSDictionary* data;
-// a string to identify the source of the event (e.g. - device name)
+// a string to identify the source of the event
 @property (nonatomic, copy) NSString* source;
 // a string to reprent the function from which the event was logged
 @property (nonatomic, copy) NSString* fnName;
