@@ -26,6 +26,14 @@ typedef NS_ENUM(NSUInteger, MPILoggerLevel) {
     MPILoggerLevelFatal
 };
 
+// status of event persistence
+typedef NS_ENUM(NSUInteger, MPIEventPersistence) {
+    MPIEventPersistenceSuccess,
+    MPIEventPersistenceOffline,
+    MPIEventPersistenceIgnore,
+    MPIEventPersistenceError
+};
+
 @interface MPIEventLogger : NSObject
 
 // Single shared instance is created on first call to sharedInstance
@@ -44,38 +52,38 @@ typedef NS_ENUM(NSUInteger, MPILoggerLevel) {
 
 // overload the log method to support various levels of detail to specified
 // for creation of the MPIEvent object
-- (void)log:(NSString*)source description:(NSString*)description;
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description;
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
+- (MPIEventPersistence)log:(NSString*)source description:(NSString*)description;
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description;
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
 
 // overloads for DEBUG level
-- (void)debug:(NSString*)source description:(NSString*)description;
-- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
-- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
-- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
-- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
+- (MPIEventPersistence)debug:(NSString*)source description:(NSString*)description;
+- (MPIEventPersistence)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
+- (MPIEventPersistence)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
+- (MPIEventPersistence)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
+- (MPIEventPersistence)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
 
 // overloads for INFO level
-- (void)info:(NSString*)source description:(NSString*)description;
-- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
-- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
-- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
-- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
+- (MPIEventPersistence)info:(NSString*)source description:(NSString*)description;
+- (MPIEventPersistence)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
+- (MPIEventPersistence)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
+- (MPIEventPersistence)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
+- (MPIEventPersistence)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
 
 // overloads for WARN level
-- (void)warn:(NSString*)source description:(NSString*)description;
-- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
-- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
-- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
-- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
+- (MPIEventPersistence)warn:(NSString*)source description:(NSString*)description;
+- (MPIEventPersistence)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
+- (MPIEventPersistence)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
+- (MPIEventPersistence)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
+- (MPIEventPersistence)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
 
 // overloads for ERROR level
-- (void)error:(NSString*)source description:(NSString*)description;
-- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
-- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
-- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
-- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
+- (MPIEventPersistence)error:(NSString*)source description:(NSString*)description;
+- (MPIEventPersistence)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags;
+- (MPIEventPersistence)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start;
+- (MPIEventPersistence)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end;
+- (MPIEventPersistence)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end data:(NSDictionary*)data;
 @end

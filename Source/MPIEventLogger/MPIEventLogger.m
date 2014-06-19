@@ -8,6 +8,7 @@
 
 #import "MPIEventLogger.h"
 #import "MPIEvent.h"
+#import "Reachability.h"
 
 // kDefaultLogLevel is used both as default level when starting the Logger
 // AND as the default level when calling log without a level specified
@@ -17,12 +18,13 @@ static MPILoggerLevel const kDefaultLogLevel = MPILoggerLevelInfo;
 // in the case it is not configured explicitly
 static MPILogDestination const kDefaultLogDestination = MPILogDestinationALL;
 
-// kBaseURL is used as the root for events sent to MPILogToAPI destination
-static NSString* const kBaseURL = @"http://k6beventlogger.herokuapp.com/api/v1/";
+static NSString* const kApiHost = @"k6beventlogger.herokuapp.com";
 
 @interface MPIEventLogger()
 // re-usable url session for API calls
 @property (nonatomic, strong) NSURLSession *urlSession;
+// track reachability to api
+@property (readwrite) BOOL apiIsReachable;
 @end
 
 @implementation MPIEventLogger
@@ -30,6 +32,8 @@ static NSString* const kBaseURL = @"http://k6beventlogger.herokuapp.com/api/v1/"
 - (id)init {
     self = [super init];
     if (self) {
+        // track if api url is reachable
+        [self setupReachability];
         // initial configuration
         _logDestination = kDefaultLogDestination;
         _logLevel = kDefaultLogLevel;
@@ -64,42 +68,42 @@ static NSString* const kBaseURL = @"http://k6beventlogger.herokuapp.com/api/v1/"
  * @param source - string to identify the source of the Event
  * @param description - friendly display text for the Event
  */
-- (void)log:(NSString*)source description:(NSString*)description {
+- (MPIEventPersistence)log:(NSString*)source description:(NSString*)description {
     return [self log:kDefaultLogLevel source:source description:description
                  tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
                   end:nil
                  data:nil];
 }
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description {
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description {
     return [self log:level source:source description:description
                  tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
                   end:nil
                  data:nil];
 }
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self log:level source:source description:description
                  tags:tags
                 start:[[NSDate alloc] init]
                   end:nil
                  data:nil];
 }
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self log:level source:source description:description
                  tags:tags
                 start:start
                   end:[[NSDate alloc] init]
                  data:nil];
 }
-- (void)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+- (MPIEventPersistence)log:(MPILoggerLevel)level source:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
     return [self log:level source:source description:description
                  tags:tags
                 start:start
                   end:end
                  data:nil];
 }
-- (void)log:(MPILoggerLevel)level
+- (MPIEventPersistence)log:(MPILoggerLevel)level
     source:(NSString*)source
 description:(NSString*)description
       tags:(NSArray*)tags
@@ -109,7 +113,7 @@ description:(NSString*)description
     
     // ignore requests to log events that are below current max level
     if (_logLevel < level) {
-        return;
+        return MPIEventPersistenceIgnore;
     }
     
     // create event object with device id set to current device name
@@ -124,19 +128,21 @@ description:(NSString*)description
                                   deviceID:deviceName
                                     fnName:nil];
     
+    MPIEventPersistence status = MPIEventPersistenceSuccess;
     // log to specified destination
     switch(_logDestination){
         case MPILogDestinationConsole:
             NSLog(@"[MPIEvent][%@] %@", source, description);
             break;
         case MPILogDestinationAPI:
-            [self persist:evt];
+            status = [self persist:evt];
             break;
         case MPILogDestinationALL:
-            [self persist:evt];
+            status = [self persist:evt];
             NSLog(@"[MPIEvent][%@] %@", source, description);
             break;
     }
+    return status;
 }
 
 
@@ -145,35 +151,35 @@ description:(NSString*)description
 /*
  * Overloads for DEBUG level
  */
-- (void)debug:(NSString *)source description:(NSString *)description {
+- (MPIEventPersistence)debug:(NSString *)source description:(NSString *)description {
      return [self debug:source description:description
                  tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
                   end:nil
                  data:nil];
  }
-- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+- (MPIEventPersistence)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self debug:source description:description
                 tags:tags
                start:[[NSDate alloc] init]
                  end:nil
                 data:nil];
 }
-- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+- (MPIEventPersistence)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self debug:source description:description
                 tags:tags
                start:start
                  end:nil
                 data:nil];
 }
-- (void)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+- (MPIEventPersistence)debug:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
     return [self debug:source description:description
                 tags:tags
                start:start
                  end:end
                 data:nil];
 }
-- (void)debug:(NSString*)source
+- (MPIEventPersistence)debug:(NSString*)source
 description:(NSString*)description
        tags:(NSArray*)tags
       start:(NSDate*)start
@@ -193,35 +199,35 @@ description:(NSString*)description
 /*
  * Overloads for INFO level
  */
-- (void)info:(NSString *)source description:(NSString *)description {
+- (MPIEventPersistence)info:(NSString *)source description:(NSString *)description {
     return [self info:source description:description
                   tags:[[NSArray alloc] init]
                  start:[[NSDate alloc] init]
                    end:nil
                   data:nil];
 }
-- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+- (MPIEventPersistence)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self info:source description:description
                   tags:tags
                  start:[[NSDate alloc] init]
                    end:nil
                   data:nil];
 }
-- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+- (MPIEventPersistence)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self info:source description:description
                   tags:tags
                  start:start
                    end:nil
                   data:nil];
 }
-- (void)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+- (MPIEventPersistence)info:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
     return [self info:source description:description
                   tags:tags
                  start:start
                    end:end
                   data:nil];
 }
-- (void)info:(NSString*)source
+- (MPIEventPersistence)info:(NSString*)source
   description:(NSString*)description
          tags:(NSArray*)tags
         start:(NSDate*)start
@@ -242,35 +248,35 @@ description:(NSString*)description
 /*
  * Overloads for WARN level
  */
-- (void)warn:(NSString *)source description:(NSString *)description {
+- (MPIEventPersistence)warn:(NSString *)source description:(NSString *)description {
     return [self warn:source description:description
                  tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
                   end:nil
                  data:nil];
 }
-- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+- (MPIEventPersistence)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self warn:source description:description
                  tags:tags
                 start:[[NSDate alloc] init]
                   end:nil
                  data:nil];
 }
-- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+- (MPIEventPersistence)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self warn:source description:description
                  tags:tags
                 start:start
                   end:nil
                  data:nil];
 }
-- (void)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+- (MPIEventPersistence)warn:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
     return [self warn:source description:description
                  tags:tags
                 start:start
                   end:end
                  data:nil];
 }
-- (void)warn:(NSString*)source
+- (MPIEventPersistence)warn:(NSString*)source
  description:(NSString*)description
         tags:(NSArray*)tags
        start:(NSDate*)start
@@ -291,35 +297,35 @@ description:(NSString*)description
 /*
  * Overloads for ERROR level
  */
-- (void)error:(NSString *)source description:(NSString *)description {
+- (MPIEventPersistence)error:(NSString *)source description:(NSString *)description {
     return [self error:source description:description
                  tags:[[NSArray alloc] init]
                 start:[[NSDate alloc] init]
                   end:nil
                  data:nil];
 }
-- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
+- (MPIEventPersistence)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags {
     return [self error:source description:description
                  tags:tags
                 start:[[NSDate alloc] init]
                   end:nil
                  data:nil];
 }
-- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
+- (MPIEventPersistence)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start {
     return [self error:source description:description
                  tags:tags
                 start:start
                   end:nil
                  data:nil];
 }
-- (void)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
+- (MPIEventPersistence)error:(NSString*)source description:(NSString*)description tags:(NSArray*)tags start:(NSDate*)start end:(NSDate*)end {
     return [self error:source description:description
                  tags:tags
                 start:start
                   end:end
                  data:nil];
 }
-- (void)error:(NSString*)source
+- (MPIEventPersistence)error:(NSString*)source
  description:(NSString*)description
         tags:(NSArray*)tags
        start:(NSDate*)start
@@ -339,15 +345,21 @@ description:(NSString*)description
 
 #pragma mark - send to API
 
-- (void)persist:(MPIEvent*)evt {
+- (MPIEventPersistence)persist:(MPIEvent*)evt {
     // validate event parameter
     if (!evt || !evt.isValid) {
         
         NSLog(@"[MPIEvent] INVALID. %@", evt);
-        return; //validation
+        return MPIEventPersistenceError; //validation
     }
     
-    NSString* messagesPath = [kBaseURL stringByAppendingPathComponent:@"events"];
+    // IF API is not reachable ... return false
+    if (_apiIsReachable == NO) {
+        return MPIEventPersistenceOffline;
+    }
+    
+    NSString* baseURL = [[NSString alloc] initWithFormat:@"http://%@/api/v1/", kApiHost];
+    NSString* messagesPath = [baseURL stringByAppendingPathComponent:@"events"];
     
     NSURL* url = [NSURL URLWithString:messagesPath]; //create url
     
@@ -375,6 +387,31 @@ description:(NSString*)description
         }
     }];
     [dataTask resume];
+    return MPIEventPersistenceSuccess;
+}
+
+
+#pragma mark - Track reachability to API
+- (void)setupReachability
+{
+    // Allocate a reachability object
+    Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    // Set the blocks
+    reach.reachableBlock = ^(Reachability*reach)
+    {
+        NSLog(@"REACHABLE!");
+        _apiIsReachable = YES;
+    };
+    
+    reach.unreachableBlock = ^(Reachability*reach)
+    {
+        NSLog(@"UNREACHABLE!");
+        _apiIsReachable = NO;
+    };
+    
+    // Start the notifier, which will cause the reachability object to retain itself!
+    [reach startNotifier];
 }
 
 @end
