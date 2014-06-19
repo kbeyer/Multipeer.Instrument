@@ -18,6 +18,9 @@
 @property (nonatomic, strong) MCNearbyServiceAdvertiser *serviceAdvertiser;
 @property (nonatomic, strong) MCNearbyServiceBrowser *serviceBrowser;
 
+// track start time of invitation process for specific peers
+@property (nonatomic, strong) NSMutableDictionary* invitations;
+
 // Connected peers are stored in the MCSession
 // Manually track connecting and disconnected peers
 @property (nonatomic, strong) NSMutableOrderedSet *connectingPeersOrderedSet;
@@ -93,6 +96,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         
         _connectingPeersOrderedSet = [[NSMutableOrderedSet alloc] init];
         _disconnectedPeersOrderedSet = [[NSMutableOrderedSet alloc] init];
+        _invitations = [[NSMutableDictionary alloc] init];
         
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         
@@ -147,6 +151,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     MPIMessage *msg = [[MPIMessage alloc] init];
     msg.type = type;
     msg.val = val;
+    msg.createdAt = [[NSDate alloc] init];
     // serialize as JSON dictionary
     NSDictionary* json = [MTLJSONAdapter JSONDictionaryFromModel:msg];
     
@@ -279,6 +284,12 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
             
         case MCSessionStateConnected:
         {
+            NSDate* inviteBeganAt = _invitations[peerID.displayName];
+            if (inviteBeganAt != nil) {
+                NSArray* tags = [[NSArray alloc] initWithObjects:@"Invite", nil];
+                NSString* description = [NSString stringWithFormat:@"Finished invite process with %@.", peerID.displayName];
+                [[MPIEventLogger sharedInstance] info:@"Invitation" description:description tags:tags start:inviteBeganAt end:[[NSDate alloc] init]];
+            }
             [self.connectingPeersOrderedSet removeObject:peerID];
             [self.disconnectedPeersOrderedSet removeObject:peerID];
             break;
@@ -306,7 +317,25 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         NSError *error = nil;
         MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:obj error:&error];
         
-        NSLog(@"didReceiveData %@:%@ from %@", msg.type, msg.val, peerID.displayName);
+        // NEW: Log Message recieve event
+        NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+        NSString* action = @"Display";
+        if ([msg.type isEqualToString:@"1"]) {
+            action = @"Flash";
+        } else if ([msg.type isEqualToString:@"2"]) {
+            action = @"Volume";
+        }
+        NSDate* start = msg.createdAt;
+        NSDate* end = [[NSDate alloc] init];
+        
+        NSString* description = [NSString stringWithFormat:@"HEY! %@ changed my %@", peerID.displayName, action];
+        NSArray* tags = [[NSArray alloc] initWithObjects:@"Message", action, nil];
+        [[MPIEventLogger sharedInstance] warn:source description:description tags:tags start:start end:end data:obj];
+        
+        
+        // OLD
+        //NSLog(@"didReceiveData %@:%@ from %@", msg.type, msg.val, peerID.displayName);
+        
         
         [[MPIGameManager instance] handleActionRequest:msg.type value:msg.val];
         
@@ -369,6 +398,9 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     if ([self sha1:myPeerID.displayName] > [self sha1:remotePeerName])
     {
         [[MPIEventLogger sharedInstance] info:source description:[NSString stringWithFormat:@"Inviting %@", remotePeerName]];
+        
+        // save invitation start for this peer
+        _invitations[remotePeerName] = [[NSDate alloc] init];
         
         [browser invitePeer:nearbyPeerID toSession:self.session withContext:nil timeout:10.0];
     }
