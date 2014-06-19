@@ -18,10 +18,19 @@
     return dateFormatter;
 }
 
++ (NSValueTransformer *)createdAtJSONTransformer {
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+        return [self.dateFormatter dateFromString:str];
+    } reverseBlock:^(NSDate *date) {
+        return [self.dateFormatter stringFromDate:date];
+    }];
+}
+
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
              @"type": @"t",
-             @"val": @"v"
+             @"val": @"v",
+             @"createdAt": @"c"
              };
 }
 
