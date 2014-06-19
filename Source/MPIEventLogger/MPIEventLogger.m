@@ -127,14 +127,14 @@ description:(NSString*)description
     // log to specified destination
     switch(_logDestination){
         case MPILogDestinationConsole:
-            NSLog(@"[MPIEvent] %@", evt);
+            NSLog(@"[MPIEvent][%@] %@", source, description);
             break;
         case MPILogDestinationAPI:
             [self persist:evt];
             break;
         case MPILogDestinationALL:
             [self persist:evt];
-            NSLog(@"[MPIEvent] %@", evt);
+            NSLog(@"[MPIEvent][%@] %@", source, description);
             break;
     }
 }
