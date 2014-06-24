@@ -25,7 +25,7 @@ static MPILoggerLevel const kDefaultLogLevel = MPILoggerLevelInfo;
 // in the case it is not configured explicitly
 static MPILogDestination const kDefaultLogDestination = MPILogDestinationALL;
 
-static NSString* const kApiHost = @"http://localhost:3000";
+static NSString* const kApiHost = @"localhost:3000";
 
 @interface MPIEventLogger()
 // re-usable url session for API calls
@@ -391,6 +391,8 @@ description:(NSString*)description
         if (!error) {
             //NSArray* responseArray = @[[NSJSONSerialization JSONObjectWithData:data options:0 error:NULL]];
             //NSLog(@"request completed");
+        } else {
+            printf("%s\n",[[NSString stringWithFormat:@"Error saving log event to API. %@", error] UTF8String]);
         }
     }];
     [dataTask resume];
