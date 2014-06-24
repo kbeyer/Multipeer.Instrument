@@ -132,11 +132,12 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 }
 
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeers:(NSArray *)peers{
+    NSDate* sendDt = [NSDate date];
     // create message object
     MPIMessage *msg = [[MPIMessage alloc] init];
     msg.type = type;
     msg.val = val;
-    msg.createdAt = [[NSDate alloc] init];
+    msg.createdAt = [[MPIEventLogger sharedInstance] timeWithOffset:sendDt];
     // serialize as JSON dictionary
     NSDictionary* json = [MTLJSONAdapter JSONDictionaryFromModel:msg];
     
@@ -158,8 +159,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
                             source:source
                        description:@"sending message"
                               tags:[[NSArray alloc] initWithObjects:@"Message", nil]
-                             start:[[NSDate alloc]init]
-                               end:[[NSDate alloc]init]
+                             start:sendDt
+                               end:nil
                               data:json];
 }
 
@@ -350,11 +351,11 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
             action = @"Sync Request";
         }
         NSDate* start = msg.createdAt;
-        NSDate* end = [[NSDate alloc] init];
+        NSDate* end = [NSDate date];
         
         NSString* description = [NSString stringWithFormat:@"HEY! %@ changed my %@", peerID.displayName, action];
         NSArray* tags = [[NSArray alloc] initWithObjects:@"Message", action, nil];
-        MPIEventPersistence status = [[MPIEventLogger sharedInstance] warn:source description:description tags:tags start:start end:end data:obj];
+        MPIEventPersistence status = [[MPIEventLogger sharedInstance] debug:source description:description tags:tags start:start end:end data:obj];
         
         // re-route if OFFLINE
         if (status == MPIEventPersistenceOffline) {

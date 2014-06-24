@@ -66,6 +66,7 @@ typedef NS_ENUM(NSUInteger, MPIEventPersistence) {
 
 // the time offset to be used for adjusting log time to match 'time server' or reference value
 @property (nonatomic) double timeDeltaSeconds;
+- (NSDate*)timeWithOffset:(NSDate*)date;
 
 // overload the log method to support various levels of detail to specified
 // for creation of the MPIEvent object

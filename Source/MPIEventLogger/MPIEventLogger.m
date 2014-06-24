@@ -404,18 +404,18 @@ description:(NSString*)description
 - (void)setupReachability
 {
     // Allocate a reachability object
-    Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    Reachability* reach = [Reachability reachabilityWithHostname:kApiHost];
     
     // Set the blocks
     reach.reachableBlock = ^(Reachability*reach)
     {
-        printf("%s\n",[[NSString stringWithFormat:@"REACHABLE!"] UTF8String]);
+        printf("%s\n",[[NSString stringWithFormat:@"API is REACHABLE!"] UTF8String]);
         _apiIsReachable = YES;
     };
     
     reach.unreachableBlock = ^(Reachability*reach)
     {
-        printf("%s\n",[[NSString stringWithFormat:@"REACHABLE!"] UTF8String]);
+        printf("%s\n",[[NSString stringWithFormat:@"API is UNREACHABLE!"] UTF8String]);
         _apiIsReachable = NO;
     };
     
@@ -427,6 +427,9 @@ description:(NSString*)description
 // returns the system time plus delta based on time sync process
 - (NSDate*)timeWithOffset:(NSDate*)date
 {
+    if(date == nil) {
+        return nil;
+    }
     return [NSDate dateWithTimeInterval:_timeDeltaSeconds sinceDate:date];
 }
 
