@@ -32,9 +32,20 @@
 // Helper method for human readable printing of MCSessionState. This state is per peer.
 - (NSString *)stringForPeerConnectionState:(MCSessionState)state;
 
+// the peer used as reference time server
+@property (strong, nonatomic) MCPeerID* timeServerPeerID;
+
 // Helper method for sending messages to peers
+- (void)sendTimestamp:(MCPeerID*)peer;
+- (void)sendTimestamp:(NSNumber*)val toPeer:(MCPeerID*)peer;
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeer:(MCPeerID*)peer;
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeers:(NSArray*)peers;
+
+// advertiser and browser controller
+- (void)startAdvertising;
+- (void)stopAdvertising;
+- (void)startBrowsing;
+- (void)stopBrowsing;
 
 @end
 

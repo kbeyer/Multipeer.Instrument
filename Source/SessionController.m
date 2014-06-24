@@ -110,6 +110,16 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 }
 
 #pragma mark - Public methods
+
+- (void)sendTimestamp:(MCPeerID*)peer{
+    // call overriden method
+    [self sendTimestamp:[[NSNumber alloc] initWithDouble:[[NSDate date] timeIntervalSince1970]] toPeer:peer];
+}
+- (void)sendTimestamp:(NSNumber*)time toPeer:(MCPeerID*)peer{
+    // call overriden method
+    [self sendMessage:@"4" value:time toPeer:peer];
+}
+
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeer:(MCPeerID*)peer{
     
     // convert single peer to array
@@ -192,6 +202,27 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     [self.connectingPeersOrderedSet removeAllObjects];
     [self.disconnectedPeersOrderedSet removeAllObjects];
 }
+// advertiser and browser controller
+- (void)startAdvertising
+{
+    NSLog(@"startAdvertising");
+    [self.serviceAdvertiser startAdvertisingPeer];
+}
+- (void)stopAdvertising
+{
+    NSLog(@"stopAdvertising");
+    [self.serviceAdvertiser stopAdvertisingPeer];
+}
+- (void)startBrowsing
+{
+    NSLog(@"startBrowsing");
+    [self.serviceBrowser startBrowsingForPeers];
+}
+- (void)stopBrowsing
+{
+    NSLog(@"stopBrowsing");
+    [self.serviceBrowser stopBrowsingForPeers];
+}
 
 - (void)startServices
 {
@@ -200,8 +231,10 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"start services for peerID: %@", self.peerID.displayName]];
     
     [self setupSession];
-    [self.serviceAdvertiser startAdvertisingPeer];
-    [self.serviceBrowser startBrowsingForPeers];
+    
+    // TEST: only do this when switch is changed
+    //[self.serviceAdvertiser startAdvertisingPeer];
+    //[self.serviceBrowser startBrowsingForPeers];
 }
 
 - (void)stopServices
@@ -210,8 +243,10 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
     [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"stop services for peerID: %@", self.peerID.displayName]];
     
-    [self.serviceBrowser stopBrowsingForPeers];
-    [self.serviceAdvertiser stopAdvertisingPeer];
+    // TEST: only do this when switch is changed
+    //[self.serviceBrowser stopBrowsingForPeers];
+    //[self.serviceAdvertiser stopAdvertisingPeer];
+    
     [self teardownSession];
 }
 
@@ -240,6 +275,12 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 
 #pragma mark - MCSessionDelegate protocol conformance
 
+// See: http://stackoverflow.com/questions/18935288/why-does-my-mcsession-peer-disconnect-randomly
+- (void) session:(MCSession*)session didReceiveCertificate:(NSArray*)certificate fromPeer:(MCPeerID*)peerID certificateHandler:(void (^)(BOOL accept))certificateHandler
+{
+    if (certificateHandler != nil) { certificateHandler(YES); }
+}
+
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
     
@@ -262,6 +303,10 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
                 NSArray* tags = [[NSArray alloc] initWithObjects:@"Invite", nil];
                 NSString* description = [NSString stringWithFormat:@"Finished invite process with %@.", peerID.displayName];
                 [[MPIEventLogger sharedInstance] info:@"Invitation" description:description tags:tags start:inviteBeganAt end:[[NSDate alloc] init]];
+                
+                // initiate time sync & save self as time server
+                _timeServerPeerID = _peerID;
+                [[MPIGameManager instance] requestTimeSync:peerID value:0];
             }
             [self.connectingPeersOrderedSet removeObject:peerID];
             [self.disconnectedPeersOrderedSet removeObject:peerID];
@@ -297,6 +342,10 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
             action = @"Flash";
         } else if ([msg.type isEqualToString:@"2"]) {
             action = @"Volume";
+        } else if ([msg.type isEqualToString:@"4"]) {
+            action = @"Time";
+        } else if ([msg.type isEqualToString:@"5"]) {
+            action = @"Sync Request";
         }
         NSDate* start = msg.createdAt;
         NSDate* end = [[NSDate alloc] init];
@@ -317,8 +366,29 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         // OLD
         //NSLog(@"didReceiveData %@:%@ from %@", msg.type, msg.val, peerID.displayName);
         
-        
-        [[MPIGameManager instance] handleActionRequest:msg.type value:msg.val];
+        if([action isEqualToString:@"Sync Request"]) {
+            
+            // save reference to peer which initiated sync
+            _timeServerPeerID = peerID;
+            
+            // initiate time sync with requestor
+            [[MPIGameManager instance] calculateTimeDeltaFrom:peerID];
+            
+        } else if([action isEqualToString:@"Time"]) {
+            NSLog(@"%@", _timeServerPeerID.displayName);
+            NSLog(@"%@", _peerID.displayName);
+            //
+            // DANGER: what if peers have the same display name
+            if ([_timeServerPeerID.displayName isEqualToString:_peerID.displayName]) {
+                // this is the time server ... so just reply with timestamp
+                [self sendTimestamp:peerID];
+            } else {
+                // this is peer that is requesting sync
+                [[MPIGameManager instance] recievedTimestamp:peerID value:msg.val];
+            }
+        } else {
+            [[MPIGameManager instance] handleActionRequest:msg.type value:msg.val];
+        }
         
     }
     

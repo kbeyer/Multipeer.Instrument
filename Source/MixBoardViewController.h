@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *nameInput;
 - (IBAction)discoverClicked:(id)sender;
 - (IBAction)advertiseChanged:(id)sender;
+- (IBAction)browseChanged:(id)sender;
 
 
 @end

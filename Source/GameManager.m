@@ -15,7 +15,12 @@
 @interface MPIGameManager()
 @property (nonatomic, strong) AVCaptureSession *avSession;
 @property (nonatomic, strong) MPIAudioManager *audioManager;
+@property double lastSendTimestamp;
+@property (nonatomic, strong) NSMutableArray *timeLatencies;
 @end
+
+
+static int const kTimeSyncIterations = 5;
 
 @implementation MPIGameManager
 
@@ -58,6 +63,70 @@
     _sessionController.delegate = nil;
 }
 
+#pragma mark - Time sync
+// initiates simple algorithm to calculate system time delta with specified player
+- (void)calculateTimeDeltaFrom:(id)playerID
+{
+    // first clear latency array so that we can refresh values
+    _timeLatencies = [[NSMutableArray alloc] init];
+    // send first message to kick off the process
+    _lastSendTimestamp = [[NSDate date] timeIntervalSince1970];
+    [_sessionController sendTimestamp:[[NSNumber alloc] initWithDouble:_lastSendTimestamp] toPeer:playerID];
+}
+// returns the system time plus delta based on time sync process
+- (NSDate*)currentTime
+{
+    return [NSDate dateWithTimeIntervalSinceNow:_timeDeltaSeconds];
+}
+
+- (void)recievedTimestamp:(id)playerID value:(NSNumber *)val
+{
+    NSLog(@"%lu", (unsigned long)_timeLatencies.count);
+    
+    double localTimestamp = [[NSDate date] timeIntervalSince1970];
+    double serverTimestamp = [val doubleValue];
+    
+    // calculate current iteration latency
+    double latency = (localTimestamp - _lastSendTimestamp) / 2;
+    [_timeLatencies addObject:[[NSNumber alloc] initWithDouble:latency]];
+    
+    
+    // check how many latency calculations we have
+    if (_timeLatencies.count >= kTimeSyncIterations) {
+        // done with sync process ... calculate final offset
+        double total;
+        total = 0;
+        for(NSNumber *value in _timeLatencies){
+            total+=[value floatValue];
+        }
+        
+        // average latencies
+        double averageLatency = total / _timeLatencies.count;
+        
+        // save final offset
+        _timeDeltaSeconds = serverTimestamp - localTimestamp + averageLatency;
+        
+        // save configuration to event logger
+        [MPIEventLogger sharedInstance].timeDeltaSeconds = _timeDeltaSeconds;
+        
+        NSLog(@"TimeSync Complete. Delta: %f", _timeDeltaSeconds);
+        return;
+        
+    } else if (_timeLatencies.count == 1) {
+        
+        // save first iteration offset
+        _timeDeltaSeconds = serverTimestamp - localTimestamp + latency;
+        
+    }
+    
+    // save last send with initially calculated offset
+    _lastSendTimestamp = [[NSDate date] timeIntervalSince1970] + _timeDeltaSeconds;
+    
+    // send back to server
+    [_sessionController sendTimestamp:[[NSNumber alloc] initWithDouble:_lastSendTimestamp] toPeer:_sessionController.timeServerPeerID];
+    
+}
+
 #pragma mark - SessionControllerDelegate protocol conformance
 
 - (void)sessionDidChangeState
@@ -66,13 +135,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self notifyPlayersChange];
     });
-    
-    // log session state change event
-    //MPIActionMessage* msg = [[MPIActionMessage alloc] init];
-    //msg.type = @"session change";
-    
-    // log to server
-    //[[MPIEventLogger instance] log:kLogSource description:(MPIMessage*)msg];
 }
 
 
@@ -84,6 +146,9 @@
 }
 - (void)requestColorChange:(id)peerID value:(NSNumber*)val {
     [_sessionController sendMessage:@"3" value:val toPeer:peerID];
+}
+- (void)requestTimeSync:(id)peerID value:(NSNumber *)val {
+    [_sessionController sendMessage:@"5" value:val toPeer:peerID];
 }
 
 - (void)handleActionRequest:(NSString*)type value:(NSNumber*)val {
@@ -103,6 +168,10 @@
         self.color = val;
         [self notifyColorChange];
         [_audioManager setLoopVolume:[val floatValue] name:@"drums"];
+    } else if ([type isEqualToString:@"4"]) {
+        // timestamp handled by session controller
+    } else if ([type isEqualToString:@"5"]) {
+        // request for time sync handled by session controller
     }
 }
 

@@ -166,10 +166,20 @@
     UISwitch* advertiseSwitch = (UISwitch*)sender;
     
     if (advertiseSwitch.isOn) {
-        //[self.sessionController  startAdvertisingPeer];
+        [[MPIGameManager instance].sessionController startAdvertising];
     } else {
-        //[self.sessionController  stopAdvertisingPeer];
+        [[MPIGameManager instance].sessionController stopAdvertising];
     }
 
+}
+
+- (IBAction)browseChanged:(id)sender {
+    UISwitch* advertiseSwitch = (UISwitch*)sender;
+    
+    if (advertiseSwitch.isOn) {
+        [[MPIGameManager instance].sessionController startBrowsing];
+    } else {
+        [[MPIGameManager instance].sessionController stopBrowsing];
+    }
 }
 @end

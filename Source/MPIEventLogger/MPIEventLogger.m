@@ -39,6 +39,7 @@ static NSString* const kApiHost = @"k6beventlogger.herokuapp.com";
 - (id)init {
     self = [super init];
     if (self) {
+        _timeDeltaSeconds = 0;
         // track if api url is reachable
         [self setupReachability];
         // initial configuration
@@ -128,8 +129,8 @@ description:(NSString*)description
                                     source:source
                                description:description
                                       tags:tags
-                                     start:start
-                                       end:end
+                                     start:[self timeWithOffset:start]
+                                       end:[self timeWithOffset:end]
                                       data:data
                                   deviceID:deviceName
                                     fnName:nil];
@@ -418,6 +419,13 @@ description:(NSString*)description
     
     // Start the notifier, which will cause the reachability object to retain itself!
     [reach startNotifier];
+}
+
+#pragma mark - time offset helper
+// returns the system time plus delta based on time sync process
+- (NSDate*)timeWithOffset:(NSDate*)date
+{
+    return [NSDate dateWithTimeInterval:_timeDeltaSeconds sinceDate:date];
 }
 
 @end

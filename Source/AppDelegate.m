@@ -30,10 +30,7 @@
 
 - (void)setupEventLogger
 {
-    MPIEventLogger* logger = [MPIEventLogger sharedInstance];
-    
-    
-    /*
+     MPIEventLogger* logger = [MPIEventLogger sharedInstance];
      NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
      // TEST: temp functions to test logging
      logger.logLevel = MPILoggerLevelDebug;
@@ -54,7 +51,7 @@
      [logger info:source description:@"CONSOLE ONLY"];
      logger.logDestination = MPILogDestinationAPI;
      [logger info:source description:@"API ONLY"];
-     */
+    
     
     // setup logger at INFO level and to console and API
     logger.logLevel = MPILoggerLevelFatal;
