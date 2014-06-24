@@ -78,8 +78,6 @@
         //NSTimeInterval msgTime = UIApplication.sharedApplication.backgroundTimeRemaining - gracePeriod;
         NSTimeInterval msgTime = gracePeriod;
         
-        NSLog(@"Background notification delay: %f", msgTime);
-        
         UILocalNotification* n = [[UILocalNotification alloc] init];
         self.expireNotification = n;
         self.expireNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:msgTime];
@@ -101,6 +99,7 @@
 }
 - (void) applicationDidEnterBackground:(UIApplication *)application
 {
+    NSLog(@"applicationDidEnterBackground");
     self.endSessionTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
                              {
                                  [[MPIGameManager instance] shutdown];
@@ -111,6 +110,7 @@
 }
 - (void) applicationWillEnterBackground:(UIApplication *)application
 {
+    NSLog(@"applicationWillEnterBackground");
     self.endSessionTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
                    {
                        [[MPIGameManager instance] shutdown];
@@ -122,6 +122,7 @@
 
 - (void) applicationWillEnterForeground:(UIApplication *)application
 {
+    NSLog(@"applicationWillEnterForeground");
     [self killExpireNotification];
     if (self.endSessionTaskId != UIBackgroundTaskInvalid)
     {
@@ -131,6 +132,7 @@
     // NOTE: let the session state events handle disconnect/reconnection
     // this way if the app comes back into forground with active session
     // it isn't automatically disconnected
+    // TODO: check connected peers? .. and restart previous services?
     //[[MPIGameManager instance] startup];
 }
 
