@@ -48,6 +48,20 @@
     // set name
     _nameInput.text = [MPIGameManager instance].sessionController.displayName;
     
+    // timer for updating clock
+    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
+    
+}
+
+- (void)timerTick:(NSTimer *)timer {
+    
+    static NSDateFormatter *dateFormatter;
+    if (!dateFormatter) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"hh:mm:ss.SSS";
+    }
+    _timeLabel.text = [dateFormatter stringFromDate:[NSDate date]];
+    _timeWithOffsetLabel.text = [dateFormatter stringFromDate:[MPIGameManager instance].currentTime];
 }
 
 - (void)configureAudio

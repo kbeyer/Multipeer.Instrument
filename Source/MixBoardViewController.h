@@ -13,6 +13,8 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *participantTableView;
 @property (weak, nonatomic) IBOutlet UITextField *nameInput;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeWithOffsetLabel;
 - (IBAction)discoverClicked:(id)sender;
 - (IBAction)advertiseChanged:(id)sender;
 - (IBAction)browseChanged:(id)sender;

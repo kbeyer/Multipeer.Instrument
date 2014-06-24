@@ -20,7 +20,7 @@
 @end
 
 
-static int const kTimeSyncIterations = 5;
+static int const kTimeSyncIterations = 10;
 
 @implementation MPIGameManager
 
@@ -124,6 +124,9 @@ static int const kTimeSyncIterations = 5;
     
     // send back to server
     [_sessionController sendTimestamp:[[NSNumber alloc] initWithDouble:_lastSendTimestamp] toPeer:_sessionController.timeServerPeerID];
+    
+    //NSLog(@"local: %f, server: %f, latency: %f, lastSend: %f",
+    //      localTimestamp, serverTimestamp, latency, _lastSendTimestamp);
     
 }
 
