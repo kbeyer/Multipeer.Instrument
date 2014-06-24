@@ -47,6 +47,10 @@
 - (void)startBrowsing;
 - (void)stopBrowsing;
 
+// stop all multi-peer related sessions
+- (void)startup;
+- (void)shutdown;
+
 @end
 
 // Delegate methods for SessionController

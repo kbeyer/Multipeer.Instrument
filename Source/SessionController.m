@@ -72,6 +72,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         
+        /*
         // Register for notifications
         [defaultCenter addObserver:self
                           selector:@selector(startServices)
@@ -82,8 +83,9 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
                           selector:@selector(stopServices)
                               name:UIApplicationDidEnterBackgroundNotification
                             object:nil];
+         */
         
-        [self startServices];
+        [self startup];
         
         _connectedPeers = self.session.connectedPeers;
         _connectingPeers = [self.connectingPeersOrderedSet array];
@@ -224,7 +226,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     [self.serviceBrowser stopBrowsingForPeers];
 }
 
-- (void)startServices
+- (void)startup
 {
     
     NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
@@ -237,7 +239,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     //[self.serviceBrowser startBrowsingForPeers];
 }
 
-- (void)stopServices
+- (void)shutdown
 {
     
     NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];

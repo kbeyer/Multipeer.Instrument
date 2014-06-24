@@ -11,6 +11,11 @@
 #import "TestFlight.h"
 #import "MPIEventLogger.h"
 
+@interface MPIAppDelegate()
+@property (strong, nonatomic) UILocalNotification* expireNotification;
+@property (nonatomic) UIBackgroundTaskIdentifier endSessionTaskId;
+@end
+
 @implementation MPIAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -31,7 +36,9 @@
 - (void)setupEventLogger
 {
      MPIEventLogger* logger = [MPIEventLogger sharedInstance];
-     NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
+
+    /*
+    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
      // TEST: temp functions to test logging
      logger.logLevel = MPILoggerLevelDebug;
      [logger debug:source description:@"debug level test"];
@@ -51,48 +58,86 @@
      [logger info:source description:@"CONSOLE ONLY"];
      logger.logDestination = MPILogDestinationAPI;
      [logger info:source description:@"API ONLY"];
-    
+    */
     
     // setup logger at INFO level and to console and API
     logger.logLevel = MPILoggerLevelFatal;
     logger.logDestination = MPILogDestinationALL;
 }
-							
-- (void)applicationWillResignActive:(UIApplication *)application
+
+- (void) createExpireNotification
 {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    [self killExpireNotification];
     
-    
-    //[[MPIPubNubManager pubnub] disconnect];
+    // if peers connected, setup kill switch
+    if ([MPIGameManager instance].sessionController.connectedPeers.count != 0)
+    {
+        NSTimeInterval gracePeriod = 10000.0f;
+        
+        // create notification that will get the user back into the app when the background process time is about to expire
+        //NSTimeInterval msgTime = UIApplication.sharedApplication.backgroundTimeRemaining - gracePeriod;
+        NSTimeInterval msgTime = gracePeriod;
+        
+        NSLog(@"Background notification delay: %f", msgTime);
+        
+        UILocalNotification* n = [[UILocalNotification alloc] init];
+        self.expireNotification = n;
+        self.expireNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:msgTime];
+        self.expireNotification.alertBody = @"Session is about to expire.";
+        self.expireNotification.soundName = UILocalNotificationDefaultSoundName;
+        self.expireNotification.applicationIconBadgeNumber = 1;
+        
+        [UIApplication.sharedApplication scheduleLocalNotification:self.expireNotification];
+    }
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
+- (void) killExpireNotification
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    
-    
-    // unsubscribe when in background
-    //[[MPIPubNubManager pubnub] disconnect];
+    if (self.expireNotification != nil)
+    {
+        [UIApplication.sharedApplication cancelLocalNotification:self.expireNotification];
+        self.expireNotification = nil;
+    }
+}
+- (void) applicationDidEnterBackground:(UIApplication *)application
+{
+    self.endSessionTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+                             {
+                                 [[MPIGameManager instance] shutdown];
+                                 [[UIApplication sharedApplication] endBackgroundTask:self.endSessionTaskId];
+                                 self.endSessionTaskId = UIBackgroundTaskInvalid;
+                             }];
+    [self createExpireNotification];
+}
+- (void) applicationWillEnterBackground:(UIApplication *)application
+{
+    self.endSessionTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+                   {
+                       [[MPIGameManager instance] shutdown];
+                       [[UIApplication sharedApplication] endBackgroundTask:self.endSessionTaskId];
+                       self.endSessionTaskId = UIBackgroundTaskInvalid;
+                   }];
+    [self createExpireNotification];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
+- (void) applicationWillEnterForeground:(UIApplication *)application
 {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    
-    // reconnect
-    //[[MPIPubNubManager pubnub] connect];
+    [self killExpireNotification];
+    if (self.endSessionTaskId != UIBackgroundTaskInvalid)
+    {
+        [[UIApplication sharedApplication] endBackgroundTask:self.endSessionTaskId];
+        self.endSessionTaskId = UIBackgroundTaskInvalid;
+    }
+    // NOTE: let the session state events handle disconnect/reconnection
+    // this way if the app comes back into forground with active session
+    // it isn't automatically disconnected
+    //[[MPIGameManager instance] startup];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [self killExpireNotification];
+    [[MPIGameManager instance] shutdown]; // shutdown multi-peer
 }
 
 @end

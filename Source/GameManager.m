@@ -232,4 +232,13 @@ static int const kTimeSyncIterations = 10;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"colorChanged" object:self];
 }
 
+- (void) startup
+{
+    [_sessionController startup];
+}
+- (void) shutdown
+{
+    [_sessionController shutdown];
+}
+
 @end

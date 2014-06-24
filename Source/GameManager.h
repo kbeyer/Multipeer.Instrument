@@ -37,4 +37,6 @@
 
 - (void)handleActionRequest:(NSString*)type value:(NSNumber*)val;
 
+- (void)startup;
+- (void)shutdown;
 @end
