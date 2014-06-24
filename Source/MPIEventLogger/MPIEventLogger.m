@@ -25,7 +25,7 @@ static MPILoggerLevel const kDefaultLogLevel = MPILoggerLevelInfo;
 // in the case it is not configured explicitly
 static MPILogDestination const kDefaultLogDestination = MPILogDestinationALL;
 
-static NSString* const kApiHost = @"k6beventlogger.herokuapp.com";
+static NSString* const kApiHost = @"http://localhost:3000";
 
 @interface MPIEventLogger()
 // re-usable url session for API calls
