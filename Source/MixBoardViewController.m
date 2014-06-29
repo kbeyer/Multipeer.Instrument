@@ -193,9 +193,11 @@
 
 - (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection
 {
+    NSLog(@"Song selected.");
+    
     [self dismissViewControllerAnimated:YES completion:nil];
     
-    
+    // check if already streaming
     if (self.outputStreamer) return;
     
     self.song = [mediaItemCollection.items[0] copy];
@@ -239,16 +241,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)changeSongInfo:(NSDictionary *)info
-{
-    if (info[@"artwork"])
-        self.albumImage.image = info[@"artwork"];
-    else
-        self.albumImage.image = nil;
-    
-    self.songTitle.text = info[@"title"];
-    self.songArtist.text = info[@"artist"];
-}
 
 #pragma mark - MPISessionControllerDelegate
 

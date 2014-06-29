@@ -70,9 +70,9 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         _disconnectedPeersOrderedSet = [[NSMutableOrderedSet alloc] init];
         _invitations = [[NSMutableDictionary alloc] init];
         
+        /*
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         
-        /*
         // Register for notifications
         [defaultCenter addObserver:self
                           selector:@selector(startServices)
@@ -476,9 +476,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
     [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"Browser found (name: %@)", remotePeerName]];
     
-    MCPeerID *myPeerID = self.session.myPeerID;
-    
-    if (YES || [self sha1:myPeerID.displayName] > [self sha1:remotePeerName])
+    if (YES || [self sha1:self.session.myPeerID.displayName] > [self sha1:remotePeerName])
     {
         [[MPIEventLogger sharedInstance] info:source description:[NSString stringWithFormat:@"Inviting %@", remotePeerName]];
         
@@ -489,7 +487,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     }
     else
     {
-        [[MPIEventLogger sharedInstance] info:source description:[NSString stringWithFormat:@"Not inviting(my sha1: %@, remote sha1: %@)", [self sha1:myPeerID.displayName], [self sha1:remotePeerName]]];
+        [[MPIEventLogger sharedInstance] info:source description:[NSString stringWithFormat:@"Not inviting(my sha1: %@, remote sha1: %@)", [self sha1:self.session.myPeerID.displayName], [self sha1:remotePeerName]]];
     }
     
     [self updateDelegate];

@@ -30,7 +30,7 @@
 
     self.audioStream = [[TDAudioStream alloc] initWithOutputStream:stream];
     self.audioStream.delegate = self;
-    NSLog(@"Init");
+    NSLog(@"AudioOutputStreamer Init");
 
     return self;
 }
@@ -41,7 +41,7 @@
         return [self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:YES];
     }
 
-    NSLog(@"Start");
+    NSLog(@"AudioOutputStreamer Start");
     self.streamThread = [[NSThread alloc] initWithTarget:self selector:@selector(run) object:nil];
     [self.streamThread start];
 }
@@ -52,11 +52,11 @@
         [self.audioStream open];
 
         self.isStreaming = YES;
-        NSLog(@"Loop");
+        NSLog(@"AudioOutputStreamer Loop");
 
         while (self.isStreaming && [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) ;
 
-        NSLog(@"Done");
+        NSLog(@"AudioOutputStreamer Done");
     }
 }
 
@@ -71,7 +71,7 @@
 
     [self.assetReader addOutput:self.assetOutput];
     [self.assetReader startReading];
-    NSLog(@"Read Asset");
+    NSLog(@"AudioOutputStreamer Read Asset");
 }
 
 - (void)sendDataChunk
@@ -80,7 +80,8 @@
 
     sampleBuffer = [self.assetOutput copyNextSampleBuffer];
 
-    if (sampleBuffer == NULL || CMSampleBufferGetNumSamples(sampleBuffer) == 0) {
+    if (sampleBuffer == NULL) return;
+    if (CMSampleBufferGetNumSamples(sampleBuffer) == 0) {
         CFRelease(sampleBuffer);
         return;
     }
@@ -128,12 +129,12 @@
 
         case TDAudioStreamEventError:
             // TODO: shit!
-            NSLog(@"Stream Error");
+            NSLog(@"AudioOutputStreamer Stream Error");
             break;
 
         case TDAudioStreamEventEnd:
             // TODO: shit!
-            NSLog(@"Stream Ended");
+            NSLog(@"AudioOutputStreamer Stream Ended");
             break;
 
         default:
