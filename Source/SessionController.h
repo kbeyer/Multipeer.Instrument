@@ -29,6 +29,9 @@
 @property (nonatomic, readonly) NSArray *connectedPeers;
 @property (nonatomic, readonly) NSArray *disconnectedPeers;
 
+// creates and returns stream for peer via current session
+- (NSOutputStream *)outputStreamForPeer:(MCPeerID *)peer;
+
 // Helper method for human readable printing of MCSessionState. This state is per peer.
 - (NSString *)stringForPeerConnectionState:(MCSessionState)state;
 
@@ -40,6 +43,8 @@
 - (void)sendTimestamp:(NSNumber*)val toPeer:(MCPeerID*)peer;
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeer:(MCPeerID*)peer;
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeers:(NSArray*)peers;
+- (void)sendMessage:(id)msg toPeer:(MCPeerID*)peer;
+- (void)sendMessage:(id)msg toPeers:(NSArray*)peers;
 
 // advertiser and browser controller
 - (void)startAdvertising;
@@ -58,6 +63,8 @@
 
 // Session changed state - connecting, connected and disconnected peers changed
 - (void)sessionDidChangeState;
+
+- (void)session:(MPISessionController *)session didReceiveAudioStream:(NSInputStream *)stream;
 
 @end
 

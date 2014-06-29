@@ -6,10 +6,12 @@
 //  Copyright (c) 2014 Kyle Beyer. All rights reserved.
 //
 
+
 #import "MixBoardViewController.h"
 #import "MixBoardTableCell.h"
 #import "GameManager.h"
 #import "Player.h"
+#import "TDAudioStreamer.h"
 
 
 #import "UIActionSheet+Blocks.h"
@@ -17,6 +19,14 @@
 @interface MPIMixBoardViewController ()
 
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+
+@property (weak, nonatomic) IBOutlet UIImageView *albumImage;
+@property (weak, nonatomic) IBOutlet UILabel *songTitle;
+@property (weak, nonatomic) IBOutlet UILabel *songArtist;
+
+@property (strong, nonatomic) MPMediaItem *song;
+@property (strong, nonatomic) TDAudioOutputStreamer *outputStreamer;
+@property (strong, nonatomic) TDAudioInputStreamer *inputStream;
 
 @end
 
@@ -41,6 +51,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(volumeChanged) name:@"volumeChanged" object:nil];
     // listen for color change
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorChanged) name:@"colorChanged" object:nil];
+    // listen for audio input stream
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInChanged) name:@"audioInChanged" object:nil];
     
     // configure audio player
     [self configureAudio];
@@ -113,6 +125,14 @@
     });
 }
 
+- (void)audioInChanged
+{
+    // Ensure UI updates occur on the main queue.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[[MPIGameManager instance] audioInStream] start];
+    });
+}
+
 #pragma mark - Memory management
 
 - (void)dealloc
@@ -138,7 +158,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    //return [MPIPubNubManager pubnub].currentGame.players.count;
     return [MPIGameManager instance].sessionController.connectedPeers.count;
 }
 
@@ -170,10 +189,85 @@
     return cell;
 }
 
+#pragma mark - Media Picker delegate
+
+- (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    
+    if (self.outputStreamer) return;
+    
+    self.song = [mediaItemCollection.items[0] copy];
+    
+    MPISongInfoMessage *info = [[MPISongInfoMessage alloc] init];
+    info.title = [self.song valueForProperty:MPMediaItemPropertyTitle] ? [self.song valueForProperty:MPMediaItemPropertyTitle] : @"";
+    info.artist = [self.song valueForProperty:MPMediaItemPropertyArtist] ? [self.song valueForProperty:MPMediaItemPropertyArtist] : @"";
+    
+    MPMediaItemArtwork *artwork = [self.song valueForProperty:MPMediaItemPropertyArtwork];
+    UIImage *image = [artwork imageWithSize:self.albumImage.frame.size];
+    if (image) {
+        info.artwork = image;
+        self.albumImage.image = image;
+    }
+    else {
+        self.albumImage.image = nil;
+    }
+    
+    self.songTitle.text = info.title;
+    self.songArtist.text = info.artist;
+    
+    // TODO: refactor type into MPISongInfoMessage object
+    info.type = @"6";
+    info.createdAt = [[MPIEventLogger sharedInstance] timeWithOffset:[NSDate date]];
+    NSArray *peers = [[MPIGameManager instance].sessionController connectedPeers];
+    
+    // TODO: send song info and stream to all peers
+    if (peers.count) {
+        [[MPIGameManager instance].sessionController sendMessage:info toPeer:peers[0]];
+        
+        self.outputStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:[[MPIGameManager instance].sessionController outputStreamForPeer:peers[0]]];
+        [self.outputStreamer streamAudioFromURL:[self.song valueForProperty:MPMediaItemPropertyAssetURL]];
+        [self.outputStreamer start];
+    }
+    
+}
+
+- (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker
+{
+    NSLog(@"Cancelled media picker.");
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)changeSongInfo:(NSDictionary *)info
+{
+    if (info[@"artwork"])
+        self.albumImage.image = info[@"artwork"];
+    else
+        self.albumImage.image = nil;
+    
+    self.songTitle.text = info[@"title"];
+    self.songArtist.text = info[@"artist"];
+}
+
+#pragma mark - MPISessionControllerDelegate
+
+- (void)session:(MPISessionController *)session didReceiveAudioStream:(NSInputStream *)stream
+{
+    if (!self.inputStream) {
+        self.inputStream = [[TDAudioInputStreamer alloc] initWithInputStream:stream];
+        [self.inputStream start];
+    }
+}
+
 #pragma mark - Touch ACTIONS
 
-- (IBAction)discoverClicked:(id)sender {
-    //[self.sessionController startServices];
+- (IBAction)songsClicked:(id)sender {
+    MPMediaPickerController *picker = [[MPMediaPickerController alloc] initWithMediaTypes:MPMediaTypeMusic];
+    picker.allowsPickingMultipleItems = NO;
+    picker.prompt = @"Select song to stream.";
+    picker.delegate = self;
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (IBAction)advertiseChanged:(id)sender {

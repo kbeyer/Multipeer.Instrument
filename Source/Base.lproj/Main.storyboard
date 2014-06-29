@@ -13,7 +13,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="XgU-I3-7ts">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="174"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="197"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J7E-e9-pu4">
@@ -39,21 +39,15 @@
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
-                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJA-ej-Ngo">
-                                    <rect key="frame" x="229" y="45" width="71" height="30"/>
-                                    <state key="normal" title="Invite">
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJA-ej-Ngo">
+                                    <rect key="frame" x="254" y="45" width="46" height="30"/>
+                                    <state key="normal" title="Songs">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
-                                        <action selector="discoverClicked:" destination="1Ww-dx-4Dv" eventType="touchUpInside" id="CD6-ID-UJM"/>
+                                        <action selector="songsClicked:" destination="1Ww-dx-4Dv" eventType="touchUpInside" id="9MO-P9-2y8"/>
                                     </connections>
                                 </button>
-                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="mAT-V5-jKB">
-                                    <rect key="frame" x="195" y="44" width="51" height="31"/>
-                                    <connections>
-                                        <action selector="browseChanged:" destination="1Ww-dx-4Dv" eventType="valueChanged" id="D0b-AK-61r"/>
-                                    </connections>
-                                </switch>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Adv." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kJS-80-mRH">
                                     <rect key="frame" x="20" y="49" width="34" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -61,7 +55,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Browse" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cYM-gU-cKp">
-                                    <rect key="frame" x="131" y="49" width="58" height="21"/>
+                                    <rect key="frame" x="118" y="49" width="58" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
@@ -72,18 +66,39 @@
                                         <action selector="advertiseChanged:" destination="1Ww-dx-4Dv" eventType="valueChanged" id="6Tv-qb-k6P"/>
                                     </connections>
                                 </switch>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TIme" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Km3-KL-hna">
-                                    <rect key="frame" x="74" y="112" width="146" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TIme" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6U-VP-ety">
                                     <rect key="frame" x="74" y="83" width="146" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TIme" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Km3-KL-hna">
+                                    <rect key="frame" x="74" y="112" width="146" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wnM-js-fZC">
+                                    <rect key="frame" x="20" y="141" width="46" height="45"/>
+                                </imageView>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TkC-qY-hRr">
+                                    <rect key="frame" x="74" y="141" width="226" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Song" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4fy-1e-N2t">
+                                    <rect key="frame" x="74" y="165" width="226" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="mAT-V5-jKB">
+                                    <rect key="frame" x="184" y="44" width="51" height="31"/>
+                                    <connections>
+                                        <action selector="browseChanged:" destination="1Ww-dx-4Dv" eventType="valueChanged" id="D0b-AK-61r"/>
+                                    </connections>
+                                </switch>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
@@ -134,8 +149,11 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="albumImage" destination="wnM-js-fZC" id="jbg-Nm-qON"/>
                         <outlet property="nameInput" destination="tnE-jN-A1E" id="JHN-KL-htp"/>
                         <outlet property="participantTableView" destination="Ywc-TE-0xf" id="kcn-Td-M8g"/>
+                        <outlet property="songArtist" destination="TkC-qY-hRr" id="cTg-pj-7p5"/>
+                        <outlet property="songTitle" destination="4fy-1e-N2t" id="U77-JK-HRt"/>
                         <outlet property="timeLabel" destination="H6U-VP-ety" id="PvC-MR-XHS"/>
                         <outlet property="timeWithOffsetLabel" destination="Km3-KL-hna" id="x8T-B4-Dam"/>
                     </connections>

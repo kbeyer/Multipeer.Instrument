@@ -138,30 +138,44 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     msg.type = type;
     msg.val = val;
     msg.createdAt = [[MPIEventLogger sharedInstance] timeWithOffset:sendDt];
+
+    // use override
+    [self sendMessage:msg toPeers:peers];
+}
+
+- (void) sendMessage:(id)msg toPeer:(MCPeerID *)peer {
+    // convert single peer to array
+    NSArray *peers = [[NSArray alloc] initWithObjects:peer, nil];
+    
+    // call overriden method
+    [self sendMessage:msg toPeers:peers];
+}
+
+- (void) sendMessage:(id)msg toPeers:(NSArray *)peers {
+     
     // serialize as JSON dictionary
     NSDictionary* json = [MTLJSONAdapter JSONDictionaryFromModel:msg];
     
     // convert to data object
-    NSData *msgData = [NSKeyedArchiver archivedDataWithRootObject:json];
-    
+    NSData *msgData = [NSKeyedArchiver archivedDataWithRootObject:[json copy]];
     NSError *error;
     // send message to specified peers ... using current session
     if (![self.session sendData:msgData
-                           toPeers:peers
-                          withMode:MCSessionSendDataReliable
-                             error:&error]) {
+                        toPeers:peers
+                       withMode:MCSessionSendDataReliable
+                          error:&error]) {
         NSLog(@"[Error] sending data %@", error);
     }
     
     // log to server
     NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
     [[MPIEventLogger sharedInstance] log:MPILoggerLevelInfo
-                            source:source
-                       description:@"sending message"
-                              tags:[[NSArray alloc] initWithObjects:@"Message", nil]
-                             start:sendDt
-                               end:nil
-                              data:json];
+                                  source:source
+                             description:@"sending message"
+                                    tags:[[NSArray alloc] initWithObjects:@"Message", nil]
+                                   start:[NSDate date]
+                                     end:nil
+                                    data:json];
 }
 
 #pragma mark - Private methods
@@ -390,7 +404,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
                 [[MPIGameManager instance] recievedTimestamp:peerID value:msg.val];
             }
         } else {
-            [[MPIGameManager instance] handleActionRequest:msg.type value:msg.val];
+            [[MPIGameManager instance] handleActionRequest:msg type:msg.type value:msg.val];
         }
         
     }
@@ -435,6 +449,21 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 - (void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID
 {
     NSLog(@"didReceiveStream %@ from %@", streamName, peerID.displayName);
+    if ([streamName isEqualToString:@"music"]) {
+        [self.delegate session:self didReceiveAudioStream:stream];
+    }
+}
+
+- (NSOutputStream *)outputStreamForPeer:(MCPeerID *)peer
+{
+    NSError *error;
+    NSOutputStream *stream = [self.session startStreamWithName:@"music" toPeer:peer error:&error];
+    
+    if (error) {
+        NSLog(@"Error: %@", [error userInfo].description);
+    }
+    
+    return stream;
 }
 
 #pragma mark - MCNearbyServiceBrowserDelegate protocol conformance

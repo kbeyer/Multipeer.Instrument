@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "SessionController.h"
+#import "TDAudioStreamer.h"
+#import "MPISongInfoMessage.h"
 
 @interface MPIGameManager : NSObject<MPISessionControllerDelegate>
 
@@ -26,6 +28,8 @@
 
 @property (readwrite) NSNumber* volume;
 @property (readwrite) NSNumber* color;
+@property (strong, nonatomic) TDAudioInputStreamer *audioInStream;
+@property (readwrite) MPISongInfoMessage *lastSongMessage;
 
 - (void)requestFlashChange:(id)playerID value:(NSNumber*)val;
 - (void)requestSoundChange:(id)playerID value:(NSNumber*)val;
@@ -35,7 +39,7 @@
 // handles time sync process
 - (void)recievedTimestamp:(id)playerID value:(NSNumber*)val;
 
-- (void)handleActionRequest:(NSString*)type value:(NSNumber*)val;
+- (void)handleActionRequest:(id)msg type:(NSString*)type value:(NSNumber*)val;
 
 - (void)startup;
 - (void)shutdown;

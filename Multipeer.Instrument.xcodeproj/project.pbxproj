@@ -33,6 +33,19 @@
 		088B9F2819477DB7006A27E4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 088B9F2719477DB7006A27E4 /* libc++.dylib */; };
 		08943D6E19533B1900D226AE /* LICENCE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08943D6B19533B1900D226AE /* LICENCE.txt */; };
 		08943D6F19533B1900D226AE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 08943D6D19533B1900D226AE /* Reachability.m */; };
+		08ED7329195C824000FFCB34 /* NSMutableArray+QueueMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7311195C824000FFCB34 /* NSMutableArray+QueueMethods.m */; };
+		08ED732A195C824000FFCB34 /* TDAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7314195C824000FFCB34 /* TDAudioFileStream.m */; };
+		08ED732B195C824000FFCB34 /* TDAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7316195C824000FFCB34 /* TDAudioQueue.m */; };
+		08ED732C195C824000FFCB34 /* TDAudioQueueBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7318195C824000FFCB34 /* TDAudioQueueBuffer.m */; };
+		08ED732D195C824000FFCB34 /* TDAudioQueueBufferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED731A195C824000FFCB34 /* TDAudioQueueBufferManager.m */; };
+		08ED732E195C824000FFCB34 /* TDAudioQueueController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED731C195C824000FFCB34 /* TDAudioQueueController.m */; };
+		08ED732F195C824000FFCB34 /* TDAudioQueueFiller.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED731E195C824000FFCB34 /* TDAudioQueueFiller.m */; };
+		08ED7330195C824000FFCB34 /* TDAudioStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7320195C824000FFCB34 /* TDAudioStream.m */; };
+		08ED7331195C824000FFCB34 /* TDAudioInputStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7322195C824000FFCB34 /* TDAudioInputStreamer.m */; };
+		08ED7332195C824000FFCB34 /* TDAudioOutputStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7324195C824000FFCB34 /* TDAudioOutputStreamer.m */; };
+		08ED7333195C824000FFCB34 /* TDAudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7326195C824000FFCB34 /* TDAudioStreamer.m */; };
+		08ED7334195C824000FFCB34 /* TDAudioStreamerConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7328195C824000FFCB34 /* TDAudioStreamerConstants.m */; };
+		08ED7337195C8B2800FFCB34 /* MPISongInfoMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ED7336195C8B2800FFCB34 /* MPISongInfoMessage.m */; };
 		27382F9E18D15B2700BAAFB9 /* Organ Run.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */; };
 		27382F9F18D15B2700BAAFB9 /* Southern Rock Drums.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */; };
 		27382FA018D15B2700BAAFB9 /* Southern Rock Organ.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */; };
@@ -105,6 +118,32 @@
 		08943D6B19533B1900D226AE /* LICENCE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENCE.txt; sourceTree = "<group>"; };
 		08943D6C19533B1900D226AE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		08943D6D19533B1900D226AE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		08ED7310195C824000FFCB34 /* NSMutableArray+QueueMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+QueueMethods.h"; sourceTree = "<group>"; };
+		08ED7311195C824000FFCB34 /* NSMutableArray+QueueMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+QueueMethods.m"; sourceTree = "<group>"; };
+		08ED7313195C824000FFCB34 /* TDAudioFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioFileStream.h; sourceTree = "<group>"; };
+		08ED7314195C824000FFCB34 /* TDAudioFileStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioFileStream.m; sourceTree = "<group>"; };
+		08ED7315195C824000FFCB34 /* TDAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueue.h; sourceTree = "<group>"; };
+		08ED7316195C824000FFCB34 /* TDAudioQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueue.m; sourceTree = "<group>"; };
+		08ED7317195C824000FFCB34 /* TDAudioQueueBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueueBuffer.h; sourceTree = "<group>"; };
+		08ED7318195C824000FFCB34 /* TDAudioQueueBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueueBuffer.m; sourceTree = "<group>"; };
+		08ED7319195C824000FFCB34 /* TDAudioQueueBufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueueBufferManager.h; sourceTree = "<group>"; };
+		08ED731A195C824000FFCB34 /* TDAudioQueueBufferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueueBufferManager.m; sourceTree = "<group>"; };
+		08ED731B195C824000FFCB34 /* TDAudioQueueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueueController.h; sourceTree = "<group>"; };
+		08ED731C195C824000FFCB34 /* TDAudioQueueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueueController.m; sourceTree = "<group>"; };
+		08ED731D195C824000FFCB34 /* TDAudioQueueFiller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueueFiller.h; sourceTree = "<group>"; };
+		08ED731E195C824000FFCB34 /* TDAudioQueueFiller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueueFiller.m; sourceTree = "<group>"; };
+		08ED731F195C824000FFCB34 /* TDAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioStream.h; sourceTree = "<group>"; };
+		08ED7320195C824000FFCB34 /* TDAudioStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioStream.m; sourceTree = "<group>"; };
+		08ED7321195C824000FFCB34 /* TDAudioInputStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioInputStreamer.h; sourceTree = "<group>"; };
+		08ED7322195C824000FFCB34 /* TDAudioInputStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioInputStreamer.m; sourceTree = "<group>"; };
+		08ED7323195C824000FFCB34 /* TDAudioOutputStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioOutputStreamer.h; sourceTree = "<group>"; };
+		08ED7324195C824000FFCB34 /* TDAudioOutputStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioOutputStreamer.m; sourceTree = "<group>"; };
+		08ED7325195C824000FFCB34 /* TDAudioStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioStreamer.h; sourceTree = "<group>"; };
+		08ED7326195C824000FFCB34 /* TDAudioStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioStreamer.m; sourceTree = "<group>"; };
+		08ED7327195C824000FFCB34 /* TDAudioStreamerConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioStreamerConstants.h; sourceTree = "<group>"; };
+		08ED7328195C824000FFCB34 /* TDAudioStreamerConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioStreamerConstants.m; sourceTree = "<group>"; };
+		08ED7335195C8B2800FFCB34 /* MPISongInfoMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPISongInfoMessage.h; path = Source/Models/MPISongInfoMessage.h; sourceTree = "<group>"; };
+		08ED7336195C8B2800FFCB34 /* MPISongInfoMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPISongInfoMessage.m; path = Source/Models/MPISongInfoMessage.m; sourceTree = "<group>"; };
 		27382F9B18D15B2700BAAFB9 /* Organ Run.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Organ Run.m4a"; path = "Resources/Organ Run.m4a"; sourceTree = "<group>"; };
 		27382F9C18D15B2700BAAFB9 /* Southern Rock Drums.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Drums.m4a"; path = "Resources/Southern Rock Drums.m4a"; sourceTree = "<group>"; };
 		27382F9D18D15B2700BAAFB9 /* Southern Rock Organ.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Southern Rock Organ.m4a"; path = "Resources/Southern Rock Organ.m4a"; sourceTree = "<group>"; };
@@ -198,9 +237,58 @@
 			name = MPIEventLogger;
 			sourceTree = "<group>";
 		};
+		08ED730E195C824000FFCB34 /* TDAudioStreamer */ = {
+			isa = PBXGroup;
+			children = (
+				08ED730F195C824000FFCB34 /* Categories */,
+				08ED7312195C824000FFCB34 /* Classes */,
+				08ED7321195C824000FFCB34 /* TDAudioInputStreamer.h */,
+				08ED7322195C824000FFCB34 /* TDAudioInputStreamer.m */,
+				08ED7323195C824000FFCB34 /* TDAudioOutputStreamer.h */,
+				08ED7324195C824000FFCB34 /* TDAudioOutputStreamer.m */,
+				08ED7325195C824000FFCB34 /* TDAudioStreamer.h */,
+				08ED7326195C824000FFCB34 /* TDAudioStreamer.m */,
+				08ED7327195C824000FFCB34 /* TDAudioStreamerConstants.h */,
+				08ED7328195C824000FFCB34 /* TDAudioStreamerConstants.m */,
+			);
+			name = TDAudioStreamer;
+			path = Source/TDAudioStreamer;
+			sourceTree = "<group>";
+		};
+		08ED730F195C824000FFCB34 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				08ED7310195C824000FFCB34 /* NSMutableArray+QueueMethods.h */,
+				08ED7311195C824000FFCB34 /* NSMutableArray+QueueMethods.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		08ED7312195C824000FFCB34 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				08ED7313195C824000FFCB34 /* TDAudioFileStream.h */,
+				08ED7314195C824000FFCB34 /* TDAudioFileStream.m */,
+				08ED7315195C824000FFCB34 /* TDAudioQueue.h */,
+				08ED7316195C824000FFCB34 /* TDAudioQueue.m */,
+				08ED7317195C824000FFCB34 /* TDAudioQueueBuffer.h */,
+				08ED7318195C824000FFCB34 /* TDAudioQueueBuffer.m */,
+				08ED7319195C824000FFCB34 /* TDAudioQueueBufferManager.h */,
+				08ED731A195C824000FFCB34 /* TDAudioQueueBufferManager.m */,
+				08ED731B195C824000FFCB34 /* TDAudioQueueController.h */,
+				08ED731C195C824000FFCB34 /* TDAudioQueueController.m */,
+				08ED731D195C824000FFCB34 /* TDAudioQueueFiller.h */,
+				08ED731E195C824000FFCB34 /* TDAudioQueueFiller.m */,
+				08ED731F195C824000FFCB34 /* TDAudioStream.h */,
+				08ED7320195C824000FFCB34 /* TDAudioStream.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		273F283D18CD1A0C00F595C2 = {
 			isa = PBXGroup;
 			children = (
+				08ED730E195C824000FFCB34 /* TDAudioStreamer */,
 				08943D6A19533B1900D226AE /* Reachability */,
 				08C1BE36194F400700E2EFA5 /* MPIEventLogger */,
 				273F289E18CE623E00F595C2 /* Resources */,
@@ -291,6 +379,8 @@
 		273F288418CDFD0700F595C2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				08ED7335195C8B2800FFCB34 /* MPISongInfoMessage.h */,
+				08ED7336195C8B2800FFCB34 /* MPISongInfoMessage.m */,
 				088B9EEB19476048006A27E4 /* ActionMessage.h */,
 				088B9EEC19476048006A27E4 /* ActionMessage.m */,
 				088B9EED19476048006A27E4 /* BaseModel.h */,
@@ -472,23 +562,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				088B9F121947609C006A27E4 /* MixBoardTableCell.m in Sources */,
+				08ED7329195C824000FFCB34 /* NSMutableArray+QueueMethods.m in Sources */,
 				083BF3D919507D8900C66DDD /* MPIEventLogger.m in Sources */,
 				088B9EFC19476048006A27E4 /* Player.m in Sources */,
 				088B9F101947609C006A27E4 /* GameManager.m in Sources */,
 				083BF3D819507D8900C66DDD /* MPIEvent.m in Sources */,
 				088B9EFB19476048006A27E4 /* Message.m in Sources */,
+				08ED7333195C824000FFCB34 /* TDAudioStreamer.m in Sources */,
 				088B9EF719476048006A27E4 /* ActionMessage.m in Sources */,
+				08ED7330195C824000FFCB34 /* TDAudioStream.m in Sources */,
 				088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */,
+				08ED7331195C824000FFCB34 /* TDAudioInputStreamer.m in Sources */,
 				088B9F151947609C006A27E4 /* SessionController.m in Sources */,
+				08ED7332195C824000FFCB34 /* TDAudioOutputStreamer.m in Sources */,
 				088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */,
 				088B9EF919476048006A27E4 /* Game.m in Sources */,
+				08ED732A195C824000FFCB34 /* TDAudioFileStream.m in Sources */,
+				08ED7337195C8B2800FFCB34 /* MPISongInfoMessage.m in Sources */,
+				08ED732F195C824000FFCB34 /* TDAudioQueueFiller.m in Sources */,
 				088B9F0F1947609C006A27E4 /* AudioManager.m in Sources */,
 				088B9EF819476048006A27E4 /* BaseModel.m in Sources */,
 				088B9F1A19476166006A27E4 /* main.m in Sources */,
 				088B9F111947609C006A27E4 /* HomeViewController.m in Sources */,
 				088B9F0E1947609C006A27E4 /* AppDelegate.m in Sources */,
+				08ED732C195C824000FFCB34 /* TDAudioQueueBuffer.m in Sources */,
+				08ED732D195C824000FFCB34 /* TDAudioQueueBufferManager.m in Sources */,
+				08ED7334195C824000FFCB34 /* TDAudioStreamerConstants.m in Sources */,
 				08943D6F19533B1900D226AE /* Reachability.m in Sources */,
 				088B9EFA19476048006A27E4 /* JoinRequest.m in Sources */,
+				08ED732E195C824000FFCB34 /* TDAudioQueueController.m in Sources */,
+				08ED732B195C824000FFCB34 /* TDAudioQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

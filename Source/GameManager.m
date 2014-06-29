@@ -140,6 +140,14 @@ static int const kTimeSyncIterations = 10;
     });
 }
 
+- (void)session:(MPISessionController *)session didReceiveAudioStream:(NSInputStream *)stream
+{
+    if (!self.audioInStream) {
+        self.audioInStream = [[TDAudioInputStreamer alloc] initWithInputStream:stream];
+        [self notifyAudioInChange];
+    }
+}
+
 
 - (void)requestFlashChange:(id)peerID value:(NSNumber*)val {
     [_sessionController sendMessage:@"1" value:val toPeer:peerID];
@@ -154,7 +162,7 @@ static int const kTimeSyncIterations = 10;
     [_sessionController sendMessage:@"5" value:val toPeer:peerID];
 }
 
-- (void)handleActionRequest:(NSString*)type value:(NSNumber*)val {
+- (void)handleActionRequest:(id)msg type:(NSString*)type value:(NSNumber*)val {
     
     if ([type isEqualToString:@"1"]) {
         // change flash value
@@ -175,6 +183,9 @@ static int const kTimeSyncIterations = 10;
         // timestamp handled by session controller
     } else if ([type isEqualToString:@"5"]) {
         // request for time sync handled by session controller
+    } else if ([type isEqualToString:@"6"]) {
+        _lastSongMessage = msg;
+        [self notifySongChange];
     }
 }
 
@@ -231,7 +242,12 @@ static int const kTimeSyncIterations = 10;
 - (void) notifyColorChange {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"colorChanged" object:self];
 }
-
+- (void) notifyAudioInChange {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"audioInChanged" object:self];
+}
+- (void) notifySongChange {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"songChanged" object:self];
+}
 - (void) startup
 {
     [_sessionController startup];
