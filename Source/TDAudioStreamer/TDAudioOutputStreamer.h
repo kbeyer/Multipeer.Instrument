@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Tony DiPasquale. The MIT License (MIT).
 //
 
+@import MediaPlayer;
 #import <Foundation/Foundation.h>
 
 @class AVURLAsset;
@@ -14,6 +15,7 @@
 
 - (instancetype)initWithOutputStream:(NSOutputStream *)stream;
 
+- (void)streamAudioFromSong:(MPMediaItem *)song;
 - (void)streamAudioFromURL:(NSURL *)url;
 - (void)start;
 - (void)stop;

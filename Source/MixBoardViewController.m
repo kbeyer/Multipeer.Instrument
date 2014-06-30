@@ -195,6 +195,11 @@
 {
     NSLog(@"Song selected.");
     
+    if ([mediaItemCollection.items[0] valueForProperty:MPMediaItemPropertyAssetURL] == nil) {
+        NSLog(@"Song is protected.");
+        return;
+    }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
     
     // check if already streaming
@@ -209,7 +214,7 @@
     MPMediaItemArtwork *artwork = [self.song valueForProperty:MPMediaItemPropertyArtwork];
     UIImage *image = [artwork imageWithSize:self.albumImage.frame.size];
     if (image) {
-        info.artwork = image;
+        //info.artwork = image;
         self.albumImage.image = image;
     }
     else {
@@ -229,7 +234,9 @@
         [[MPIGameManager instance].sessionController sendMessage:info toPeer:peers[0]];
         
         self.outputStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:[[MPIGameManager instance].sessionController outputStreamForPeer:peers[0]]];
-        [self.outputStreamer streamAudioFromURL:[self.song valueForProperty:MPMediaItemPropertyAssetURL]];
+        
+        [self.outputStreamer streamAudioFromSong:mediaItemCollection.items[0]];
+        //[self.outputStreamer streamAudioFromURL:[self.song valueForProperty:MPMediaItemPropertyAssetURL]];
         [self.outputStreamer start];
     }
     

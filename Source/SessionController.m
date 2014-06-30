@@ -363,6 +363,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
             action = @"Time";
         } else if ([msg.type isEqualToString:@"5"]) {
             action = @"Sync Request";
+        } else if ([msg.type isEqualToString:@"6"]) {
+            action = @"Song Info";
         }
         NSDate* start = msg.createdAt;
         NSDate* end = [NSDate date];

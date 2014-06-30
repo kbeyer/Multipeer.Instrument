@@ -60,6 +60,11 @@
     }
 }
 
+- (void)streamAudioFromSong:(MPMediaItem*)song
+{
+    [self streamAudioFromURL:[song valueForProperty:MPMediaItemPropertyAssetURL]];
+}
+
 - (void)streamAudioFromURL:(NSURL *)url
 {
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
@@ -99,7 +104,7 @@
     for (NSUInteger i = 0; i < audioBufferList.mNumberBuffers; i++) {
         AudioBuffer audioBuffer = audioBufferList.mBuffers[i];
         [self.audioStream writeData:audioBuffer.mData maxLength:audioBuffer.mDataByteSize];
-        NSLog(@"buffer size: %u", (unsigned int)audioBuffer.mDataByteSize);
+        //NSLog(@"buffer size: %u", (unsigned int)audioBuffer.mDataByteSize);
     }
 
     CFRelease(blockBuffer);
