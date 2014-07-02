@@ -148,7 +148,7 @@ static int const kTimeSyncIterations = 10;
 
 - (void)session:(MPISessionController *)session didReceiveAudioStream:(NSInputStream *)stream
 {
-    [_audioManager playMic:stream];
+    [_audioManager playStream:stream];
 }
 
 - (void)requestFlashChange:(id)peerID value:(NSNumber*)val {

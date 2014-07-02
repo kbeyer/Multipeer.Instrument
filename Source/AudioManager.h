@@ -21,7 +21,7 @@
 -(void)closeMic;
 
 // play mic stream
--(void)playMic:(NSInputStream*)stream;
+-(void)playStream:(NSInputStream*)stream;
 
 
 @end

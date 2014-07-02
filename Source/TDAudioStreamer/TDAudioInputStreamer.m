@@ -115,7 +115,7 @@
             UInt32 length = [audioStream readData:bytes maxLength:self.audioStreamReadMaxLength];
             //[self.audioFileStream parseData:bytes length:length];
             
-            NSLog(@"audio in has data %i", length);
+            NSLog(@"audio in has data %i", (unsigned int)length);
             
             [self.processor parseData:bytes length:length];
             break;
@@ -153,7 +153,7 @@
 
 - (void)audioFileStream:(TDAudioFileStream *)audioFileStream didReceiveData:(const void *)data length:(UInt32)length
 {
-    NSLog(@"audio in length %i", length);
+    NSLog(@"audio in length %i", (unsigned int)length);
     
     [TDAudioQueueFiller fillAudioQueue:self.audioQueue withData:data length:length offset:0];
 }
@@ -161,7 +161,7 @@
 - (void)audioFileStream:(TDAudioFileStream *)audioFileStream didReceiveData:(const void *)data length:(UInt32)length packetDescription:(AudioStreamPacketDescription)packetDescription
 {
     
-    NSLog(@"received data %i", length);
+    NSLog(@"received data %i", (unsigned int)length);
     
     [TDAudioQueueFiller fillAudioQueue:self.audioQueue withData:data length:length packetDescription:packetDescription];
 }

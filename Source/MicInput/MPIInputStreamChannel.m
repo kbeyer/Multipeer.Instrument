@@ -13,11 +13,10 @@
 #import "AEAudioController+AudiobusStub.h"
 
 static const int kAudioBufferLength = 16384;
-static const int kAudiobusReceiverPortConnectedToSelfChanged;
 
 UInt32 const kAudioStreamReadMaxLength = 512;
 
-@interface MPIInputStreamChannel () <NSStreamDelegate> {
+@interface MPIInputStreamChannel () {
     TPCircularBuffer _buffer;
     NSInputStream *_inputStream;
     BOOL _audiobusConnectedToSelf;
@@ -40,6 +39,7 @@ UInt32 const kAudioStreamReadMaxLength = 512;
     self.audioController = audioController;
     _volume = 1.0;
     _inputStream = stream;
+    _inputStream.delegate = self;
     return self;
 }
 

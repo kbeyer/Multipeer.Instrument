@@ -14,7 +14,7 @@ extern "C" {
 #import "TheAmazingAudioEngine.h"
     
 // Input stream channel, used for playing audio from input stream
-@interface MPIInputStreamChannel : NSObject
+@interface MPIInputStreamChannel : NSObject<NSStreamDelegate>
 
 /*!
  * Initialise
@@ -29,8 +29,6 @@ extern "C" {
 @property (nonatomic, readonly) AudioStreamBasicDescription audioDescription;
 
 - (void)start;
-- (void)resume;
-- (void)pause;
 - (void)stop;
 
 @end

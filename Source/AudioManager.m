@@ -12,7 +12,7 @@
 #import "AEExpanderFilter.h"
 #import "AELimiterFilter.h"
 #import "AERecorder.h"
-#import "TDAudioStreamer.h"
+#import "MPIInputStreamChannel.h"
 
 
 static const int kInputChannelsChangedContext;
@@ -33,8 +33,7 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 @property (nonatomic, retain) AEExpanderFilter *expander;
 @property (nonatomic, retain) AEAudioUnitFilter *reverb;
 @property (nonatomic, retain) id<AEAudioReceiver> micReceiver;
-@property (nonatomic, retain) AEBlockChannel *micPlayer;
-@property (nonatomic, retain) TDAudioInputStreamer *inputStreamer;
+@property (nonatomic, retain) MPIInputStreamChannel *inputStreamChannel;
 
 @end
 
@@ -210,7 +209,7 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 
 -(void)playStream:(NSInputStream*)stream
 {
-    
+    /*
     // play data from stream on channel
     AEBlockChannel *channel = [AEBlockChannel channelWithBlock:^(const AudioTimeStamp  *time,
                                                          UInt32           frames,
@@ -231,16 +230,22 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
     }];
     channel.audioDescription = [AEAudioController nonInterleaved16BitStereoAudioDescription];
     channel.channelIsMuted = NO;
+     */
     
-    [_audioController addChannels:[NSArray arrayWithObjects:channel, nil]];
+    self.inputStreamChannel = [[MPIInputStreamChannel alloc] initWithAudioController:_audioController stream:stream];
+    _inputStreamChannel.channelIsMuted = NO;
+    
+    [_audioController addChannels:[NSArray arrayWithObjects:_inputStreamChannel, nil]];
+    
+    [_inputStreamChannel start];
 }
 
--(void)stopMic
+-(void)stopStream
 {
     
-    
-    [_audioController removeChannels:@[_micPlayer]];
-    self.micPlayer = nil;
+    [_inputStreamChannel stop];
+    [_audioController removeChannels:@[_inputStreamChannel]];
+    self.inputStreamChannel = nil;
 }
 
 

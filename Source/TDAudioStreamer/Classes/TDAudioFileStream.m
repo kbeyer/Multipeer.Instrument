@@ -26,7 +26,7 @@ void TDAudioFileStreamPropertyListener(void *inClientData, AudioFileStreamID inA
 void TDAudioFileStreamPacketsListener(void *inClientData, UInt32 inNumberBytes, UInt32 inNumberPackets, const void *inInputData, AudioStreamPacketDescription *inPacketDescriptions)
 {
     
-    NSLog(@"received packets %i", inNumberPackets);
+    NSLog(@"received packets %i", (unsigned int)inNumberPackets);
     
     TDAudioFileStream *audioFileStream = (__bridge TDAudioFileStream *)inClientData;
     [audioFileStream didReceivePackets:inInputData packetDescriptions:inPacketDescriptions numberOfPackets:inNumberPackets numberOfBytes:inNumberBytes];
@@ -84,7 +84,7 @@ void TDAudioFileStreamPacketsListener(void *inClientData, UInt32 inNumberBytes, 
 - (void)didReceivePackets:(const void *)packets packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions numberOfPackets:(UInt32)numberOfPackets numberOfBytes:(UInt32)numberOfBytes
 {
     
-    NSLog(@"received packets %i", numberOfPackets);
+    NSLog(@"received packets %i", (unsigned int)numberOfPackets);
     
     if (packetDescriptions) {
         for (NSUInteger i = 0; i < numberOfPackets; i++) {
