@@ -39,7 +39,6 @@ UInt32 const kAudioStreamReadMaxLength = 512;
     self.audioController = audioController;
     _volume = 1.0;
     _inputStream = stream;
-    _inputStream.delegate = self;
     return self;
 }
 
@@ -47,7 +46,7 @@ UInt32 const kAudioStreamReadMaxLength = 512;
     TPCircularBufferCleanup(&_buffer);
     self.audioController = nil;
     
-    if (_inputStream) [self close];
+    if (_inputStream) [self stop];
 }
 
 
@@ -65,7 +64,8 @@ UInt32 const kAudioStreamReadMaxLength = 512;
 - (void)run
 {
     @autoreleasepool {
-        [_inputStream open];
+        
+        [self open];
         
         self.isPlaying = YES;
         
@@ -128,12 +128,14 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
     switch (eventCode) {
         case NSStreamEventHasBytesAvailable:
             
+            NSLog(@"NSStreamEventHasBytesAvailable");
+            
             self.isPlaying = YES;
             
             uint8_t bytes[kAudioStreamReadMaxLength];
-            UInt32 length = [_inputStream read:bytes maxLength:kAudioStreamReadMaxLength];
+            NSInteger length = [_inputStream read:bytes maxLength:kAudioStreamReadMaxLength];
             
-            NSLog(@"audio in has data %i", (unsigned int)length);
+            NSLog(@"audio in has data %li", (long)length);
             
             //
             // TODO: push data into circular buffer
@@ -143,6 +145,9 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
             break;
             
         case NSStreamEventEndEncountered:
+            
+            NSLog(@"NSStreamEventEndEncountered");
+            
             self.isPlaying = NO;
             break;
             
@@ -166,6 +171,7 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
 
 - (void)stop
 {
+    [self close];
     [self performSelector:@selector(stopThread) onThread:self.audioStreamerThread withObject:nil waitUntilDone:YES];
 }
 
