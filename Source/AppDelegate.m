@@ -62,7 +62,7 @@
     
     // setup logger at INFO level and to console and API
     logger.logLevel = MPILoggerLevelFatal;
-    logger.logDestination = MPILogDestinationALL;
+    logger.logDestination = MPILogDestinationConsole;
 }
 
 - (void) createExpireNotification

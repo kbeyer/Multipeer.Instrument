@@ -39,7 +39,7 @@ void TDAudioFileStreamPacketsListener(void *inClientData, UInt32 inNumberBytes, 
     self = [super init];
     if (!self) return nil;
 
-    OSStatus err = AudioFileStreamOpen((__bridge void *)self, TDAudioFileStreamPropertyListener, TDAudioFileStreamPacketsListener, kAudioFileM4AType, &_audioFileStreamID);
+    OSStatus err = AudioFileStreamOpen((__bridge void *)self, TDAudioFileStreamPropertyListener, TDAudioFileStreamPacketsListener, 0, &_audioFileStreamID);
 
     if (err){
         NSLog(@"Error opening audio streamer: %d", (int)err);
