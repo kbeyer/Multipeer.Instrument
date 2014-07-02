@@ -42,7 +42,7 @@
 - (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type;
 
 
-- (void)startEcho;
+- (void)startEcho:(NSOutputStream*)stream;
 - (void)stopEcho;
 
 - (void)startup;

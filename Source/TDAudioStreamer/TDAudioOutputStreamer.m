@@ -79,6 +79,12 @@
     NSLog(@"AudioOutputStreamer Read Asset");
 }
 
+
+- (UInt32)writeData:(uint8_t *)data maxLength:(UInt32)maxLength
+{
+    return [self.audioStream writeData:data maxLength:maxLength];
+}
+
 - (void)sendDataChunk
 {
     CMSampleBufferRef sampleBuffer;

@@ -20,4 +20,7 @@
 - (void)start;
 - (void)stop;
 
+
+- (UInt32)writeData:(uint8_t *)data maxLength:(UInt32)maxLength;
+
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "TDAudioStreamer.h"
 
 // return max value for given values
 #define max(a, b) (((a) > (b)) ? (a) : (b))
@@ -30,13 +31,18 @@
     
     // gain
     float gain;
+    
+    // output streamer
+    TDAudioOutputStreamer *outputStreamer;
 }
 
 @property (readonly) AudioBuffer audioBuffer;
 @property (readonly) AudioComponentInstance audioUnit;
 @property (nonatomic) float gain;
+@property (readonly) TDAudioOutputStreamer *outputStreamer;
 
 -(AudioProcessor*)init;
+-(AudioProcessor*)initWithOutputStream:(NSOutputStream*)stream;
 
 -(void)initializeAudio;
 -(void)processBuffer: (AudioBufferList*) audioBufferList;

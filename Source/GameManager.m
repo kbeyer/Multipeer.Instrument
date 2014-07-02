@@ -262,14 +262,17 @@ static int const kTimeSyncIterations = 10;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"songChanged" object:self];
 }
 
-- (void) startEcho
+- (void) startEcho:(NSOutputStream*)stream
 {
     if (_audioProcessor == nil) {
-        _audioProcessor = [[AudioProcessor alloc] init];
+        if (stream == nil) {
+            _audioProcessor = [[AudioProcessor alloc] init];
+        } else {
+            _audioProcessor = [[AudioProcessor alloc] initWithOutputStream:stream];
+        }
     }
     NSLog(@"Starting up AudioUnit");
     [_audioProcessor start];
-    assert(<#e#>)
     NSLog(@"AudioUnit running");
 
 }
@@ -279,6 +282,8 @@ static int const kTimeSyncIterations = 10;
     NSLog(@"Stopping AudioUnit");
     [_audioProcessor stop];
     NSLog(@"AudioUnit stopped");
+    // release every time?
+    _audioProcessor = nil;
 }
 
 - (void) startup

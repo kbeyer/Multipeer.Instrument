@@ -68,6 +68,7 @@ static OSStatus playbackCallback(void *inRefCon,
      */
     AudioProcessor *audioProcessor = (__bridge AudioProcessor*) inRefCon;
     
+    
     // iterate over incoming stream an copy to output stream
 	for (int i=0; i < ioData->mNumberBuffers; i++) { 
 		AudioBuffer buffer = ioData->mBuffers[i];
@@ -81,18 +82,10 @@ static OSStatus playbackCallback(void *inRefCon,
         // set data size
 		buffer.mDataByteSize = size;
         
+        // copy to peer outputstream
+        [audioProcessor.outputStreamer writeData:buffer.mData maxLength:buffer.mDataByteSize];
         
     }
-    
-    
-    // TODO : copy to output stream
-    /*
-    self.outputStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:[[MPIGameManager instance].sessionController outputStreamForPeer:peers[0]]];
-    
-    [self.outputStreamer streamAudioFromSong:mediaItemCollection.items[0]];
-    //[self.outputStreamer streamAudioFromURL:[self.song valueForProperty:MPMediaItemPropertyAssetURL]];
-    [self.outputStreamer start];
-    */
     
     return noErr;
 }
@@ -100,7 +93,7 @@ static OSStatus playbackCallback(void *inRefCon,
 #pragma mark objective-c class
 
 @implementation AudioProcessor
-@synthesize audioUnit, audioBuffer, gain;
+@synthesize audioUnit, audioBuffer, gain, outputStreamer;
 
 -(AudioProcessor*)init
 {
@@ -108,6 +101,16 @@ static OSStatus playbackCallback(void *inRefCon,
     if (self) {
         gain = 0;
         [self initializeAudio];
+    }
+    return self;
+}
+-(AudioProcessor*)initWithOutputStream:(NSOutputStream*)stream
+{
+    self = [super init];
+    if (self) {
+        gain = 0;
+        [self initializeAudio];
+        outputStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:stream];
     }
     return self;
 }
@@ -266,12 +269,14 @@ static OSStatus playbackCallback(void *inRefCon,
     // start the audio unit. You should hear something, hopefully :)
     OSStatus status = AudioOutputUnitStart(audioUnit);
     [self hasError:status:__FILE__:__LINE__];
+    [self.outputStreamer start];
 }
 -(void)stop;
 {
     // stop the audio unit
     OSStatus status = AudioOutputUnitStop(audioUnit);
     [self hasError:status:__FILE__:__LINE__];
+    [self.outputStreamer stop];
 }
 
 

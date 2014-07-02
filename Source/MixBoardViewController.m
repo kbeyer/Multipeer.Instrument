@@ -295,7 +295,14 @@
     UISwitch* micSwitch = (UISwitch*)sender;
     
     if (micSwitch.isOn) {
-        [[MPIGameManager instance] startEcho];
+        NSArray *peers = [[MPIGameManager instance].sessionController connectedPeers];
+        NSOutputStream *outputStream = nil;
+        
+        // TODO: send song info and stream to all peers
+        if (peers.count) {
+            outputStream = [[MPIGameManager instance].sessionController outputStreamForPeer:peers[0]];
+        }
+        [[MPIGameManager instance] startEcho:outputStream];
     } else {
         [[MPIGameManager instance] stopEcho];
     }
