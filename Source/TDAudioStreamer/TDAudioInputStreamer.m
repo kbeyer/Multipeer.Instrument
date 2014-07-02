@@ -61,6 +61,7 @@
 
     self.audioStreamerThread = [[NSThread alloc] initWithTarget:self selector:@selector(run) object:nil];
     [self.audioStreamerThread start];
+    NSLog(@"Audio Streamer thread started");
 }
 
 - (void)run
@@ -109,6 +110,7 @@
             uint8_t bytes[self.audioStreamReadMaxLength];
             UInt32 length = [audioStream readData:bytes maxLength:self.audioStreamReadMaxLength];
             [self.audioFileStream parseData:bytes length:length];
+            NSLog(@"audio in has data %i", length);
             break;
         }
 
@@ -144,11 +146,16 @@
 
 - (void)audioFileStream:(TDAudioFileStream *)audioFileStream didReceiveData:(const void *)data length:(UInt32)length
 {
+    NSLog(@"audio in length %i", length);
+    
     [TDAudioQueueFiller fillAudioQueue:self.audioQueue withData:data length:length offset:0];
 }
 
 - (void)audioFileStream:(TDAudioFileStream *)audioFileStream didReceiveData:(const void *)data length:(UInt32)length packetDescription:(AudioStreamPacketDescription)packetDescription
 {
+    
+    NSLog(@"received data %i", length);
+    
     [TDAudioQueueFiller fillAudioQueue:self.audioQueue withData:data length:length packetDescription:packetDescription];
 }
 

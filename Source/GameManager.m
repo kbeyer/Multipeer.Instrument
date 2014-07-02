@@ -10,6 +10,7 @@
 #import "AudioManager.h"
 #import "ActionMessage.h"
 #import "MPIEventLogger.h"
+#import "AudioProcessor.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface MPIGameManager()
@@ -17,6 +18,8 @@
 @property (nonatomic, strong) MPIAudioManager *audioManager;
 @property double lastSendTimestamp;
 @property (nonatomic, strong) NSMutableArray *timeLatencies;
+// TODO: move this to audioManager
+@property (retain, nonatomic) AudioProcessor *audioProcessor;
 @end
 
 
@@ -61,6 +64,9 @@ static int const kTimeSyncIterations = 10;
 {
     // Nil out delegates
     _sessionController.delegate = nil;
+    
+    _audioInStream = nil;
+    _avSession = nil;
 }
 
 #pragma mark - Time sync
@@ -144,10 +150,10 @@ static int const kTimeSyncIterations = 10;
 {
     if (!self.audioInStream) {
         self.audioInStream = [[TDAudioInputStreamer alloc] initWithInputStream:stream];
+        NSLog(@"Audio in stream changed.");
         [self notifyAudioInChange];
     }
 }
-
 
 - (void)requestFlashChange:(id)peerID value:(NSNumber*)val {
     [_sessionController sendMessage:@"1" value:val toPeer:peerID];
@@ -162,28 +168,35 @@ static int const kTimeSyncIterations = 10;
     [_sessionController sendMessage:@"5" value:val toPeer:peerID];
 }
 
-- (void)handleActionRequest:(id)msg type:(NSString*)type value:(NSNumber*)val {
+- (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type {
     
+    NSError *error = nil;
     if ([type isEqualToString:@"1"]) {
+        
+        MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
+        
         // change flash value
         [self toggleFlashlight];
-        [_audioManager muteLoop:![val boolValue] name:@"organ"];
-        [_audioManager muteLoop:![val boolValue] name:@"drums"];
+        [_audioManager muteLoop:![msg.val boolValue] name:@"organ"];
+        [_audioManager muteLoop:![msg.val boolValue] name:@"drums"];
     } else if ([type isEqualToString:@"2"]) {
+        MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
         // change sound of players
-        self.volume = val;
+        self.volume = msg.val;
         //[self notifyVolumeChange];
-        [_audioManager setLoopVolume:[val floatValue] name:@"organ"];
+        [_audioManager setLoopVolume:[msg.val floatValue] name:@"organ"];
     } else if ([type isEqualToString:@"3"]) {
+        MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
         // change color of players
-        self.color = val;
+        self.color = msg.val;
         [self notifyColorChange];
-        [_audioManager setLoopVolume:[val floatValue] name:@"drums"];
+        [_audioManager setLoopVolume:[msg.val floatValue] name:@"drums"];
     } else if ([type isEqualToString:@"4"]) {
         // timestamp handled by session controller
     } else if ([type isEqualToString:@"5"]) {
         // request for time sync handled by session controller
     } else if ([type isEqualToString:@"6"]) {
+        MPISongInfoMessage *msg = [MTLJSONAdapter modelOfClass:[MPISongInfoMessage class] fromJSONDictionary:json error:&error];
         _lastSongMessage = msg;
         [self notifySongChange];
     }
@@ -248,6 +261,26 @@ static int const kTimeSyncIterations = 10;
 - (void) notifySongChange {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"songChanged" object:self];
 }
+
+- (void) startEcho
+{
+    if (_audioProcessor == nil) {
+        _audioProcessor = [[AudioProcessor alloc] init];
+    }
+    NSLog(@"Starting up AudioUnit");
+    [_audioProcessor start];
+    assert(<#e#>)
+    NSLog(@"AudioUnit running");
+
+}
+- (void) stopEcho
+{
+    
+    NSLog(@"Stopping AudioUnit");
+    [_audioProcessor stop];
+    NSLog(@"AudioUnit stopped");
+}
+
 - (void) startup
 {
     [_sessionController startup];
@@ -255,6 +288,14 @@ static int const kTimeSyncIterations = 10;
 - (void) shutdown
 {
     [_sessionController shutdown];
+    [_audioInStream stop];
+    _audioInStream = nil;
+    [_avSession stopRunning];
+    _avSession = nil;
+    if(_audioProcessor != nil){
+        [_audioProcessor stop];
+        _audioProcessor = nil;
+    }
 }
 
 @end

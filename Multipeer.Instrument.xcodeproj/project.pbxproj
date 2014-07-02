@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		083BF3D819507D8900C66DDD /* MPIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF3D519507D8900C66DDD /* MPIEvent.m */; };
 		083BF3D919507D8900C66DDD /* MPIEventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF3D719507D8900C66DDD /* MPIEventLogger.m */; };
+		08670ECA19630ADA00CD23A8 /* AudioProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 08670EC919630ADA00CD23A8 /* AudioProcessor.m */; };
 		088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EE919476034006A27E4 /* PropertyUtil.m */; };
 		088B9EF719476048006A27E4 /* ActionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEC19476048006A27E4 /* ActionMessage.m */; };
 		088B9EF819476048006A27E4 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEE19476048006A27E4 /* BaseModel.m */; };
@@ -76,6 +77,8 @@
 		083BF3D519507D8900C66DDD /* MPIEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIEvent.m; path = Source/MPIEventLogger/MPIEvent.m; sourceTree = "<group>"; };
 		083BF3D619507D8900C66DDD /* MPIEventLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPIEventLogger.h; path = Source/MPIEventLogger/MPIEventLogger.h; sourceTree = "<group>"; };
 		083BF3D719507D8900C66DDD /* MPIEventLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIEventLogger.m; path = Source/MPIEventLogger/MPIEventLogger.m; sourceTree = "<group>"; };
+		08670EC819630ADA00CD23A8 /* AudioProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioProcessor.h; sourceTree = "<group>"; };
+		08670EC919630ADA00CD23A8 /* AudioProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioProcessor.m; sourceTree = "<group>"; };
 		088B9EE819476034006A27E4 /* PropertyUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = PropertyUtil.h; path = Source/Util/PropertyUtil.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		088B9EE919476034006A27E4 /* PropertyUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PropertyUtil.m; path = Source/Util/PropertyUtil.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		088B9EEB19476048006A27E4 /* ActionMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ActionMessage.h; path = Source/Models/ActionMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -192,6 +195,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08670EC719630AD900CD23A8 /* MicInput */ = {
+			isa = PBXGroup;
+			children = (
+				08670EC819630ADA00CD23A8 /* AudioProcessor.h */,
+				08670EC919630ADA00CD23A8 /* AudioProcessor.m */,
+			);
+			name = MicInput;
+			path = Source/MicInput;
+			sourceTree = "<group>";
+		};
 		08943D6A19533B1900D226AE /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -288,6 +301,7 @@
 		273F283D18CD1A0C00F595C2 = {
 			isa = PBXGroup;
 			children = (
+				08670EC719630AD900CD23A8 /* MicInput */,
 				08ED730E195C824000FFCB34 /* TDAudioStreamer */,
 				08943D6A19533B1900D226AE /* Reachability */,
 				08C1BE36194F400700E2EFA5 /* MPIEventLogger */,
@@ -590,6 +604,7 @@
 				08ED7334195C824000FFCB34 /* TDAudioStreamerConstants.m in Sources */,
 				08943D6F19533B1900D226AE /* Reachability.m in Sources */,
 				088B9EFA19476048006A27E4 /* JoinRequest.m in Sources */,
+				08670ECA19630ADA00CD23A8 /* AudioProcessor.m in Sources */,
 				08ED732E195C824000FFCB34 /* TDAudioQueueController.m in Sources */,
 				08ED732B195C824000FFCB34 /* TDAudioQueue.m in Sources */,
 			);
@@ -718,11 +733,13 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/Multipeer.Instrument-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Multipeer.Instrument-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Multipeer.Instrument/Multipeer.Instrument-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
@@ -737,11 +754,13 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/Multipeer.Instrument-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Multipeer.Instrument-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Multipeer.Instrument/Multipeer.Instrument-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};

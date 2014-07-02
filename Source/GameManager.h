@@ -39,7 +39,11 @@
 // handles time sync process
 - (void)recievedTimestamp:(id)playerID value:(NSNumber*)val;
 
-- (void)handleActionRequest:(id)msg type:(NSString*)type value:(NSNumber*)val;
+- (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type;
+
+
+- (void)startEcho;
+- (void)stopEcho;
 
 - (void)startup;
 - (void)shutdown;

@@ -19,6 +19,7 @@
 - (IBAction)songsClicked:(id)sender;
 - (IBAction)advertiseChanged:(id)sender;
 - (IBAction)browseChanged:(id)sender;
+- (IBAction)micChanged:(id)sender;
 
 
 @end

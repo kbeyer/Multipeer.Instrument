@@ -53,6 +53,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorChanged) name:@"colorChanged" object:nil];
     // listen for audio input stream
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInChanged) name:@"audioInChanged" object:nil];
+    // listen for song changed
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInSongChanged) name:@"songChanged" object:nil];
     
     // configure audio player
     [self configureAudio];
@@ -130,6 +132,15 @@
     // Ensure UI updates occur on the main queue.
     dispatch_async(dispatch_get_main_queue(), ^{
         [[[MPIGameManager instance] audioInStream] start];
+    });
+}
+
+- (void)audioInSongChanged
+{
+    // Ensure UI updates occur on the main queue.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _songArtist.text = [MPIGameManager instance].lastSongMessage.artist;
+        _songTitle.text = [MPIGameManager instance].lastSongMessage.title;
     });
 }
 
@@ -249,16 +260,6 @@
 }
 
 
-#pragma mark - MPISessionControllerDelegate
-
-- (void)session:(MPISessionController *)session didReceiveAudioStream:(NSInputStream *)stream
-{
-    if (!self.inputStream) {
-        self.inputStream = [[TDAudioInputStreamer alloc] initWithInputStream:stream];
-        [self.inputStream start];
-    }
-}
-
 #pragma mark - Touch ACTIONS
 
 - (IBAction)songsClicked:(id)sender {
@@ -287,6 +288,16 @@
         [[MPIGameManager instance].sessionController startBrowsing];
     } else {
         [[MPIGameManager instance].sessionController stopBrowsing];
+    }
+}
+
+- (IBAction)micChanged:(id)sender {
+    UISwitch* micSwitch = (UISwitch*)sender;
+    
+    if (micSwitch.isOn) {
+        [[MPIGameManager instance] startEcho];
+    } else {
+        [[MPIGameManager instance] stopEcho];
     }
 }
 @end
