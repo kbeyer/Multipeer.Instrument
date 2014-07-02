@@ -11,6 +11,8 @@
 
 @interface MPIMessage : MTLModel<MTLJSONSerializing>
 
++ (NSDateFormatter *)dateFormatter;
+
 @property (nonatomic, copy) NSString* type;
 @property (nonatomic, copy) NSNumber* val;
 @property (nonatomic, copy) NSDate* createdAt;

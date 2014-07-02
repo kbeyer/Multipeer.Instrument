@@ -349,24 +349,22 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     // then deserialize as from JSON if NSDictionary
     if ([obj isKindOfClass:[NSDictionary class]]){
         
-        NSError *error = nil;
-        MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:obj error:&error];
-        
+        NSString *msgType = obj[@"type"];
         // NEW: Log Message recieve event
         NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
         NSString* action = @"Display";
-        if ([msg.type isEqualToString:@"1"]) {
+        if ([msgType isEqualToString:@"1"]) {
             action = @"Flash";
-        } else if ([msg.type isEqualToString:@"2"]) {
+        } else if ([msgType isEqualToString:@"2"]) {
             action = @"Volume";
-        } else if ([msg.type isEqualToString:@"4"]) {
+        } else if ([msgType isEqualToString:@"4"]) {
             action = @"Time";
-        } else if ([msg.type isEqualToString:@"5"]) {
+        } else if ([msgType isEqualToString:@"5"]) {
             action = @"Sync Request";
-        } else if ([msg.type isEqualToString:@"6"]) {
+        } else if ([msgType isEqualToString:@"6"]) {
             action = @"Song Info";
         }
-        NSDate* start = msg.createdAt;
+        NSDate* start = [[MPIMessage dateFormatter] dateFromString:obj[@"createdAt"]];
         NSDate* end = [NSDate date];
         
         NSString* description = [NSString stringWithFormat:@"HEY! %@ changed my %@", peerID.displayName, action];
@@ -403,10 +401,10 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
                 [self sendTimestamp:peerID];
             } else {
                 // this is peer that is requesting sync
-                [[MPIGameManager instance] recievedTimestamp:peerID value:msg.val];
+                [[MPIGameManager instance] recievedTimestamp:peerID value:0];
             }
         } else {
-            [[MPIGameManager instance] handleActionRequest:msg type:msg.type value:msg.val];
+            [[MPIGameManager instance] handleActionRequest:obj type:msgType];
         }
         
     }
@@ -502,6 +500,12 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     
     [self.connectingPeersOrderedSet removeObject:peerID];
     [self.disconnectedPeersOrderedSet addObject:peerID];
+    
+    if (self.connectedPeers.count == 0) {
+        // if all peers are disconnected, restart
+        [[MPIGameManager instance] shutdown];
+        [[MPIGameManager instance] startup];
+    }
     
     [self updateDelegate];
 }

@@ -28,9 +28,9 @@
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
-             @"type": @"t",
-             @"val": @"v",
-             @"createdAt": @"c"
+             @"type": @"type",
+             @"val": @"val",
+             @"createdAt": @"createdAt"
              };
 }
 
