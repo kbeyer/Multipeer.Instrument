@@ -12,18 +12,16 @@
 #import "AEAudioController+Audiobus.h"
 #import "AEAudioController+AudiobusStub.h"
 
-static const int kAudioBufferLength = 16384;
+#import "TDAudioInputStreamer.h"
 
-UInt32 const kAudioStreamReadMaxLength = 512;
+static const int kAudioBufferLength = 16384;
 
 @interface MPIInputStreamChannel () {
     TPCircularBuffer _buffer;
-    NSInputStream *_inputStream;
+    TDAudioInputStreamer* _streamer;
     BOOL _audiobusConnectedToSelf;
 }
 @property (nonatomic, strong) AEAudioController *audioController;
-@property (strong, nonatomic) NSThread *audioStreamerThread;
-@property (assign, atomic) BOOL isPlaying;
 @end
 
 @implementation MPIInputStreamChannel
@@ -38,39 +36,15 @@ UInt32 const kAudioStreamReadMaxLength = 512;
     TPCircularBufferInit(&_buffer, kAudioBufferLength);
     self.audioController = audioController;
     _volume = 1.0;
-    _inputStream = stream;
+    //_inputStream = stream;
+    _streamer = [[TDAudioInputStreamer alloc] initWithInputStream:stream buffer:_buffer];
     return self;
 }
 
 - (void)dealloc {
     TPCircularBufferCleanup(&_buffer);
     self.audioController = nil;
-    
-    if (_inputStream) [self stop];
-}
-
-
-- (void)start
-{
-    if (![[NSThread currentThread] isEqual:[NSThread mainThread]]) {
-        return [self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:YES];
-    }
-    
-    self.audioStreamerThread = [[NSThread alloc] initWithTarget:self selector:@selector(run) object:nil];
-    [self.audioStreamerThread start];
-    NSLog(@"Audio Streamer thread started");
-}
-
-- (void)run
-{
-    @autoreleasepool {
-        
-        [self open];
-        
-        self.isPlaying = YES;
-        
-        while (self.isPlaying && [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) ;
-    }
+    [self stop];
 }
 
 
@@ -103,6 +77,8 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
                                             NULL,
                                             AEAudioControllerAudioDescription(audioController));
     
+    NSLog(@"renderCallback %i", fillCount);
+    
     return noErr;
 }
 
@@ -114,71 +90,17 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
     return _audioController.inputAudioDescription;
 }
 
-#pragma mark - stream methods
 
-- (void)open
+
+- (void)start
 {
-    _inputStream.delegate = self;
-    [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    return [_inputStream open];
+    [_streamer start];
 }
-
-- (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
-{
-    switch (eventCode) {
-        case NSStreamEventHasBytesAvailable:
-            
-            NSLog(@"NSStreamEventHasBytesAvailable");
-            
-            self.isPlaying = YES;
-            
-            uint8_t bytes[kAudioStreamReadMaxLength];
-            NSInteger length = [_inputStream read:bytes maxLength:kAudioStreamReadMaxLength];
-            
-            NSLog(@"audio in has data %li", (long)length);
-            
-            //
-            // TODO: push data into circular buffer
-            //
-            TPCircularBufferProduceBytes(&(_buffer), bytes, kAudioStreamReadMaxLength);
-            
-            break;
-            
-        case NSStreamEventEndEncountered:
-            
-            NSLog(@"NSStreamEventEndEncountered");
-            
-            self.isPlaying = NO;
-            break;
-            
-        case NSStreamEventErrorOccurred:
-            NSLog(@"NSStreamEventErrorOccurred");
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)close
-{
-    [_inputStream close];
-    _inputStream.delegate = nil;
-    [_inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-}
-
-#pragma mark - Public Methods
-
 - (void)stop
 {
-    [self close];
-    [self performSelector:@selector(stopThread) onThread:self.audioStreamerThread withObject:nil waitUntilDone:YES];
+    [_streamer stop];
 }
 
-- (void)stopThread
-{
-    self.isPlaying = NO;
-}
 
 @end
 

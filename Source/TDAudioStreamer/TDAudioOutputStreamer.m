@@ -82,6 +82,7 @@
 
 - (UInt32)writeData:(uint8_t *)data maxLength:(UInt32)maxLength
 {
+    NSLog(@"writing to stream: %ui", maxLength);
     return [self.audioStream writeData:data maxLength:maxLength];
 }
 

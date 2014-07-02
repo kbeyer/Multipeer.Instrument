@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AudioProcessor.h"
+
+#import "TPCircularBuffer.h"
+#import "TPCircularBuffer+AudioBufferList.h"
 
 @interface TDAudioInputStreamer : NSObject
 
@@ -15,7 +17,7 @@
 @property (assign, nonatomic) UInt32 audioQueueBufferSize;
 @property (assign, nonatomic) UInt32 audioQueueBufferCount;
 
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream processor:(AudioProcessor*)processor;
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream buffer:(TPCircularBuffer)buffer;
 
 - (void)start;
 - (void)resume;

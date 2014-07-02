@@ -14,7 +14,11 @@
 #import "TDAudioQueueFiller.h"
 #import "TDAudioStreamerConstants.h"
 
+
 @interface TDAudioInputStreamer () <TDAudioStreamDelegate, TDAudioFileStreamDelegate, TDAudioQueueDelegate>
+{
+    TPCircularBuffer _buffer;
+}
 
 @property (strong, nonatomic) NSThread *audioStreamerThread;
 @property (assign, atomic) BOOL isPlaying;
@@ -23,7 +27,6 @@
 @property (strong, nonatomic) TDAudioFileStream *audioFileStream;
 @property (strong, nonatomic) TDAudioQueue *audioQueue;
 
-@property (readonly) AudioProcessor* processor;
 
 @end
 
@@ -42,17 +45,17 @@
     return self;
 }
 
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream processor:(AudioProcessor*)processor
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream buffer:(TPCircularBuffer)buffer
 {
     self = [self init];
     if (!self) return nil;
 
+    _buffer = buffer;
     self.audioStream = [[TDAudioStream alloc] initWithInputStream:inputStream];
     if (!self.audioStream) return nil;
 
     self.audioStream.delegate = self;
     
-    _processor = processor;
 
     return self;
 }
@@ -115,9 +118,12 @@
             UInt32 length = [audioStream readData:bytes maxLength:self.audioStreamReadMaxLength];
             //[self.audioFileStream parseData:bytes length:length];
             
+            AudioBufferList *bufferList = TPCircularBufferPrepareEmptyAudioBufferList(bytes, 1, self.audioStreamReadMaxLength, nil);
+            
+            TPCircularBufferProduceBytes(&(_buffer), bytes, self.audioStreamReadMaxLength);
+            
             NSLog(@"audio in has data %i", (unsigned int)length);
             
-            [self.processor parseData:bytes length:length];
             break;
         }
 

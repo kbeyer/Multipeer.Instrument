@@ -13,6 +13,7 @@
 #import "AELimiterFilter.h"
 #import "AERecorder.h"
 #import "MPIInputStreamChannel.h"
+#import "TDAudioStreamer.h"
 
 
 static const int kInputChannelsChangedContext;
@@ -34,6 +35,8 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 @property (nonatomic, retain) AEAudioUnitFilter *reverb;
 @property (nonatomic, retain) id<AEAudioReceiver> micReceiver;
 @property (nonatomic, retain) MPIInputStreamChannel *inputStreamChannel;
+
+@property (nonatomic, retain) TDAudioOutputStreamer *outputStreamer;
 
 @end
 
@@ -179,6 +182,8 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
     //[_audioController addInputReceiver:_playthrough];
     //[_audioController addChannels:@[_playthrough]];
     
+    self.outputStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:stream];
+    [_outputStreamer start];
     
     self.micReceiver = [AEBlockAudioReceiver audioReceiverWithBlock:
                                     ^(void                     *source,
@@ -190,8 +195,9 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
                                         for (int i=0; i < audio->mNumberBuffers; i++) {
                                             AudioBuffer buffer = audio->mBuffers[i];
                                             
+                                            [_outputStreamer writeData:buffer.mData maxLength:buffer.mDataByteSize];
                                             // TODO: write data to stream
-                                            [stream write:buffer.mData maxLength:buffer.mDataByteSize];
+                                            //[stream write:buffer.mData maxLength:buffer.mDataByteSize];
                                         }
                                         
                                     }];
@@ -201,9 +207,11 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 }
 -(void)closeMic
 {
+    [_outputStreamer stop];
     //[_audioController removeChannels:@[_micReceiver]];
     [_audioController removeInputReceiver:_micReceiver];
     self.micReceiver = nil;
+    self.outputStreamer = nil;
 }
 
 

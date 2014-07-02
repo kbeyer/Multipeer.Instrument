@@ -14,7 +14,7 @@ extern "C" {
 #import "TheAmazingAudioEngine.h"
     
 // Input stream channel, used for playing audio from input stream
-@interface MPIInputStreamChannel : NSObject<NSStreamDelegate>
+@interface MPIInputStreamChannel : NSObject
 
 /*!
  * Initialise
