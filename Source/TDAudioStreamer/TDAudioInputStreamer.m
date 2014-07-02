@@ -23,6 +23,8 @@
 @property (strong, nonatomic) TDAudioFileStream *audioFileStream;
 @property (strong, nonatomic) TDAudioQueue *audioQueue;
 
+@property (readonly) AudioProcessor* processor;
+
 @end
 
 @implementation TDAudioInputStreamer
@@ -40,7 +42,7 @@
     return self;
 }
 
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream processor:(AudioProcessor*)processor
 {
     self = [self init];
     if (!self) return nil;
@@ -49,6 +51,8 @@
     if (!self.audioStream) return nil;
 
     self.audioStream.delegate = self;
+    
+    _processor = processor;
 
     return self;
 }
@@ -109,8 +113,11 @@
         case TDAudioStreamEventHasData: {
             uint8_t bytes[self.audioStreamReadMaxLength];
             UInt32 length = [audioStream readData:bytes maxLength:self.audioStreamReadMaxLength];
-            [self.audioFileStream parseData:bytes length:length];
+            //[self.audioFileStream parseData:bytes length:length];
+            
             NSLog(@"audio in has data %i", length);
+            
+            [self.processor parseData:bytes length:length];
             break;
         }
 

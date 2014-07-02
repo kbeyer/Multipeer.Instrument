@@ -12,9 +12,11 @@
 #import "AEExpanderFilter.h"
 #import "AELimiterFilter.h"
 #import "AERecorder.h"
+#import "TDAudioStreamer.h"
 
 
 static const int kInputChannelsChangedContext;
+static const UInt32 kAudioStreamReadMaxLength = 512;
 
 @interface MPIAudioManager(){
     AudioFileID _audioUnitFile;
@@ -30,6 +32,10 @@ static const int kInputChannelsChangedContext;
 @property (nonatomic, retain) AELimiterFilter *limiter;
 @property (nonatomic, retain) AEExpanderFilter *expander;
 @property (nonatomic, retain) AEAudioUnitFilter *reverb;
+@property (nonatomic, retain) id<AEAudioReceiver> micReceiver;
+@property (nonatomic, retain) AEBlockChannel *micPlayer;
+@property (nonatomic, retain) TDAudioInputStreamer *inputStreamer;
+
 @end
 
 @implementation MPIAudioManager
@@ -166,5 +172,76 @@ static const int kInputChannelsChangedContext;
     }
     player.volume = volume;
 }
+
+
+-(void)openMic:(NSOutputStream *)stream
+{
+    //self.playthrough = [[AEPlaythroughChannel alloc] initWithAudioController:_audioController];
+    //[_audioController addInputReceiver:_playthrough];
+    //[_audioController addChannels:@[_playthrough]];
+    
+    
+    self.micReceiver = [AEBlockAudioReceiver audioReceiverWithBlock:
+                                    ^(void                     *source,
+                                      const AudioTimeStamp     *time,
+                                      UInt32                    frames,
+                                      AudioBufferList          *audio) {
+                                        
+                                        // iterate over incoming stream an copy to output stream
+                                        for (int i=0; i < audio->mNumberBuffers; i++) {
+                                            AudioBuffer buffer = audio->mBuffers[i];
+                                            
+                                            // TODO: write data to stream
+                                            [stream write:buffer.mData maxLength:buffer.mDataByteSize];
+                                        }
+                                        
+                                    }];
+    
+    [_audioController addInputReceiver:_micReceiver];
+    
+}
+-(void)closeMic
+{
+    //[_audioController removeChannels:@[_micReceiver]];
+    [_audioController removeInputReceiver:_micReceiver];
+    self.micReceiver = nil;
+}
+
+
+-(void)playStream:(NSInputStream*)stream
+{
+    
+    // play data from stream on channel
+    AEBlockChannel *channel = [AEBlockChannel channelWithBlock:^(const AudioTimeStamp  *time,
+                                                         UInt32           frames,
+                                                         AudioBufferList *audio) {
+        
+        uint8_t bytes[kAudioStreamReadMaxLength];
+        UInt32 length = [stream read:bytes maxLength:kAudioStreamReadMaxLength];
+        
+        for (int i=0; i < audio->mNumberBuffers; i++) {
+            AudioBuffer buffer = audio->mBuffers[i];
+            
+            // write stream data to audio buffers
+            buffer.mData = bytes;
+        }
+        
+        
+        NSLog(@"channelWithBlock called.  Read %u bytes", (unsigned int)length);
+    }];
+    channel.audioDescription = [AEAudioController nonInterleaved16BitStereoAudioDescription];
+    channel.channelIsMuted = NO;
+    
+    [_audioController addChannels:[NSArray arrayWithObjects:channel, nil]];
+}
+
+-(void)stopMic
+{
+    
+    
+    [_audioController removeChannels:@[_micPlayer]];
+    self.micPlayer = nil;
+}
+
 
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "TDAudioStreamer.h"
+#import "TDAudioOutputStreamer.h"
 
 // return max value for given values
 #define max(a, b) (((a) > (b)) ? (a) : (b))
@@ -54,6 +54,8 @@
 // gain
 -(void)setGain:(float)gainValue;
 -(float)getGain;
+
+- (void)parseData:(const void *)data length:(UInt32)length;
 
 // error managment
 -(void)hasError:(int)statusCode:(char*)file:(int)line;

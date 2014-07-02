@@ -148,11 +148,7 @@ static int const kTimeSyncIterations = 10;
 
 - (void)session:(MPISessionController *)session didReceiveAudioStream:(NSInputStream *)stream
 {
-    if (!self.audioInStream) {
-        self.audioInStream = [[TDAudioInputStreamer alloc] initWithInputStream:stream];
-        NSLog(@"Audio in stream changed.");
-        [self notifyAudioInChange];
-    }
+    [_audioManager playMic:stream];
 }
 
 - (void)requestFlashChange:(id)peerID value:(NSNumber*)val {
@@ -264,26 +260,11 @@ static int const kTimeSyncIterations = 10;
 
 - (void) startEcho:(NSOutputStream*)stream
 {
-    if (_audioProcessor == nil) {
-        if (stream == nil) {
-            _audioProcessor = [[AudioProcessor alloc] init];
-        } else {
-            _audioProcessor = [[AudioProcessor alloc] initWithOutputStream:stream];
-        }
-    }
-    NSLog(@"Starting up AudioUnit");
-    [_audioProcessor start];
-    NSLog(@"AudioUnit running");
-
+    [_audioManager openMic:stream];
 }
 - (void) stopEcho
 {
-    
-    NSLog(@"Stopping AudioUnit");
-    [_audioProcessor stop];
-    NSLog(@"AudioUnit stopped");
-    // release every time?
-    _audioProcessor = nil;
+    [_audioManager closeMic];
 }
 
 - (void) startup

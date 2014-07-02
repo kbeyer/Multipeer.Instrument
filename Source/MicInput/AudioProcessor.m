@@ -76,8 +76,12 @@ static OSStatus playbackCallback(void *inRefCon,
         // find minimum size
 		UInt32 size = min(buffer.mDataByteSize, [audioProcessor audioBuffer].mDataByteSize);
         
+        /* TEST
+         * ... prevent feedback by not playing to speaker
+         */
         // copy buffer to audio buffer which gets played after function return
 		memcpy(buffer.mData, [audioProcessor audioBuffer].mData, size);
+        
         
         // set data size
 		buffer.mDataByteSize = size;
@@ -288,6 +292,15 @@ static OSStatus playbackCallback(void *inRefCon,
 -(float)getGain
 {
     return gain;
+}
+
+#pragma mark manual playback
+- (void)parseData:(const void *)data length:(UInt32)length
+{
+    // find minimum size
+    UInt32 size = min(length, [self audioBuffer].mDataByteSize);
+    // copy buffer to audio buffer which gets played after function return
+    memcpy(data, [self audioBuffer].mData, size);
 }
 
 #pragma mark processing

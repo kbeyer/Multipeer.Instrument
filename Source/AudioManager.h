@@ -15,5 +15,13 @@
 -(void)muteLoop:(BOOL)mute name:(NSString*)key;
 -(void)setLoopVolume:(float)volume name:(NSString*)key;
 
+// listen to mic and stream to peer(s)
+-(void)openMic:(NSOutputStream*)stream;
+// top listening to and streaming mic
+-(void)closeMic;
+
+// play mic stream
+-(void)playMic:(NSInputStream*)stream;
+
 
 @end
