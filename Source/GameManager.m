@@ -153,6 +153,9 @@ static int const kTimeSyncIterations = 10;
     // log for now ...
     NSLog(@"x: %f, y: %f, z: %f", x, y, z);
     // TODO: send message to peers
+    
+    // TEST: use y value to change display
+    //[self requestColorChange:_sessionController.connectedPeers[0] value:[[NSNumber alloc] initWithFloat:y]];
 }
 
 #pragma mark - SessionControllerDelegate protocol conformance
@@ -289,7 +292,7 @@ static int const kTimeSyncIterations = 10;
 - (void) startup
 {
     [_sessionController startup];
-    [[MPIMotionManager instance] start];
+    //[[MPIMotionManager instance] start];
 }
 - (void) shutdown
 {
