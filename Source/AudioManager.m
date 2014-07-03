@@ -13,6 +13,8 @@
 #import "AELimiterFilter.h"
 #import "AERecorder.h"
 #import "MPIInputStreamChannel.h"
+#import "MPIAudioStreamer.h"
+
 #import "TDAudioStreamer.h"
 
 
@@ -33,7 +35,10 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 @property (nonatomic, retain) AELimiterFilter *limiter;
 @property (nonatomic, retain) AEExpanderFilter *expander;
 @property (nonatomic, retain) AEAudioUnitFilter *reverb;
-@property (nonatomic, retain) id<AEAudioReceiver> micReceiver;
+
+//@property (nonatomic, retain) id<AEAudioReceiver> micReceiver;
+@property (nonatomic, retain) MPIAudioStreamer *micReceiver;
+
 @property (nonatomic, retain) MPIInputStreamChannel *inputStreamChannel;
 
 @property (nonatomic, retain) TDAudioOutputStreamer *outputStreamer;
@@ -182,6 +187,7 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
     //[_audioController addInputReceiver:_playthrough];
     //[_audioController addChannels:@[_playthrough]];
     
+    /*
     self.outputStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:stream];
     [_outputStreamer start];
     
@@ -191,17 +197,20 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
                                       UInt32                    frames,
                                       AudioBufferList          *audio) {
                                         
-                                        // iterate over incoming stream an copy to output stream
+                                        NSLog(@"mic in. frames: %i buffers: %i", frames, audio->mNumberBuffers);
+                                        
+                                        // iterate over incoming stream and copy to output stream
                                         for (int i=0; i < audio->mNumberBuffers; i++) {
                                             AudioBuffer buffer = audio->mBuffers[i];
                                             
                                             [_outputStreamer writeData:buffer.mData maxLength:buffer.mDataByteSize];
-                                            // TODO: write data to stream
-                                            //[stream write:buffer.mData maxLength:buffer.mDataByteSize];
                                         }
                                         
                                     }];
+    */
     
+    self.micReceiver = [[MPIAudioStreamer alloc] initWithAudioController:_audioController];
+    [_micReceiver beginStreaming:stream];
     [_audioController addInputReceiver:_micReceiver];
     
 }
@@ -217,29 +226,6 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 
 -(void)playStream:(NSInputStream*)stream
 {
-    /*
-    // play data from stream on channel
-    AEBlockChannel *channel = [AEBlockChannel channelWithBlock:^(const AudioTimeStamp  *time,
-                                                         UInt32           frames,
-                                                         AudioBufferList *audio) {
-        
-        uint8_t bytes[kAudioStreamReadMaxLength];
-        UInt32 length = [stream read:bytes maxLength:kAudioStreamReadMaxLength];
-        
-        for (int i=0; i < audio->mNumberBuffers; i++) {
-            AudioBuffer buffer = audio->mBuffers[i];
-            
-            // write stream data to audio buffers
-            buffer.mData = bytes;
-        }
-        
-        
-        NSLog(@"channelWithBlock called.  Read %u bytes", (unsigned int)length);
-    }];
-    channel.audioDescription = [AEAudioController nonInterleaved16BitStereoAudioDescription];
-    channel.channelIsMuted = NO;
-     */
-    
     self.inputStreamChannel = [[MPIInputStreamChannel alloc] initWithAudioController:_audioController stream:stream];
     _inputStreamChannel.channelIsMuted = NO;
     

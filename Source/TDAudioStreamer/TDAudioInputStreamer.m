@@ -18,6 +18,7 @@
 @interface TDAudioInputStreamer () <TDAudioStreamDelegate, TDAudioFileStreamDelegate, TDAudioQueueDelegate>
 {
     TPCircularBuffer _buffer;
+    AEAudioController *_audioController;
 }
 
 @property (strong, nonatomic) NSThread *audioStreamerThread;
@@ -45,11 +46,12 @@
     return self;
 }
 
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream buffer:(TPCircularBuffer)buffer
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream buffer:(TPCircularBuffer)buffer audioController:(AEAudioController *)audioController
 {
     self = [self init];
     if (!self) return nil;
 
+    _audioController = audioController;
     _buffer = buffer;
     self.audioStream = [[TDAudioStream alloc] initWithInputStream:inputStream];
     if (!self.audioStream) return nil;
@@ -116,11 +118,11 @@
         case TDAudioStreamEventHasData: {
             uint8_t bytes[self.audioStreamReadMaxLength];
             UInt32 length = [audioStream readData:bytes maxLength:self.audioStreamReadMaxLength];
-            //[self.audioFileStream parseData:bytes length:length];
+            [self.audioFileStream parseData:bytes length:length];
             
-            AudioBufferList *bufferList = TPCircularBufferPrepareEmptyAudioBufferList(bytes, 1, self.audioStreamReadMaxLength, nil);
-            
-            TPCircularBufferProduceBytes(&(_buffer), bytes, self.audioStreamReadMaxLength);
+            //
+            // TODO : write to AudioPlayer buffer
+            //
             
             NSLog(@"audio in has data %i", (unsigned int)length);
             

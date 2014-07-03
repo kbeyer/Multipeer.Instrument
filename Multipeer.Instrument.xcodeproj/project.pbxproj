@@ -10,6 +10,7 @@
 		083BF3D819507D8900C66DDD /* MPIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF3D519507D8900C66DDD /* MPIEvent.m */; };
 		083BF3D919507D8900C66DDD /* MPIEventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF3D719507D8900C66DDD /* MPIEventLogger.m */; };
 		0844086F1964F7F10079D9BC /* MPIMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0844086E1964F7F10079D9BC /* MPIMotionManager.m */; };
+		084408721965DD900079D9BC /* MPIAudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 084408711965DD900079D9BC /* MPIAudioStreamer.m */; };
 		08670ECA19630ADA00CD23A8 /* AudioProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 08670EC919630ADA00CD23A8 /* AudioProcessor.m */; };
 		088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EE919476034006A27E4 /* PropertyUtil.m */; };
 		088B9EF719476048006A27E4 /* ActionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEC19476048006A27E4 /* ActionMessage.m */; };
@@ -81,6 +82,8 @@
 		083BF3D719507D8900C66DDD /* MPIEventLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIEventLogger.m; path = Source/MPIEventLogger/MPIEventLogger.m; sourceTree = "<group>"; };
 		0844086D1964F7F10079D9BC /* MPIMotionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPIMotionManager.h; path = Source/MPIMotionManager.h; sourceTree = SOURCE_ROOT; };
 		0844086E1964F7F10079D9BC /* MPIMotionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIMotionManager.m; path = Source/MPIMotionManager.m; sourceTree = SOURCE_ROOT; };
+		084408701965DD900079D9BC /* MPIAudioStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPIAudioStreamer.h; sourceTree = "<group>"; };
+		084408711965DD900079D9BC /* MPIAudioStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPIAudioStreamer.m; sourceTree = "<group>"; };
 		08670EC819630ADA00CD23A8 /* AudioProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioProcessor.h; sourceTree = "<group>"; };
 		08670EC919630ADA00CD23A8 /* AudioProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioProcessor.m; sourceTree = "<group>"; };
 		088B9EE819476034006A27E4 /* PropertyUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = PropertyUtil.h; path = Source/Util/PropertyUtil.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -208,6 +211,8 @@
 				08670EC919630ADA00CD23A8 /* AudioProcessor.m */,
 				08C5F0CF1964AD410038E81B /* MPIInputStreamChannel.h */,
 				08C5F0D01964AD410038E81B /* MPIInputStreamChannel.m */,
+				084408701965DD900079D9BC /* MPIAudioStreamer.h */,
+				084408711965DD900079D9BC /* MPIAudioStreamer.m */,
 			);
 			name = MicInput;
 			path = Source/MicInput;
@@ -599,6 +604,7 @@
 				088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */,
 				08ED7331195C824000FFCB34 /* TDAudioInputStreamer.m in Sources */,
 				088B9F151947609C006A27E4 /* SessionController.m in Sources */,
+				084408721965DD900079D9BC /* MPIAudioStreamer.m in Sources */,
 				0844086F1964F7F10079D9BC /* MPIMotionManager.m in Sources */,
 				08ED7332195C824000FFCB34 /* TDAudioOutputStreamer.m in Sources */,
 				088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */,
