@@ -26,7 +26,7 @@
     
     
     // initial game launch
-    [MPIGameManager instance];
+    [[MPIGameManager instance] startup];
     
     //[TestFlight takeOff:@"ba6904ec-9673-47ca-a275-e1bd8ddeda07"];
     

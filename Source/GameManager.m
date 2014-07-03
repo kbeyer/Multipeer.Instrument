@@ -43,6 +43,9 @@ static int const kTimeSyncIterations = 10;
     self.sessionController.delegate = self;
     
     _audioManager = [[MPIAudioManager alloc] init];
+    
+    // setup self as motion manager delegate
+    [MPIMotionManager instance].delegate = self;
 }
 
 + (MPIGameManager *)instance
@@ -134,6 +137,22 @@ static int const kTimeSyncIterations = 10;
     //NSLog(@"local: %f, server: %f, latency: %f, lastSend: %f",
     //      localTimestamp, serverTimestamp, latency, _lastSendTimestamp);
     
+}
+
+#pragma mark - MotionManagerDelegate protocol conformance
+
+- (void)attitudeChanged:(float)yaw pitch:(float)pitch roll:(float)roll
+{
+    // log for now ...
+    NSLog(@"yaw: %f, pitch: %f, roll: %f", yaw, pitch, roll);
+    // TODO: send message to peers
+}
+
+- (void)rotationChanged:(float)x y:(float)y z:(float)z
+{
+    // log for now ...
+    NSLog(@"x: %f, y: %f, z: %f", x, y, z);
+    // TODO: send message to peers
 }
 
 #pragma mark - SessionControllerDelegate protocol conformance
@@ -270,6 +289,7 @@ static int const kTimeSyncIterations = 10;
 - (void) startup
 {
     [_sessionController startup];
+    [[MPIMotionManager instance] start];
 }
 - (void) shutdown
 {
@@ -282,6 +302,7 @@ static int const kTimeSyncIterations = 10;
         [_audioProcessor stop];
         _audioProcessor = nil;
     }
+    [[MPIMotionManager instance] stop];
 }
 
 @end

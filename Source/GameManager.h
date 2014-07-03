@@ -10,8 +10,9 @@
 #import "SessionController.h"
 #import "TDAudioStreamer.h"
 #import "MPISongInfoMessage.h"
+#import "MPIMotionManager.h"
 
-@interface MPIGameManager : NSObject<MPISessionControllerDelegate>
+@interface MPIGameManager : NSObject<MPISessionControllerDelegate, MPIMotionManagerDelegate>
 
 + (MPIGameManager*)instance;
 

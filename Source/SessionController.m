@@ -85,7 +85,7 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
                             object:nil];
          */
         
-        [self startup];
+        //[self startup];
         
         _connectedPeers = self.session.connectedPeers;
         _connectingPeers = [self.connectingPeersOrderedSet array];
