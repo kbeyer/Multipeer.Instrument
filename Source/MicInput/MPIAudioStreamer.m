@@ -113,23 +113,6 @@ static void audioCallback(__unsafe_unretained MPIAudioStreamer *THIS,
     return audioCallback;
 }
 
-- (void)sendDataChunk
-{
-    
-    UInt32 bufferLength = kProcessChunkSize;
-    AEMixerBufferDequeue(_mixer, _buffer, &bufferLength, NULL);
-    
-    if ( bufferLength > 0 ) {
-        
-        for (NSUInteger i = 0; i < _buffer->mNumberBuffers; i++) {
-            AudioBuffer audioBuffer = _buffer->mBuffers[i];
-            [self.audioStream writeData:audioBuffer.mData maxLength:audioBuffer.mDataByteSize];
-            
-            NSLog(@"buffer size: %u", (unsigned int)audioBuffer.mDataByteSize);
-        }
-    }
-}
-
 
 #pragma mark - TDAudioStreamDelegate
 
@@ -137,7 +120,7 @@ static void audioCallback(__unsafe_unretained MPIAudioStreamer *THIS,
 {
     switch (event) {
         case TDAudioStreamEventWantsData:
-            [self sendDataChunk];
+            //[self sendDataChunk];
             break;
             
         case TDAudioStreamEventError:

@@ -15,9 +15,11 @@
 #import "TDAudioStreamerConstants.h"
 
 
+static const int kIncrementalLoadBufferSize = 4096;
+static const int kMaxAudioFileReadSize = 16384;
+
 @interface TDAudioInputStreamer () <TDAudioStreamDelegate, TDAudioFileStreamDelegate, TDAudioQueueDelegate>
 {
-    TPCircularBuffer _buffer;
     AEAudioController *_audioController;
 }
 
@@ -46,17 +48,32 @@
     return self;
 }
 
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream buffer:(TPCircularBuffer)buffer audioController:(AEAudioController *)audioController
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream audioController:(AEAudioController *)audioController
 {
     self = [self init];
     if (!self) return nil;
 
     _audioController = audioController;
-    _buffer = buffer;
+    
     self.audioStream = [[TDAudioStream alloc] initWithInputStream:inputStream];
     if (!self.audioStream) return nil;
 
     self.audioStream.delegate = self;
+    
+    /*
+    AudioStreamBasicDescription audioDescription = _audioController.inputAudioDescription;
+    
+    // Prepare buffers
+    int bufferCount = (audioDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved) ? audioDescription.mChannelsPerFrame : 1;
+    int channelsPerBuffer = (audioDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved) ? 1 : audioDescription.mChannelsPerFrame;
+    AudioBufferList *bufferList = AEAllocateAndInitAudioBufferList(audioDescription, _audioReceiverBlock ? kIncrementalLoadBufferSize : (UInt32)fileLengthInFrames);
+    
+    
+    
+    AudioBufferList *scratchBufferList = AEAllocateAndInitAudioBufferList(audioDescription, 0);
+    */
+    
+    
     
 
     return self;
@@ -82,6 +99,39 @@
 
         while (self.isPlaying && [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) ;
     }
+}
+
+- (void)parseData:(const void *)data length:(UInt32)length;
+{
+    OSStatus status;
+    
+    
+    // Get stream data format
+    AudioStreamBasicDescription streamAudioDescription = _audioController.audioDescription;
+    
+    
+    // Prepare buffers
+    int bufferCount = (streamAudioDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved) ? streamAudioDescription.mChannelsPerFrame : 1;
+    int channelsPerBuffer = (streamAudioDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved) ? 1 : streamAudioDescription.mChannelsPerFrame;
+    AudioBufferList *bufferList = AEAllocateAndInitAudioBufferList(streamAudioDescription, kIncrementalLoadBufferSize);
+
+    
+    AudioBufferList *scratchBufferList = AEAllocateAndInitAudioBufferList(streamAudioDescription, 0);
+    
+    // Perform read in multiple small chunks (otherwise ExtAudioFileRead crashes when performing sample rate conversion)
+    UInt64 readFrames = 0;
+    
+            for ( int i=0; i<scratchBufferList->mNumberBuffers; i++ ) {
+                scratchBufferList->mBuffers[i].mNumberChannels = channelsPerBuffer;
+                scratchBufferList->mBuffers[i].mData = (char*)bufferList->mBuffers[i].mData + readFrames*streamAudioDescription.mBytesPerFrame;
+                scratchBufferList->mBuffers[i].mDataByteSize = kMaxAudioFileReadSize;
+            }
+        
+        // Perform read
+        UInt32 numberOfPackets = (UInt32)(scratchBufferList->mBuffers[0].mDataByteSize / streamAudioDescription.mBytesPerFrame);
+    
+        status = ExtAudioFileRead(audioFile, &numberOfPackets, scratchBufferList);
+    
 }
 
 #pragma mark - Properties
@@ -118,8 +168,10 @@
         case TDAudioStreamEventHasData: {
             uint8_t bytes[self.audioStreamReadMaxLength];
             UInt32 length = [audioStream readData:bytes maxLength:self.audioStreamReadMaxLength];
-            [self.audioFileStream parseData:bytes length:length];
             
+            //[self.audioFileStream parseData:bytes length:length];
+            
+            [self parseData:bytes length:length];
             //
             // TODO : write to AudioPlayer buffer
             //

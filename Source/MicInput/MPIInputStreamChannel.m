@@ -37,7 +37,7 @@ static const int kAudioBufferLength = 16384;
     self.audioController = audioController;
     _volume = 1.0;
     //_inputStream = stream;
-    _streamer = [[TDAudioInputStreamer alloc] initWithInputStream:stream buffer:_buffer audioController:audioController];
+    _streamer = [[TDAudioInputStreamer alloc] initWithInputStream:stream audioController:audioController];
     return self;
 }
 
