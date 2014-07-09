@@ -227,6 +227,7 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 -(void)playStream:(NSInputStream*)stream
 {
     self.inputStreamChannel = [[MPIInputStreamChannel alloc] initWithAudioController:_audioController stream:stream];
+    
     _inputStreamChannel.channelIsMuted = NO;
     
     [_audioController addChannels:[NSArray arrayWithObjects:_inputStreamChannel, nil]];

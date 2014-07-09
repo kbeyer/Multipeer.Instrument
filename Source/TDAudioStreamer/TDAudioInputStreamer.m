@@ -14,6 +14,8 @@
 #import "TDAudioQueueFiller.h"
 #import "TDAudioStreamerConstants.h"
 
+#import "MPIInputStreamChannel.h"
+
 
 static const int kIncrementalLoadBufferSize = 4096;
 static const int kMaxAudioFileReadSize = 16384;
@@ -21,6 +23,7 @@ static const int kMaxAudioFileReadSize = 16384;
 @interface TDAudioInputStreamer () <TDAudioStreamDelegate, TDAudioFileStreamDelegate, TDAudioQueueDelegate>
 {
     AEAudioController *_audioController;
+    MPIInputStreamChannel *_inputStreamChannel;
 }
 
 @property (strong, nonatomic) NSThread *audioStreamerThread;
@@ -48,11 +51,12 @@ static const int kMaxAudioFileReadSize = 16384;
     return self;
 }
 
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream audioController:(AEAudioController *)audioController
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream audioController:(AEAudioController *)audioController streamChannel:(id)streamChannel
 {
     self = [self init];
     if (!self) return nil;
 
+    _inputStreamChannel = streamChannel;
     _audioController = audioController;
     
     self.audioStream = [[TDAudioStream alloc] initWithInputStream:inputStream];
@@ -101,39 +105,6 @@ static const int kMaxAudioFileReadSize = 16384;
     }
 }
 
-- (void)parseData:(const void *)data length:(UInt32)length;
-{
-    OSStatus status;
-    
-    
-    // Get stream data format
-    AudioStreamBasicDescription streamAudioDescription = _audioController.audioDescription;
-    
-    
-    // Prepare buffers
-    int bufferCount = (streamAudioDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved) ? streamAudioDescription.mChannelsPerFrame : 1;
-    int channelsPerBuffer = (streamAudioDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved) ? 1 : streamAudioDescription.mChannelsPerFrame;
-    AudioBufferList *bufferList = AEAllocateAndInitAudioBufferList(streamAudioDescription, kIncrementalLoadBufferSize);
-
-    
-    AudioBufferList *scratchBufferList = AEAllocateAndInitAudioBufferList(streamAudioDescription, 0);
-    
-    // Perform read in multiple small chunks (otherwise ExtAudioFileRead crashes when performing sample rate conversion)
-    UInt64 readFrames = 0;
-    
-            for ( int i=0; i<scratchBufferList->mNumberBuffers; i++ ) {
-                scratchBufferList->mBuffers[i].mNumberChannels = channelsPerBuffer;
-                scratchBufferList->mBuffers[i].mData = (char*)bufferList->mBuffers[i].mData + readFrames*streamAudioDescription.mBytesPerFrame;
-                scratchBufferList->mBuffers[i].mDataByteSize = kMaxAudioFileReadSize;
-            }
-        
-        // Perform read
-        UInt32 numberOfPackets = (UInt32)(scratchBufferList->mBuffers[0].mDataByteSize / streamAudioDescription.mBytesPerFrame);
-    
-        status = ExtAudioFileRead(audioFile, &numberOfPackets, scratchBufferList);
-    
-}
-
 #pragma mark - Properties
 
 - (UInt32)audioStreamReadMaxLength
@@ -171,12 +142,9 @@ static const int kMaxAudioFileReadSize = 16384;
             
             //[self.audioFileStream parseData:bytes length:length];
             
-            [self parseData:bytes length:length];
-            //
-            // TODO : write to AudioPlayer buffer
-            //
+            [_inputStreamChannel parseData:bytes length:length];
             
-            NSLog(@"audio in has data %i", (unsigned int)length);
+            //NSLog(@"audio in has data %i", (unsigned int)length);
             
             break;
         }

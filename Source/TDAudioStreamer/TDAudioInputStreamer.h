@@ -18,7 +18,7 @@
 
 @property (assign, nonatomic) AudioBufferList *bufferList;
 
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream audioController:(AEAudioController*)audioController;
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream audioController:(AEAudioController*)audioController streamChannel:(id)streamChannel;
 
 
 

@@ -34,7 +34,7 @@ NSLog(@"Error: %ld -> %s:%d", (status), __FILE__, __LINE__);\
     player->_volume = 1.0;
     player->_channelIsPlaying = YES;
     player->_audioDescription = audioController.audioDescription;
-    player.streamer = [[TDAudioInputStreamer alloc] initWithInputStream:stream audioController:audioController];
+    player.streamer = [[TDAudioInputStreamer alloc] initWithInputStream:stream audioController:audioController streamChannel:nil];
     
     
     [player.streamer start];
