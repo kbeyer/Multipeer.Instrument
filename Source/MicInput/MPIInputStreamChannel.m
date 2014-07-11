@@ -185,8 +185,15 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
         TPCircularBufferConsumeNextBufferList(&THIS->_buffer);
     }
     
+    
     UInt32 fillCount = TPCircularBufferPeek(&THIS->_buffer, NULL, AEAudioControllerAudioDescription(audioController));
     if ( fillCount > frames ) {
+    
+        
+        //
+        // TODO: what if we don't throw these away?
+        //
+        
         UInt32 skip = fillCount - frames;
         TPCircularBufferDequeueBufferListFrames(&THIS->_buffer,
                                                 &skip,
