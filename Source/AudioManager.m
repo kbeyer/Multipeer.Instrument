@@ -49,11 +49,49 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 
 @synthesize audioController = _audioController;
 
++ (AudioStreamBasicDescription)DefaultAudioDescription
+{
+    /*
+     We need to specifie our format on which we want to work.
+     We use Linear PCM cause its uncompressed and we work on raw data.
+     for more informations check.
+     
+     We want 16 bits, 2 bytes per packet/frames at 44khz
+     
+    AudioStreamBasicDescription audioFormat;
+    audioFormat.mSampleRate			= 44100.0;
+    audioFormat.mFormatID			= kAudioFormatLinearPCM;
+    audioFormat.mFormatFlags		= kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger;
+    audioFormat.mFramesPerPacket	= 1;
+    audioFormat.mChannelsPerFrame	= 1;
+    audioFormat.mBitsPerChannel		= 16;
+    audioFormat.mBytesPerPacket		= 2;
+    audioFormat.mBytesPerFrame		= 2;
+    return audioFormat;
+     */
+    
+    
+    AudioStreamBasicDescription audioDescription;
+    memset(&audioDescription, 0, sizeof(audioDescription));
+    audioDescription.mFormatID          = kAudioFormatLinearPCM;
+    audioDescription.mFormatFlags       = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsNonInterleaved;
+    audioDescription.mChannelsPerFrame  = 1;
+    audioDescription.mBytesPerPacket    = sizeof(SInt16);
+    audioDescription.mFramesPerPacket   = 1;
+    audioDescription.mBytesPerFrame     = sizeof(SInt16);
+    audioDescription.mBitsPerChannel    = 8 * sizeof(SInt16);
+    audioDescription.mSampleRate        = 44100.0;
+    return audioDescription;
+}
+
 - (id)init{
     self = [super init];
     if (self) {
         // Create an instance of the audio controller, set it up and start it running
-        AEAudioController* ac = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleaved16BitStereoAudioDescription] inputEnabled:YES];
+        //AEAudioController* ac = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleaved16BitStereoAudioDescription] inputEnabled:YES];
+        
+        AEAudioController* ac = [[AEAudioController alloc] initWithAudioDescription:MPIAudioManager.DefaultAudioDescription inputEnabled:YES];
+        
         ac.preferredBufferDuration = 0.005;
         [ac start:NULL];
         return [self initWithAudioController:ac];
@@ -183,32 +221,6 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 
 -(void)openMic:(NSOutputStream *)stream
 {
-    //self.playthrough = [[AEPlaythroughChannel alloc] initWithAudioController:_audioController];
-    //[_audioController addInputReceiver:_playthrough];
-    //[_audioController addChannels:@[_playthrough]];
-    
-    /*
-    self.outputStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:stream];
-    [_outputStreamer start];
-    
-    self.micReceiver = [AEBlockAudioReceiver audioReceiverWithBlock:
-                                    ^(void                     *source,
-                                      const AudioTimeStamp     *time,
-                                      UInt32                    frames,
-                                      AudioBufferList          *audio) {
-                                        
-                                        NSLog(@"mic in. frames: %i buffers: %i", frames, audio->mNumberBuffers);
-                                        
-                                        // iterate over incoming stream and copy to output stream
-                                        for (int i=0; i < audio->mNumberBuffers; i++) {
-                                            AudioBuffer buffer = audio->mBuffers[i];
-                                            
-                                            [_outputStreamer writeData:buffer.mData maxLength:buffer.mDataByteSize];
-                                        }
-                                        
-                                    }];
-    */
-    
     self.micReceiver = [[MPIAudioStreamer alloc] initWithAudioController:_audioController];
     [_micReceiver beginStreaming:stream];
     [_audioController addInputReceiver:_micReceiver];
@@ -217,7 +229,6 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 -(void)closeMic
 {
     [_outputStreamer stop];
-    //[_audioController removeChannels:@[_micReceiver]];
     [_audioController removeInputReceiver:_micReceiver];
     self.micReceiver = nil;
     self.outputStreamer = nil;
@@ -227,17 +238,13 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 -(void)playStream:(NSInputStream*)stream
 {
     self.inputStreamChannel = [[MPIInputStreamChannel alloc] initWithAudioController:_audioController stream:stream];
-    
     _inputStreamChannel.channelIsMuted = NO;
-    
     [_audioController addChannels:[NSArray arrayWithObjects:_inputStreamChannel, nil]];
-    
     [_inputStreamChannel start];
 }
 
 -(void)stopStream
 {
-    
     [_inputStreamChannel stop];
     [_audioController removeChannels:@[_inputStreamChannel]];
     self.inputStreamChannel = nil;
