@@ -6,10 +6,6 @@
 //  Copyright (c) 2014 Kyle Beyer. All rights reserved.
 //
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-    
 #import <Foundation/Foundation.h>
 #import "TheAmazingAudioEngine.h"
     
@@ -21,7 +17,7 @@ extern "C" {
 #define min(a, b) (((a) < (b)) ? (a) : (b))
     
 // Input stream channel, used for playing audio from input stream
-@interface MPIInputStreamChannel : NSObject
+@interface MPIInputStreamChannel : NSObject <NSStreamDelegate>
 
 /*!
  * Initialise
@@ -41,7 +37,4 @@ extern "C" {
 - (void)stop;
 
 @end
-    
-#ifdef __cplusplus
-}
-#endif
+

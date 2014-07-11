@@ -9,17 +9,14 @@
 #import "MPIInputStreamChannel.h"
 #import "TPCircularBuffer.h"
 #import "TPCircularBuffer+AudioBufferList.h"
-#import "AEAudioController+Audiobus.h"
-#import "AEAudioController+AudiobusStub.h"
-
-#import "TDAudioInputStreamer.h"
 
 static const int kAudioBufferLength = 16384;
 
+UInt32 const kAudioStreamReadMaxLength = 512;
+
 @interface MPIInputStreamChannel () {
     TPCircularBuffer _buffer;
-    TDAudioInputStreamer* _streamer;
-    BOOL _audiobusConnectedToSelf;
+    NSInputStream *_inputStream;
 }
 @property (nonatomic, strong) AEAudioController *audioController;
 @end
@@ -34,11 +31,12 @@ static const int kAudioBufferLength = 16384;
 - (id)initWithAudioController:(AEAudioController*)audioController stream:(NSInputStream*)stream {
     if ( !(self = [super init]) ) return nil;
     
+    _inputStream = stream;
+    
     TPCircularBufferInit(&_buffer, kAudioBufferLength);
     self.audioController = audioController;
     _volume = 1.0;
     
-    _streamer = [[TDAudioInputStreamer alloc] initWithInputStream:stream audioController:audioController streamChannel:self];
     return self;
 }
 
@@ -167,6 +165,43 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
     return noErr;
 }
 
+#pragma mark - NSStream delagates
+
+- (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
+{
+    switch (eventCode) {
+        case NSStreamEventHasBytesAvailable: {
+            uint8_t data[kAudioStreamReadMaxLength];
+            
+            UInt32 length = (UInt32)[(NSInputStream*)aStream read:data maxLength:kAudioStreamReadMaxLength];
+            
+            if (length > 0) {
+                [self parseData:data length:length];
+            }
+            NSLog(@"input stream read %i", (unsigned int)length);
+            break;
+        }
+            
+        case NSStreamEventHasSpaceAvailable:
+            //[self.delegate audioStream:self didRaiseEvent:TDAudioStreamEventWantsData];
+            NSLog(@"Space Available of MPIIntputStreamChannel.inputStream");
+            break;
+            
+        case NSStreamEventEndEncountered:
+            //[self.delegate audioStream:self didRaiseEvent:TDAudioStreamEventEnd];
+            NSLog(@"End of MPIIntputStreamChannel.inputStream");
+            break;
+            
+        case NSStreamEventErrorOccurred:
+            NSLog(@"ERROR on MPIIntputStreamChannel.inputStream");
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
 -(AEAudioControllerRenderCallback)renderCallback {
     return renderCallback;
 }
@@ -175,15 +210,17 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
     return _audioController.inputAudioDescription;
 }
 
-
-
 - (void)start
 {
-    [_streamer start];
+    _inputStream.delegate = self;
+    [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    return [_inputStream open];
 }
 - (void)stop
 {
-    [_streamer stop];
+    [_inputStream close];
+    _inputStream.delegate = nil;
+    [_inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 
