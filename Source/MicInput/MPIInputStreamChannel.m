@@ -14,7 +14,7 @@ static const int kAudioBufferLength = 16384;
 
 UInt32 const kAudioStreamReadMaxLength = 512;
 
-@interface MPIInputStreamChannel () {
+@interface MPIInputStreamChannel () <NSStreamDelegate> {
     TPCircularBuffer _buffer;
     NSInputStream *_inputStream;
 }
@@ -45,6 +45,45 @@ UInt32 const kAudioStreamReadMaxLength = 512;
     self.audioController = nil;
     [self stop];
 }
+
+#pragma mark - network thread 
+
+
++ (NSThread *)networkThread {
+    static NSThread *networkThread = nil;
+    static dispatch_once_t oncePredicate;
+    
+    dispatch_once(&oncePredicate, ^{
+        networkThread =
+        [[NSThread alloc] initWithTarget:self
+                                selector:@selector(networkThreadMain:)
+                                  object:nil];
+        [networkThread start];
+    });
+    
+    return networkThread;
+}
+
++ (void)networkThreadMain:(id)unused {
+    do {
+        @autoreleasepool {
+            [[NSRunLoop currentRunLoop] run];
+        }
+    } while (YES);
+}
+
+- (void)scheduleInCurrentThread
+{
+    [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+                            forMode:NSRunLoopCommonModes];
+}
+- (void)unscheduleInCurrentThread
+{
+    [_inputStream removeFromRunLoop:[NSRunLoop currentRunLoop]
+                            forMode:NSRunLoopCommonModes];
+}
+
+#pragma mark - data parsing from stream
 
 - (void)parseData:(const void *)data length:(UInt32)length
 {
@@ -128,6 +167,9 @@ UInt32 const kAudioStreamReadMaxLength = 512;
     free(bufferList.mBuffers[0].mData);
 }
 
+
+#pragma mark - render audio to speaker
+
 static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
                                __unsafe_unretained AEAudioController *audioController,
                                const AudioTimeStamp     *time,
@@ -164,6 +206,7 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
     
     return noErr;
 }
+
 
 #pragma mark - NSStream delagates
 
@@ -213,14 +256,20 @@ static OSStatus renderCallback(__unsafe_unretained MPIInputStreamChannel *THIS,
 - (void)start
 {
     _inputStream.delegate = self;
-    [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self performSelector:@selector(scheduleInCurrentThread)
+                 onThread:[[self class] networkThread]
+               withObject:nil
+            waitUntilDone:YES];
     return [_inputStream open];
 }
 - (void)stop
 {
     [_inputStream close];
     _inputStream.delegate = nil;
-    [_inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self performSelector:@selector(unscheduleInCurrentThread)
+                 onThread:[[self class] networkThread]
+               withObject:nil
+            waitUntilDone:YES];
 }
 
 
