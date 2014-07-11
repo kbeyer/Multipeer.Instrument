@@ -232,8 +232,10 @@ static void audioCallback(__unsafe_unretained MPIAudioStreamer *THIS,
             oscillatorPosition += oscillatorRate;
             if ( oscillatorPosition > 1.0 ) oscillatorPosition -= 2.0;
             
-            ((SInt16*)outBufferList.mBuffers[0].mData)[i] = x;
-            //((SInt16*)outBufferList.mBuffers[1].mData)[i] = x;
+            for (NSUInteger b = 0; b < outBufferList.mNumberBuffers; b++) {
+                ((SInt16*)outBufferList.mBuffers[b].mData)[i] = x;
+                //((SInt16*)outBufferList.mBuffers[1].mData)[i] = x;
+            }
         }
     } else {
     
