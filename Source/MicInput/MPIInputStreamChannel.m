@@ -18,9 +18,6 @@ static const int kAudioBufferLength = 16384;
 
 @interface MPIInputStreamChannel () {
     TPCircularBuffer _buffer;
-    
-    //AudioBuffer _audioBuffer;
-    
     TDAudioInputStreamer* _streamer;
     BOOL _audiobusConnectedToSelf;
 }
@@ -41,8 +38,6 @@ static const int kAudioBufferLength = 16384;
     self.audioController = audioController;
     _volume = 1.0;
     
-    
-    //_inputStream = stream;
     _streamer = [[TDAudioInputStreamer alloc] initWithInputStream:stream audioController:audioController streamChannel:self];
     return self;
 }
@@ -55,13 +50,10 @@ static const int kAudioBufferLength = 16384;
 
 - (void)parseData:(const void *)data length:(UInt32)length
 {
+    // setup audio buffers to copy data from stream into
     UInt32 inFrames = 512;
     
     AudioBuffer inBuffer;
-    /*
-     we set the number of channels to mono and allocate our block size to
-     1024 bytes.
-     */
     inBuffer.mNumberChannels = 1;
     inBuffer.mDataByteSize = inFrames * 2;
     inBuffer.mData = malloc( inFrames * 2 );
@@ -131,8 +123,8 @@ static const int kAudioBufferLength = 16384;
     }
     
     
-    AudioStreamBasicDescription audioDesc = [self audioDescription];
-    TPCircularBufferCopyAudioBufferList(&_buffer, &bufferList, NULL, inFrames, &audioDesc);
+    // copy all available data to audio buffer for playing
+    TPCircularBufferCopyAudioBufferList(&_buffer, &bufferList, NULL, kTPCircularBufferCopyAll, NULL);
     
     // free up temporary audio buffer after copy
     free(bufferList.mBuffers[0].mData);

@@ -64,21 +64,6 @@ static const int kMaxAudioFileReadSize = 16384;
 
     self.audioStream.delegate = self;
     
-    /*
-    AudioStreamBasicDescription audioDescription = _audioController.inputAudioDescription;
-    
-    // Prepare buffers
-    int bufferCount = (audioDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved) ? audioDescription.mChannelsPerFrame : 1;
-    int channelsPerBuffer = (audioDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved) ? 1 : audioDescription.mChannelsPerFrame;
-    AudioBufferList *bufferList = AEAllocateAndInitAudioBufferList(audioDescription, _audioReceiverBlock ? kIncrementalLoadBufferSize : (UInt32)fileLengthInFrames);
-    
-    
-    
-    AudioBufferList *scratchBufferList = AEAllocateAndInitAudioBufferList(audioDescription, 0);
-    */
-    
-    
-    
 
     return self;
 }
