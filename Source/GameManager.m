@@ -285,6 +285,26 @@ static int const kTimeSyncIterations = 10;
     [_audioManager closeMic];
 }
 
+- (NSString*)recordingFilePathFor:(NSString*)playerID {
+    NSArray *documentsFolders = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *fileName = [NSString stringWithFormat:@"Recording-%@.aiff", playerID];
+    return [documentsFolders[0] stringByAppendingPathComponent:fileName];
+}
+
+- (void)startRecordMicFor:(NSString*)playerID {
+    [_audioManager startRecordingToFile:[self recordingFilePathFor:playerID]];
+}
+- (void)stopRecordMicFor:(NSString*)playerID {
+    [_audioManager stopRecordingToFile];
+}
+
+- (void)startPlayRecordingFor:(NSString*)playerID {
+    [_audioManager startPlayingFromFile:[self recordingFilePathFor:playerID]];
+}
+- (void)stopPlayRecordingFor:(NSString *)playerID {
+    [_audioManager stopPlayingFromFile];
+}
+
 - (void) startup
 {
     [_sessionController startup];

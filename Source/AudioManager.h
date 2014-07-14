@@ -24,4 +24,12 @@
 -(void)playStream:(NSInputStream*)stream;
 
 
+// start recording to a file
+-(void)startRecordingToFile:(NSString*)filePath;
+-(void)stopRecordingToFile;
+
+// start playing from file
+-(void)startPlayingFromFile:(NSString*)filePath;
+-(void)stopPlayingFromFile;
+
 @end

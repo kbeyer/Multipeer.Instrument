@@ -32,10 +32,14 @@ static const int kInputChannelsChangedContext;
 @property (nonatomic, retain) AEExpanderFilter *expander;
 @property (nonatomic, retain) AEAudioUnitFilter *reverb;
 
-//@property (nonatomic, retain) id<AEAudioReceiver> micReceiver;
+// mic -> output stream
 @property (nonatomic, retain) MPIAudioStreamer *micReceiver;
-
+// input stream -> speaker
 @property (nonatomic, retain) MPIInputStreamChannel *inputStreamChannel;
+// file recorder
+@property (nonatomic, retain) AERecorder *fileRecorder;
+// player for recordings
+@property (nonatomic, retain) AEAudioFilePlayer *recordingFilePlayer;
 
 @end
 
@@ -62,6 +66,10 @@ static const int kInputChannelsChangedContext;
     audioFormat.mBytesPerPacket		= 2;
     audioFormat.mBytesPerFrame		= 2;
     return audioFormat;
+     
+     Alternatively ... use AEAudioController
+     
+     [AEAudioController nonInterleaved16BitStereoAudioDescription]
      */
     
     
@@ -82,8 +90,6 @@ static const int kInputChannelsChangedContext;
     self = [super init];
     if (self) {
         // Create an instance of the audio controller, set it up and start it running
-        //AEAudioController* ac = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleaved16BitStereoAudioDescription] inputEnabled:YES];
-        
         AEAudioController* ac = [[AEAudioController alloc] initWithAudioDescription:MPIAudioManager.DefaultAudioDescription inputEnabled:YES];
         
         ac.preferredBufferDuration = 0.005;
@@ -210,6 +216,11 @@ static const int kInputChannelsChangedContext;
         player.loop = YES;
     }
     player.volume = volume;
+    
+    // also adust recording playback if present
+    if (_recordingFilePlayer) {
+        _recordingFilePlayer.volume = volume;
+    }
 }
 
 
@@ -242,6 +253,63 @@ static const int kInputChannelsChangedContext;
     [_audioController removeChannels:@[_inputStreamChannel]];
     self.inputStreamChannel = nil;
 }
+
+#pragma mark - recording to playback from file
+
+-(void)startRecordingToFile:(NSString *)filePath {
+    
+    self.fileRecorder = [[AERecorder alloc] initWithAudioController:_audioController];
+    
+    NSError *error = nil;
+    if ( ![_fileRecorder beginRecordingToFileAtPath:filePath fileType:kAudioFileAIFFType error:&error] ) {
+        [[[UIAlertView alloc] initWithTitle:@"Error"
+                                    message:[NSString stringWithFormat:@"Couldn't start recording: %@", [error localizedDescription]]
+                                   delegate:nil
+                          cancelButtonTitle:nil
+                          otherButtonTitles:@"OK", nil] show];
+        self.fileRecorder = nil;
+        return;
+    }
+    
+    
+    [_audioController addOutputReceiver:_fileRecorder];
+    [_audioController addInputReceiver:_fileRecorder];
+}
+-(void)stopRecordingToFile {
+    [_fileRecorder finishRecording];
+    [_audioController removeOutputReceiver:_fileRecorder];
+    [_audioController removeInputReceiver:_fileRecorder];
+    self.fileRecorder = nil;
+}
+-(void)startPlayingFromFile:(NSString *)filePath {
+    
+    if ( ![[NSFileManager defaultManager] fileExistsAtPath:filePath] ) return;
+    
+    NSError *error = nil;
+    self.recordingFilePlayer = [AEAudioFilePlayer audioFilePlayerWithURL:[NSURL fileURLWithPath:filePath] audioController:_audioController error:&error];
+    
+    if ( !_recordingFilePlayer ) {
+        [[[UIAlertView alloc] initWithTitle:@"Error"
+                                    message:[NSString stringWithFormat:@"Couldn't start playback: %@", [error localizedDescription]]
+                                   delegate:nil
+                          cancelButtonTitle:nil
+                          otherButtonTitles:@"OK", nil] show];
+        return;
+    }
+    
+    //_recordingFilePlayer.removeUponFinish = YES;
+    
+    // default to loop playback
+    _recordingFilePlayer.loop = YES;
+
+    [_audioController addChannels:@[_recordingFilePlayer]];
+}
+-(void)stopPlayingFromFile {
+    [_audioController removeChannels:@[_recordingFilePlayer]];
+    self.recordingFilePlayer = nil;
+}
+
+
 
 
 @end

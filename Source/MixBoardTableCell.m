@@ -21,6 +21,14 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        
+        // setup record button states
+        [_recordButton setTitle:@"Record" forState:UIControlStateNormal];
+        [_recordButton setTitle:@"Stop" forState:UIControlStateSelected];
+        // setup play button states
+        [_playButton setTitle:@"Play" forState:UIControlStateNormal];
+        [_playButton setTitle:@"Stop" forState:UIControlStateSelected];
+
     }
     return self;
 }
@@ -61,6 +69,26 @@
     
     _lastSentVolume = _soundSlider.value;
     [[MPIGameManager instance] requestSoundChange:_playerID value:[[NSNumber alloc] initWithFloat: _lastSentVolume]];
+}
+
+- (IBAction)playRecording:(id)sender {
+    if (_playButton.selected) {
+        [[MPIGameManager instance] stopPlayRecordingFor:_playerID.displayName];
+        _playButton.selected = NO;
+    } else {
+        [[MPIGameManager instance] startPlayRecordingFor:_playerID.displayName];
+        _playButton.selected = YES;
+    }
+}
+
+- (IBAction)recordMic:(id)sender {
+    if (_recordButton.selected) {
+        [[MPIGameManager instance] stopRecordMicFor:_playerID.displayName];
+        _recordButton.selected = NO;
+    } else {
+        [[MPIGameManager instance] startRecordMicFor:_playerID.displayName];
+        _recordButton.selected = YES;
+    }
 }
 
 

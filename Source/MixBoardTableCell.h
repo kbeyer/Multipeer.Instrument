@@ -17,8 +17,12 @@
 @property (weak, nonatomic) IBOutlet UISlider *soundSlider;
 @property (weak, nonatomic) IBOutlet UISlider *colorSlider;
 @property (weak, nonatomic) IBOutlet UISwitch *flashSwitch;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (weak, nonatomic) IBOutlet UIButton *recordButton;
 - (IBAction)flashSwitchChanged:(id)sender;
 - (IBAction)colorSliderChanged:(id)sender;
 - (IBAction)volumeSliderChanged:(id)sender;
+- (IBAction)playRecording:(id)sender;
+- (IBAction)recordMic:(id)sender;
 
 @end

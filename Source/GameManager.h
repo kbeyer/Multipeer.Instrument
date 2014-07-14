@@ -40,6 +40,10 @@
 
 - (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type;
 
+- (void)startPlayRecordingFor:(NSString*)playerID;
+- (void)startRecordMicFor:(NSString*)playerID;
+- (void)stopPlayRecordingFor:(NSString*)playerID;
+- (void)stopRecordMicFor:(NSString*)playerID;
 
 - (void)startEcho:(NSOutputStream*)stream;
 - (void)stopEcho;
