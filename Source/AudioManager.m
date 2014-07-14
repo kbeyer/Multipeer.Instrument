@@ -15,20 +15,16 @@
 #import "MPIInputStreamChannel.h"
 #import "MPIAudioStreamer.h"
 
-#import "TDAudioStreamer.h"
 
 
 static const int kInputChannelsChangedContext;
-static const UInt32 kAudioStreamReadMaxLength = 512;
 
 @interface MPIAudioManager(){
     AudioFileID _audioUnitFile;
     AEChannelGroupRef _group;
 }
-@property (nonatomic, retain) NSMutableDictionary *loops; // dictionary of available AEAudioFilePlayer loops
-//@property (nonatomic, retain) AEAudioFilePlayer *loop1;
-//@property (nonatomic, retain) AEAudioFilePlayer *loop2;
-@property (nonatomic, retain) AEBlockChannel *oscillator;
+// dictionary of available AEAudioFilePlayer loops
+@property (nonatomic, retain) NSMutableDictionary *loops; @property (nonatomic, retain) AEBlockChannel *oscillator;
 @property (nonatomic, retain) AEAudioUnitChannel *audioUnitPlayer;
 @property (nonatomic, retain) AEAudioFilePlayer *oneshot;
 @property (nonatomic, retain) AEPlaythroughChannel *playthrough;
@@ -40,8 +36,6 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 @property (nonatomic, retain) MPIAudioStreamer *micReceiver;
 
 @property (nonatomic, retain) MPIInputStreamChannel *inputStreamChannel;
-
-@property (nonatomic, retain) TDAudioOutputStreamer *outputStreamer;
 
 @end
 
@@ -228,10 +222,9 @@ static const UInt32 kAudioStreamReadMaxLength = 512;
 }
 -(void)closeMic
 {
-    [_outputStreamer stop];
+    [_micReceiver finishStreaming];
     [_audioController removeInputReceiver:_micReceiver];
     self.micReceiver = nil;
-    self.outputStreamer = nil;
 }
 
 

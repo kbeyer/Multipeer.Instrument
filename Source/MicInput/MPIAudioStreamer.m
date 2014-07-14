@@ -1,5 +1,5 @@
 //
-//  MPIOutputStreamChannel.m
+//  MPIAudioStreamer.m
 //  Multipeer.Instrument
 //
 //  Created by Kyle Beyer on 7/3/14.
@@ -16,7 +16,7 @@
 NSString * MPIStreamerDidEncounterErrorNotification = @"MPIStreamerDidEncounterErrorNotification";
 NSString * kMPIStreamerErrorKey = @"error";
 
-@interface MPIAudioStreamer ()  <NSStreamDelegate> {
+@interface MPIAudioStreamer () {
     BOOL _streaming;
     AudioBufferList *_buffer;
     AEAudioController *_audioController;
@@ -138,17 +138,9 @@ static void audioCallback(__unsafe_unretained MPIAudioStreamer *THIS,
     
     if ( bufferLength > 0 ) {
         
-        
         // copy all available data to audio buffer for streaming
         TPCircularBufferCopyAudioBufferList(&THIS->_circularBuffer, THIS->_buffer, time, kTPCircularBufferCopyAll, NULL);
-        
-        /*
-        for (NSUInteger i = 0; i < THIS->_buffer->mNumberBuffers; i++) {
-            AudioBuffer audioBuffer = THIS->_buffer->mBuffers[i];
-            //[THIS->_outputStream write:audioBuffer.mData maxLength:audioBuffer.mDataByteSize];
-            NSLog(@"stream write buf: %lu size: %u", (unsigned long)i, (unsigned int)audioBuffer.mDataByteSize);
-        }
-         */
+
     }
     
 }
@@ -171,6 +163,19 @@ static void audioCallback(__unsafe_unretained MPIAudioStreamer *THIS,
         case NSStreamEventHasSpaceAvailable:
             NSLog(@"AudioOutputStreamer Space Available");
             [self sendNext];
+            break;
+        case NSStreamEventEndEncountered:
+            NSLog(@"AudioOutputStreamer NSStreamEventEndEncountered");
+            break;
+        case NSStreamEventErrorOccurred:
+            NSLog(@"AudioOutputStreamer NSStreamEventErrorOccurred");
+            [self finishStreaming];
+            break;
+        case NSStreamEventOpenCompleted:
+            NSLog(@"AudioOutputStreamer NSStreamEventOpenCompleted");
+            break;
+        case NSStreamEventNone:
+            NSLog(@"AudioOutputStreamer NSStreamEventNone");
             break;
     }
 }

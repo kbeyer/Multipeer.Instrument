@@ -11,7 +11,6 @@
 #import "MixBoardTableCell.h"
 #import "GameManager.h"
 #import "Player.h"
-#import "TDAudioStreamer.h"
 
 
 #import "UIActionSheet+Blocks.h"
@@ -25,8 +24,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *songArtist;
 
 @property (strong, nonatomic) MPMediaItem *song;
-@property (strong, nonatomic) TDAudioOutputStreamer *outputStreamer;
-@property (strong, nonatomic) TDAudioInputStreamer *inputStream;
 
 @end
 
@@ -131,7 +128,8 @@
 {
     // Ensure UI updates occur on the main queue.
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[[MPIGameManager instance] audioInStream] start];
+        NSLog(@"SONG SELECTION DISABLED");
+        //[[[MPIGameManager instance] audioInStream] start];
     });
 }
 
@@ -214,7 +212,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     
     // check if already streaming
-    if (self.outputStreamer) return;
+    //if (self.outputStreamer) return;
     
     self.song = [mediaItemCollection.items[0] copy];
     
@@ -244,11 +242,14 @@
     if (peers.count) {
         [[MPIGameManager instance].sessionController sendMessage:info toPeer:peers[0]];
         
+        NSLog(@"FILE STREAMING DISABLED");
+        /*
         self.outputStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:[[MPIGameManager instance].sessionController outputStreamForPeer:peers[0]]];
         
         [self.outputStreamer streamAudioFromSong:mediaItemCollection.items[0]];
         //[self.outputStreamer streamAudioFromURL:[self.song valueForProperty:MPMediaItemPropertyAssetURL]];
         [self.outputStreamer start];
+         */
     }
     
 }

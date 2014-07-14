@@ -1,5 +1,5 @@
 //
-//  MPIOutputStreamChannel.h
+//  MPIAudioStreamer.h
 //  Multipeer.Instrument
 //
 //  Inspired by AERecord
@@ -16,22 +16,22 @@ extern "C" {
 #import <Foundation/Foundation.h>
 #import "TheAmazingAudioEngine.h"
     
-    extern NSString * MPIStreamerDidEncounterErrorNotification;
-    extern NSString * kMPIStreamerErrorKey;
-    
-    /*!
-     * Streaming utility, used for streaming live audio
-     *
-     *  This can be used to stream just the microphone input, or the output of the
-     *  audio system, just one channel, or a combination of all three. Simply add an
-     *  instance of this class as an audio receiver for the particular audio you wish
-     *  to record, using AEAudioController's [addInputReceiver:](@ref AEAudioController::addInputReceiver:),
-     *  [addOutputReceiver:](@ref AEAudioController::addOutputReceiver:),
-     *  [addOutputReceiver:forChannel:](@ref AEAudioController::addOutputReceiver:forChannel:), etc, and all
-     *  streams will be mixed together and recorded.
-     *
-     */
-    @interface MPIAudioStreamer : NSObject<AEAudioReceiver>
+extern NSString * MPIStreamerDidEncounterErrorNotification;
+extern NSString * kMPIStreamerErrorKey;
+
+/*!
+ * Streaming utility, used for streaming live audio
+ *
+ *  This can be used to stream just the microphone input, or the output of the
+ *  audio system, just one channel, or a combination of all three. Simply add an
+ *  instance of this class as an audio receiver for the particular audio you wish
+ *  to record, using AEAudioController's [addInputReceiver:](@ref AEAudioController::addInputReceiver:),
+ *  [addOutputReceiver:](@ref AEAudioController::addOutputReceiver:),
+ *  [addOutputReceiver:forChannel:](@ref AEAudioController::addOutputReceiver:forChannel:), etc, and all
+ *  streams will be mixed together and recorded.
+ *
+ */
+@interface MPIAudioStreamer : NSObject<AEAudioReceiver, NSStreamDelegate>
 
 
 /*!

@@ -10,7 +10,6 @@
 #import "AudioManager.h"
 #import "ActionMessage.h"
 #import "MPIEventLogger.h"
-#import "AudioProcessor.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface MPIGameManager()
@@ -18,8 +17,6 @@
 @property (nonatomic, strong) MPIAudioManager *audioManager;
 @property double lastSendTimestamp;
 @property (nonatomic, strong) NSMutableArray *timeLatencies;
-// TODO: move this to audioManager
-@property (retain, nonatomic) AudioProcessor *audioProcessor;
 @end
 
 
@@ -68,7 +65,6 @@ static int const kTimeSyncIterations = 10;
     // Nil out delegates
     _sessionController.delegate = nil;
     
-    _audioInStream = nil;
     _avSession = nil;
 }
 
@@ -297,14 +293,8 @@ static int const kTimeSyncIterations = 10;
 - (void) shutdown
 {
     [_sessionController shutdown];
-    [_audioInStream stop];
-    _audioInStream = nil;
     [_avSession stopRunning];
     _avSession = nil;
-    if(_audioProcessor != nil){
-        [_audioProcessor stop];
-        _audioProcessor = nil;
-    }
     [[MPIMotionManager instance] stop];
 }
 

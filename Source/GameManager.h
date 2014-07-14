@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "SessionController.h"
-#import "TDAudioStreamer.h"
 #import "MPISongInfoMessage.h"
 #import "MPIMotionManager.h"
 
@@ -29,7 +28,6 @@
 
 @property (readwrite) NSNumber* volume;
 @property (readwrite) NSNumber* color;
-@property (strong, nonatomic) TDAudioInputStreamer *audioInStream;
 @property (readwrite) MPISongInfoMessage *lastSongMessage;
 
 - (void)requestFlashChange:(id)playerID value:(NSNumber*)val;
