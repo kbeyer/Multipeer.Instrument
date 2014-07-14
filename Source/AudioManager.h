@@ -36,8 +36,10 @@
 
 // start recording to a file
 -(void)startRecordingToFile:(NSString*)filePath;
--(void)stopRecordingToFile;
+-(void)stopRecordingToFile:(NSString*)filePath;
 
+- (NSString*)recordingFilePathFor:(NSString*)playerID;
+    
 // start playing from file
 -(void)startPlayingFromFile:(NSString*)filePath;
 -(void)stopPlayingFromFile;

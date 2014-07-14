@@ -298,6 +298,12 @@ static const int kInputChannelsChangedContext;
 
 #pragma mark - recording to playback from file
 
+- (NSString*)recordingFilePathFor:(NSString*)playerID {
+    NSArray *documentsFolders = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *fileName = [NSString stringWithFormat:@"Recording-%@.aiff", playerID];
+    return [documentsFolders[0] stringByAppendingPathComponent:fileName];
+}
+
 -(void)startRecordingToFile:(NSString *)filePath {
     
     self.fileRecorder = [[AERecorder alloc] initWithAudioController:_audioController];
@@ -317,7 +323,11 @@ static const int kInputChannelsChangedContext;
     [_audioController addOutputReceiver:_fileRecorder];
     [_audioController addInputReceiver:_fileRecorder];
 }
--(void)stopRecordingToFile {
+-(void)stopRecordingToFile:(NSString*)filePath {
+    //
+    // TODO: unique recorder per file / player
+    //
+    
     [_fileRecorder finishRecording];
     [_audioController removeOutputReceiver:_fileRecorder];
     [_audioController removeInputReceiver:_fileRecorder];

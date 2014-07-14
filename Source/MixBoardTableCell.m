@@ -94,7 +94,7 @@
 
 - (IBAction)recordMic:(id)sender {
     if (_recordButton.selected) {
-        [[MPIGameManager instance] stopRecordMicFor:_playerID.displayName];
+        [[MPIGameManager instance] stopRecordMicFor:_playerID.displayName withPeer:_playerID];
         _recordButton.selected = NO;
     } else {
         [[MPIGameManager instance] startRecordMicFor:_playerID.displayName];

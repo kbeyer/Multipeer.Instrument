@@ -206,6 +206,8 @@ static int const kTimeSyncIterations = 10;
         [self toggleFlashlight];
         [_audioManager muteLoop:![msg.val boolValue] name:@"organ"];
         [_audioManager muteLoop:![msg.val boolValue] name:@"drums"];
+        
+        
     } else if ([type isEqualToString:@"2"]) {
         MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
         // change sound of players
@@ -216,12 +218,15 @@ static int const kTimeSyncIterations = 10;
         
         // TODO: set player loop volume
         //[_audioManager setLoopVolume:[msg.val floatValue] name:msg.]
+        
     } else if ([type isEqualToString:@"3"]) {
         MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
         // change color of players
         self.color = msg.val;
         [self notifyColorChange];
         [_audioManager setLoopVolume:[msg.val floatValue] name:@"drums"];
+        
+        
     } else if ([type isEqualToString:@"4"]) {
         // timestamp handled by session controller
     } else if ([type isEqualToString:@"5"]) {
@@ -302,34 +307,41 @@ static int const kTimeSyncIterations = 10;
     [_audioManager closeMic];
 }
 
-- (NSString*)recordingFilePathFor:(NSString*)playerID {
-    NSArray *documentsFolders = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *fileName = [NSString stringWithFormat:@"Recording-%@.aiff", playerID];
-    return [documentsFolders[0] stringByAppendingPathComponent:fileName];
-}
 
-- (void)startRecordMicFor:(NSString*)playerID {
-    [_audioManager startRecordingToFile:[self recordingFilePathFor:playerID]];
+- (void)startRecordMicFor:(NSString*)playerName {
+    [_audioManager startRecordingToFile:[_audioManager recordingFilePathFor:playerName]];
 }
-- (void)stopRecordMicFor:(NSString*)playerID {
-    [_audioManager stopRecordingToFile];
+- (void)stopRecordMicFor:(NSString*)playerName withPeer:(id)peerID {
+    NSString* filePath = [_audioManager recordingFilePathFor:playerName];
+    // tell audio manager to stop recording
+    [_audioManager stopRecordingToFile:filePath];
+    
+    // send when file is done recording
+    [_sessionController sendAudioFileAtPath:filePath toPeer:peerID];
+    //
+    // TODO: enable play button only after file transfer is complet
+    //
 }
 
 - (void)startPlayRecordingFor:(NSString*)playerID {
-    NSString *filePath = [self recordingFilePathFor:playerID];
+    NSString *filePath = [_audioManager recordingFilePathFor:playerID];
     [_audioManager startPlayingFromFile:filePath];
 }
 
 - (void)startStreamingRecordingTo:(id)peerID fromPlayerName:(NSString*)playerName {
     
-    [_sessionController sendAudioFileAtPath:[self recordingFilePathFor:playerName] toPeer:peerID];
+    //[_sessionController sendAudioFileAtPath:[self recordingFilePathFor:playerName] toPeer:peerID];
+    
+    //
+    // TODO: send message to start playing transfered audio
+    //
     
     //NSOutputStream *stream = [_sessionController outputStreamForPeer:peerID withName:@"audio-file"];
     //[_audioManager startAudioFileStream:stream fromPath:[self recordingFilePathFor:playerName]];
 }
 
 - (void)stopStreamingRecordingFrom:(NSString*)playerName {
-    [_audioManager stopAudioFileStreamFrom:[self recordingFilePathFor:playerName]];
+    [_audioManager stopAudioFileStreamFrom:[_audioManager recordingFilePathFor:playerName]];
 }
 
 - (void)stopPlayRecordingFor:(NSString *)playerID {
