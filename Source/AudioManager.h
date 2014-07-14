@@ -8,12 +8,17 @@
 
 #import <Foundation/Foundation.h>
 @class AEAudioController;
+@class AEAudioFilePlayer;
 
 @interface MPIAudioManager : NSObject
 
 @property (retain, nonatomic) AEAudioController *audioController;
 -(void)muteLoop:(BOOL)mute name:(NSString*)key;
 -(void)setLoopVolume:(float)volume name:(NSString*)key;
+
+// enable addition of audio loops
+-(AEAudioFilePlayer*)addAudioLoop:(NSString*)key forURL:(NSURL*)fileUrl;
+-(void)addAudioLoop:(NSString*)key forURL:(NSURL *)fileUrl andPlay:(BOOL)autoPlay;
 
 // listen to mic and stream to peer(s)
 -(void)openMic:(NSOutputStream*)stream;
@@ -22,7 +27,12 @@
 
 // play mic stream
 -(void)playStream:(NSInputStream*)stream;
+// play file stream
+-(void)playFileStream:(NSInputStream*)stream;
 
+// stream audio file to output stream
+-(void)startAudioFileStream:(NSOutputStream*)stream fromPath:(NSString*)filePath;
+-(void)stopAudioFileStreamFrom:(NSString*)filePath;
 
 // start recording to a file
 -(void)startRecordingToFile:(NSString*)filePath;

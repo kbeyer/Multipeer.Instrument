@@ -432,15 +432,28 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         // Write to documents directory
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *copyPath = [NSString stringWithFormat:@"%@/%@", [paths firstObject], resourceName];
-        if (![[NSFileManager defaultManager] copyItemAtPath:[localURL path] toPath:copyPath error:nil])
+        NSError* error;
+        
+        /*
+         if (![[NSFileManager defaultManager] copyItemAtPath:[localURL path] toPath:copyPath error:&error])
+         {
+         NSLog(@"Error copying resource to documents directory (%@) [%@]", copyPath, error);
+         }
+         */
+        
+        NSURL* resultingURL;
+        if (![[NSFileManager defaultManager] replaceItemAtURL:[NSURL fileURLWithPath:copyPath] withItemAtURL:localURL backupItemName:@"audiofile-backup" options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&resultingURL error:&error])
         {
-            NSLog(@"Error copying resource to documents directory");
+            NSLog(@"Error copying resource to documents directory (%@) [%@]", copyPath, error);
         }
         else
         {
             // Get a URL for the path we just copied the resource to
-            NSURL *url = [NSURL fileURLWithPath:copyPath];
-            NSLog(@"url = %@", url);
+            //NSURL *url = [NSURL fileURLWithPath:copyPath];
+            NSLog(@"url = %@, copyPath = %@", resultingURL, copyPath);
+            
+            // tell game manager about it
+            [self.delegate session:self didReceiveAudioFileFrom:peerID.displayName atPath:copyPath];
         }
     }
 }
@@ -449,21 +462,39 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
 - (void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID
 {
     NSLog(@"didReceiveStream %@ from %@", streamName, peerID.displayName);
-    if ([streamName isEqualToString:@"music"]) {
+    if ([streamName isEqualToString:@"mic"]) {
         [self.delegate session:self didReceiveAudioStream:stream];
+    } else if ([streamName isEqualToString:@"audio-file"]) {
+        [self.delegate session:self didReceiveAudioFileStream:stream];
     }
 }
 
-- (NSOutputStream *)outputStreamForPeer:(MCPeerID *)peer
+- (NSOutputStream *)outputStreamForPeer:(MCPeerID *)peer withName:(NSString*)streamName
 {
     NSError *error;
-    NSOutputStream *stream = [self.session startStreamWithName:@"music" toPeer:peer error:&error];
+    NSOutputStream *stream = [self.session startStreamWithName:streamName toPeer:peer error:&error];
     
     if (error) {
         NSLog(@"Error: %@", [error userInfo].description);
     }
     
     return stream;
+}
+
+- (void)sendAudioFileAtPath:(NSString*)filePath toPeer:(id)peerID
+{
+    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+    NSLog(@"Attempting send for file at %@", filePath);
+    
+    NSProgress *progress =
+        [self.session sendResourceAtURL:fileURL
+                               withName:[fileURL lastPathComponent]
+                                 toPeer:peerID
+                  withCompletionHandler:^(NSError *error)
+        {
+            if (error) { NSLog(@"[Error sending audio file] %@", error); return; }
+            NSLog(@"Done sending file: %@", filePath);
+        }];
 }
 
 #pragma mark - MCNearbyServiceBrowserDelegate protocol conformance

@@ -14,17 +14,7 @@
 #import "TDAudioQueueFiller.h"
 #import "TDAudioStreamerConstants.h"
 
-#import "MPIInputStreamChannel.h"
-
-
-static const int kIncrementalLoadBufferSize = 4096;
-static const int kMaxAudioFileReadSize = 16384;
-
 @interface TDAudioInputStreamer () <TDAudioStreamDelegate, TDAudioFileStreamDelegate, TDAudioQueueDelegate>
-{
-    AEAudioController *_audioController;
-    MPIInputStreamChannel *_inputStreamChannel;
-}
 
 @property (strong, nonatomic) NSThread *audioStreamerThread;
 @property (assign, atomic) BOOL isPlaying;
@@ -32,7 +22,6 @@ static const int kMaxAudioFileReadSize = 16384;
 @property (strong, nonatomic) TDAudioStream *audioStream;
 @property (strong, nonatomic) TDAudioFileStream *audioFileStream;
 @property (strong, nonatomic) TDAudioQueue *audioQueue;
-
 
 @end
 
@@ -42,29 +31,25 @@ static const int kMaxAudioFileReadSize = 16384;
 {
     self = [super init];
     if (!self) return nil;
-
+    
     self.audioFileStream = [[TDAudioFileStream alloc] init];
     if (!self.audioFileStream) return nil;
-
+    
     self.audioFileStream.delegate = self;
-
+    
     return self;
 }
 
-- (instancetype)initWithInputStream:(NSInputStream *)inputStream audioController:(AEAudioController *)audioController streamChannel:(id)streamChannel
+- (instancetype)initWithInputStream:(NSInputStream *)inputStream
 {
     self = [self init];
     if (!self) return nil;
-
-    _inputStreamChannel = streamChannel;
-    _audioController = audioController;
     
     self.audioStream = [[TDAudioStream alloc] initWithInputStream:inputStream];
     if (!self.audioStream) return nil;
-
+    
     self.audioStream.delegate = self;
     
-
     return self;
 }
 
@@ -73,19 +58,18 @@ static const int kMaxAudioFileReadSize = 16384;
     if (![[NSThread currentThread] isEqual:[NSThread mainThread]]) {
         return [self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:YES];
     }
-
+    
     self.audioStreamerThread = [[NSThread alloc] initWithTarget:self selector:@selector(run) object:nil];
     [self.audioStreamerThread start];
-    NSLog(@"Audio Streamer thread started");
 }
 
 - (void)run
 {
     @autoreleasepool {
         [self.audioStream open];
-
+        
         self.isPlaying = YES;
-
+        
         while (self.isPlaying && [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) ;
     }
 }
@@ -96,7 +80,7 @@ static const int kMaxAudioFileReadSize = 16384;
 {
     if (!_audioStreamReadMaxLength)
         _audioStreamReadMaxLength = kTDAudioStreamReadMaxLength;
-
+    
     return _audioStreamReadMaxLength;
 }
 
@@ -104,7 +88,7 @@ static const int kMaxAudioFileReadSize = 16384;
 {
     if (!_audioQueueBufferSize)
         _audioQueueBufferSize = kTDAudioQueueBufferSize;
-
+    
     return _audioQueueBufferSize;
 }
 
@@ -112,7 +96,7 @@ static const int kMaxAudioFileReadSize = 16384;
 {
     if (!_audioQueueBufferCount)
         _audioQueueBufferCount = kTDAudioQueueBufferCount;
-
+    
     return _audioQueueBufferCount;
 }
 
@@ -124,25 +108,19 @@ static const int kMaxAudioFileReadSize = 16384;
         case TDAudioStreamEventHasData: {
             uint8_t bytes[self.audioStreamReadMaxLength];
             UInt32 length = [audioStream readData:bytes maxLength:self.audioStreamReadMaxLength];
-            
-            //[self.audioFileStream parseData:bytes length:length];
-            
-            [_inputStreamChannel parseData:bytes length:length];
-            
-            //NSLog(@"audio in has data %i", (unsigned int)length);
-            
+            [self.audioFileStream parseData:bytes length:length];
             break;
         }
-
+            
         case TDAudioStreamEventEnd:
             self.isPlaying = NO;
             [self.audioQueue finish];
             break;
-
+            
         case TDAudioStreamEventError:
             [[NSNotificationCenter defaultCenter] postNotificationName:TDAudioStreamDidFinishPlayingNotification object:nil];
             break;
-
+            
         default:
             break;
     }
@@ -153,9 +131,9 @@ static const int kMaxAudioFileReadSize = 16384;
 - (void)audioFileStreamDidBecomeReady:(TDAudioFileStream *)audioFileStream
 {
     UInt32 bufferSize = audioFileStream.packetBufferSize ? audioFileStream.packetBufferSize : self.audioQueueBufferSize;
-
+    
     self.audioQueue = [[TDAudioQueue alloc] initWithBasicDescription:audioFileStream.basicDescription bufferCount:self.audioQueueBufferCount bufferSize:bufferSize magicCookieData:audioFileStream.magicCookieData magicCookieSize:audioFileStream.magicCookieLength];
-
+    
     self.audioQueue.delegate = self;
 }
 
@@ -166,16 +144,11 @@ static const int kMaxAudioFileReadSize = 16384;
 
 - (void)audioFileStream:(TDAudioFileStream *)audioFileStream didReceiveData:(const void *)data length:(UInt32)length
 {
-    NSLog(@"audio in length %i", (unsigned int)length);
-    
     [TDAudioQueueFiller fillAudioQueue:self.audioQueue withData:data length:length offset:0];
 }
 
 - (void)audioFileStream:(TDAudioFileStream *)audioFileStream didReceiveData:(const void *)data length:(UInt32)length packetDescription:(AudioStreamPacketDescription)packetDescription
 {
-    
-    NSLog(@"received data %i", (unsigned int)length);
-    
     [TDAudioQueueFiller fillAudioQueue:self.audioQueue withData:data length:length packetDescription:packetDescription];
 }
 

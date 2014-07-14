@@ -169,6 +169,19 @@ static int const kTimeSyncIterations = 10;
     [_audioManager playStream:stream];
 }
 
+- (void)session:(MPISessionController *)session didReceiveAudioFileStream:(NSInputStream *)stream
+{
+    [_audioManager playFileStream:stream];
+}
+
+- (void)session:(MPISessionController *)session didReceiveAudioFileFrom:(NSString*)playerName atPath:(NSString*)filePath
+{
+    // add as new audio loop
+    [_audioManager addAudioLoop:playerName forURL:[NSURL fileURLWithPath:filePath] andPlay:YES];
+}
+
+
+
 - (void)requestFlashChange:(id)peerID value:(NSNumber*)val {
     [_sessionController sendMessage:@"1" value:val toPeer:peerID];
 }
@@ -199,6 +212,10 @@ static int const kTimeSyncIterations = 10;
         self.volume = msg.val;
         //[self notifyVolumeChange];
         [_audioManager setLoopVolume:[msg.val floatValue] name:@"organ"];
+        
+        
+        // TODO: set player loop volume
+        //[_audioManager setLoopVolume:[msg.val floatValue] name:msg.]
     } else if ([type isEqualToString:@"3"]) {
         MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
         // change color of players
@@ -299,8 +316,22 @@ static int const kTimeSyncIterations = 10;
 }
 
 - (void)startPlayRecordingFor:(NSString*)playerID {
-    [_audioManager startPlayingFromFile:[self recordingFilePathFor:playerID]];
+    NSString *filePath = [self recordingFilePathFor:playerID];
+    [_audioManager startPlayingFromFile:filePath];
 }
+
+- (void)startStreamingRecordingTo:(id)peerID fromPlayerName:(NSString*)playerName {
+    
+    [_sessionController sendAudioFileAtPath:[self recordingFilePathFor:playerName] toPeer:peerID];
+    
+    //NSOutputStream *stream = [_sessionController outputStreamForPeer:peerID withName:@"audio-file"];
+    //[_audioManager startAudioFileStream:stream fromPath:[self recordingFilePathFor:playerName]];
+}
+
+- (void)stopStreamingRecordingFrom:(NSString*)playerName {
+    [_audioManager stopAudioFileStreamFrom:[self recordingFilePathFor:playerName]];
+}
+
 - (void)stopPlayRecordingFor:(NSString *)playerID {
     [_audioManager stopPlayingFromFile];
 }

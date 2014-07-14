@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		083B3BD819745F000022C6C6 /* NSMutableArray+QueueMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BC019745F000022C6C6 /* NSMutableArray+QueueMethods.m */; };
+		083B3BD919745F000022C6C6 /* TDAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BC319745F000022C6C6 /* TDAudioFileStream.m */; };
+		083B3BDA19745F000022C6C6 /* TDAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BC519745F000022C6C6 /* TDAudioQueue.m */; };
+		083B3BDB19745F000022C6C6 /* TDAudioQueueBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BC719745F000022C6C6 /* TDAudioQueueBuffer.m */; };
+		083B3BDC19745F000022C6C6 /* TDAudioQueueBufferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BC919745F000022C6C6 /* TDAudioQueueBufferManager.m */; };
+		083B3BDD19745F000022C6C6 /* TDAudioQueueController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BCB19745F000022C6C6 /* TDAudioQueueController.m */; };
+		083B3BDE19745F000022C6C6 /* TDAudioQueueFiller.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BCD19745F000022C6C6 /* TDAudioQueueFiller.m */; };
+		083B3BDF19745F000022C6C6 /* TDAudioStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BCF19745F000022C6C6 /* TDAudioStream.m */; };
+		083B3BE019745F000022C6C6 /* TDAudioInputStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BD119745F000022C6C6 /* TDAudioInputStreamer.m */; };
+		083B3BE119745F000022C6C6 /* TDAudioOutputStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BD319745F000022C6C6 /* TDAudioOutputStreamer.m */; };
+		083B3BE219745F000022C6C6 /* TDAudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BD519745F000022C6C6 /* TDAudioStreamer.m */; };
+		083B3BE319745F000022C6C6 /* TDAudioStreamerConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 083B3BD719745F000022C6C6 /* TDAudioStreamerConstants.m */; };
 		083BF3D819507D8900C66DDD /* MPIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF3D519507D8900C66DDD /* MPIEvent.m */; };
 		083BF3D919507D8900C66DDD /* MPIEventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 083BF3D719507D8900C66DDD /* MPIEventLogger.m */; };
 		0844086F1964F7F10079D9BC /* MPIMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0844086E1964F7F10079D9BC /* MPIMotionManager.m */; };
@@ -63,6 +75,30 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		083B3BBF19745F000022C6C6 /* NSMutableArray+QueueMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+QueueMethods.h"; sourceTree = "<group>"; };
+		083B3BC019745F000022C6C6 /* NSMutableArray+QueueMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+QueueMethods.m"; sourceTree = "<group>"; };
+		083B3BC219745F000022C6C6 /* TDAudioFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioFileStream.h; sourceTree = "<group>"; };
+		083B3BC319745F000022C6C6 /* TDAudioFileStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioFileStream.m; sourceTree = "<group>"; };
+		083B3BC419745F000022C6C6 /* TDAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueue.h; sourceTree = "<group>"; };
+		083B3BC519745F000022C6C6 /* TDAudioQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueue.m; sourceTree = "<group>"; };
+		083B3BC619745F000022C6C6 /* TDAudioQueueBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueueBuffer.h; sourceTree = "<group>"; };
+		083B3BC719745F000022C6C6 /* TDAudioQueueBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueueBuffer.m; sourceTree = "<group>"; };
+		083B3BC819745F000022C6C6 /* TDAudioQueueBufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueueBufferManager.h; sourceTree = "<group>"; };
+		083B3BC919745F000022C6C6 /* TDAudioQueueBufferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueueBufferManager.m; sourceTree = "<group>"; };
+		083B3BCA19745F000022C6C6 /* TDAudioQueueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueueController.h; sourceTree = "<group>"; };
+		083B3BCB19745F000022C6C6 /* TDAudioQueueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueueController.m; sourceTree = "<group>"; };
+		083B3BCC19745F000022C6C6 /* TDAudioQueueFiller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioQueueFiller.h; sourceTree = "<group>"; };
+		083B3BCD19745F000022C6C6 /* TDAudioQueueFiller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioQueueFiller.m; sourceTree = "<group>"; };
+		083B3BCE19745F000022C6C6 /* TDAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioStream.h; sourceTree = "<group>"; };
+		083B3BCF19745F000022C6C6 /* TDAudioStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioStream.m; sourceTree = "<group>"; };
+		083B3BD019745F000022C6C6 /* TDAudioInputStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioInputStreamer.h; sourceTree = "<group>"; };
+		083B3BD119745F000022C6C6 /* TDAudioInputStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioInputStreamer.m; sourceTree = "<group>"; };
+		083B3BD219745F000022C6C6 /* TDAudioOutputStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioOutputStreamer.h; sourceTree = "<group>"; };
+		083B3BD319745F000022C6C6 /* TDAudioOutputStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioOutputStreamer.m; sourceTree = "<group>"; };
+		083B3BD419745F000022C6C6 /* TDAudioStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioStreamer.h; sourceTree = "<group>"; };
+		083B3BD519745F000022C6C6 /* TDAudioStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioStreamer.m; sourceTree = "<group>"; };
+		083B3BD619745F000022C6C6 /* TDAudioStreamerConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAudioStreamerConstants.h; sourceTree = "<group>"; };
+		083B3BD719745F000022C6C6 /* TDAudioStreamerConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAudioStreamerConstants.m; sourceTree = "<group>"; };
 		083BF3D419507D8900C66DDD /* MPIEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPIEvent.h; path = Source/MPIEventLogger/MPIEvent.h; sourceTree = "<group>"; };
 		083BF3D519507D8900C66DDD /* MPIEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPIEvent.m; path = Source/MPIEventLogger/MPIEvent.m; sourceTree = "<group>"; };
 		083BF3D619507D8900C66DDD /* MPIEventLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPIEventLogger.h; path = Source/MPIEventLogger/MPIEventLogger.h; sourceTree = "<group>"; };
@@ -165,6 +201,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		083B3BBD19745F000022C6C6 /* TDAudioStreamer */ = {
+			isa = PBXGroup;
+			children = (
+				083B3BBE19745F000022C6C6 /* Categories */,
+				083B3BC119745F000022C6C6 /* Classes */,
+				083B3BD019745F000022C6C6 /* TDAudioInputStreamer.h */,
+				083B3BD119745F000022C6C6 /* TDAudioInputStreamer.m */,
+				083B3BD219745F000022C6C6 /* TDAudioOutputStreamer.h */,
+				083B3BD319745F000022C6C6 /* TDAudioOutputStreamer.m */,
+				083B3BD419745F000022C6C6 /* TDAudioStreamer.h */,
+				083B3BD519745F000022C6C6 /* TDAudioStreamer.m */,
+				083B3BD619745F000022C6C6 /* TDAudioStreamerConstants.h */,
+				083B3BD719745F000022C6C6 /* TDAudioStreamerConstants.m */,
+			);
+			name = TDAudioStreamer;
+			path = Source/TDAudioStreamer;
+			sourceTree = "<group>";
+		};
+		083B3BBE19745F000022C6C6 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				083B3BBF19745F000022C6C6 /* NSMutableArray+QueueMethods.h */,
+				083B3BC019745F000022C6C6 /* NSMutableArray+QueueMethods.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		083B3BC119745F000022C6C6 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				083B3BC219745F000022C6C6 /* TDAudioFileStream.h */,
+				083B3BC319745F000022C6C6 /* TDAudioFileStream.m */,
+				083B3BC419745F000022C6C6 /* TDAudioQueue.h */,
+				083B3BC519745F000022C6C6 /* TDAudioQueue.m */,
+				083B3BC619745F000022C6C6 /* TDAudioQueueBuffer.h */,
+				083B3BC719745F000022C6C6 /* TDAudioQueueBuffer.m */,
+				083B3BC819745F000022C6C6 /* TDAudioQueueBufferManager.h */,
+				083B3BC919745F000022C6C6 /* TDAudioQueueBufferManager.m */,
+				083B3BCA19745F000022C6C6 /* TDAudioQueueController.h */,
+				083B3BCB19745F000022C6C6 /* TDAudioQueueController.m */,
+				083B3BCC19745F000022C6C6 /* TDAudioQueueFiller.h */,
+				083B3BCD19745F000022C6C6 /* TDAudioQueueFiller.m */,
+				083B3BCE19745F000022C6C6 /* TDAudioStream.h */,
+				083B3BCF19745F000022C6C6 /* TDAudioStream.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		08670EC719630AD900CD23A8 /* MicInput */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,6 +309,7 @@
 		273F283D18CD1A0C00F595C2 = {
 			isa = PBXGroup;
 			children = (
+				083B3BBD19745F000022C6C6 /* TDAudioStreamer */,
 				08670EC719630AD900CD23A8 /* MicInput */,
 				08943D6A19533B1900D226AE /* Reachability */,
 				08C1BE36194F400700E2EFA5 /* MPIEventLogger */,
@@ -502,24 +587,36 @@
 			files = (
 				088B9F121947609C006A27E4 /* MixBoardTableCell.m in Sources */,
 				083BF3D919507D8900C66DDD /* MPIEventLogger.m in Sources */,
+				083B3BDD19745F000022C6C6 /* TDAudioQueueController.m in Sources */,
 				088B9EFC19476048006A27E4 /* Player.m in Sources */,
 				088B9F101947609C006A27E4 /* GameManager.m in Sources */,
+				083B3BE019745F000022C6C6 /* TDAudioInputStreamer.m in Sources */,
 				083BF3D819507D8900C66DDD /* MPIEvent.m in Sources */,
+				083B3BDA19745F000022C6C6 /* TDAudioQueue.m in Sources */,
 				088B9EFB19476048006A27E4 /* Message.m in Sources */,
+				083B3BDF19745F000022C6C6 /* TDAudioStream.m in Sources */,
 				08C5F0D11964AD410038E81B /* MPIInputStreamChannel.m in Sources */,
 				088B9EF719476048006A27E4 /* ActionMessage.m in Sources */,
 				088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */,
+				083B3BDC19745F000022C6C6 /* TDAudioQueueBufferManager.m in Sources */,
 				088B9F151947609C006A27E4 /* SessionController.m in Sources */,
 				084408721965DD900079D9BC /* MPIAudioStreamer.m in Sources */,
+				083B3BE119745F000022C6C6 /* TDAudioOutputStreamer.m in Sources */,
 				0844086F1964F7F10079D9BC /* MPIMotionManager.m in Sources */,
+				083B3BE219745F000022C6C6 /* TDAudioStreamer.m in Sources */,
 				088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */,
+				083B3BDB19745F000022C6C6 /* TDAudioQueueBuffer.m in Sources */,
 				088B9EF919476048006A27E4 /* Game.m in Sources */,
 				08ED7337195C8B2800FFCB34 /* MPISongInfoMessage.m in Sources */,
 				088B9F0F1947609C006A27E4 /* AudioManager.m in Sources */,
 				088B9EF819476048006A27E4 /* BaseModel.m in Sources */,
 				088B9F1A19476166006A27E4 /* main.m in Sources */,
 				088B9F111947609C006A27E4 /* HomeViewController.m in Sources */,
+				083B3BD819745F000022C6C6 /* NSMutableArray+QueueMethods.m in Sources */,
+				083B3BD919745F000022C6C6 /* TDAudioFileStream.m in Sources */,
 				088B9F0E1947609C006A27E4 /* AppDelegate.m in Sources */,
+				083B3BDE19745F000022C6C6 /* TDAudioQueueFiller.m in Sources */,
+				083B3BE319745F000022C6C6 /* TDAudioStreamerConstants.m in Sources */,
 				08943D6F19533B1900D226AE /* Reachability.m in Sources */,
 				088B9EFA19476048006A27E4 /* JoinRequest.m in Sources */,
 			);

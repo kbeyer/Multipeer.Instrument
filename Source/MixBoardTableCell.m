@@ -73,10 +73,21 @@
 
 - (IBAction)playRecording:(id)sender {
     if (_playButton.selected) {
+        // stop local playback
         [[MPIGameManager instance] stopPlayRecordingFor:_playerID.displayName];
+        
+        // stop streaming
+        [[MPIGameManager instance] stopStreamingRecordingFrom:_playerID.displayName];
+        
         _playButton.selected = NO;
     } else {
+        // play locally
         [[MPIGameManager instance] startPlayRecordingFor:_playerID.displayName];
+        
+        // and stream to associated peer
+        [[MPIGameManager instance] startStreamingRecordingTo:_playerID fromPlayerName:_playerID.displayName];
+        
+        // remember state
         _playButton.selected = YES;
     }
 }

@@ -299,9 +299,11 @@
         NSArray *peers = [[MPIGameManager instance].sessionController connectedPeers];
         NSOutputStream *outputStream = nil;
         
+        //
         // TODO: send song info and stream to all peers
+        //
         if (peers.count) {
-            outputStream = [[MPIGameManager instance].sessionController outputStreamForPeer:peers[0]];
+            outputStream = [[MPIGameManager instance].sessionController outputStreamForPeer:peers[0] withName:@"mic"];
         }
         [[MPIGameManager instance] startEcho:outputStream];
     } else {

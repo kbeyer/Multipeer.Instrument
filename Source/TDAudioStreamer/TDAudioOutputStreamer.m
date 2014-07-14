@@ -27,11 +27,11 @@
 {
     self = [super init];
     if (!self) return nil;
-
+    
     self.audioStream = [[TDAudioStream alloc] initWithOutputStream:stream];
     self.audioStream.delegate = self;
-    NSLog(@"AudioOutputStreamer Init");
-
+    NSLog(@"Init");
+    
     return self;
 }
 
@@ -40,8 +40,8 @@
     if (![[NSThread currentThread] isEqual:[NSThread mainThread]]) {
         return [self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:YES];
     }
-
-    NSLog(@"AudioOutputStreamer Start");
+    
+    NSLog(@"Start");
     self.streamThread = [[NSThread alloc] initWithTarget:self selector:@selector(run) object:nil];
     [self.streamThread start];
 }
@@ -50,70 +50,57 @@
 {
     @autoreleasepool {
         [self.audioStream open];
-
+        
         self.isStreaming = YES;
-        NSLog(@"AudioOutputStreamer Loop");
-
+        NSLog(@"Loop");
+        
         while (self.isStreaming && [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) ;
-
-        NSLog(@"AudioOutputStreamer Done");
+        
+        NSLog(@"Done");
     }
-}
-
-- (void)streamAudioFromSong:(MPMediaItem*)song
-{
-    [self streamAudioFromURL:[song valueForProperty:MPMediaItemPropertyAssetURL]];
 }
 
 - (void)streamAudioFromURL:(NSURL *)url
 {
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
     NSError *assetError;
-
+    
     self.assetReader = [AVAssetReader assetReaderWithAsset:asset error:&assetError];
     self.assetOutput = [AVAssetReaderTrackOutput assetReaderTrackOutputWithTrack:asset.tracks[0] outputSettings:nil];
     if (![self.assetReader canAddOutput:self.assetOutput]) return;
-
+    
     [self.assetReader addOutput:self.assetOutput];
     [self.assetReader startReading];
-    NSLog(@"AudioOutputStreamer Read Asset");
-}
-
-
-- (UInt32)writeData:(uint8_t *)data maxLength:(UInt32)maxLength
-{
-    NSLog(@"writing to stream: %ui", maxLength);
-    return [self.audioStream writeData:data maxLength:maxLength];
+    NSLog(@"Read Asset");
 }
 
 - (void)sendDataChunk
 {
     CMSampleBufferRef sampleBuffer;
-
+    
     sampleBuffer = [self.assetOutput copyNextSampleBuffer];
-
-    if (sampleBuffer == NULL) return;
-    if (CMSampleBufferGetNumSamples(sampleBuffer) == 0) {
+    
+    if (sampleBuffer == NULL || CMSampleBufferGetNumSamples(sampleBuffer) == 0) {
         CFRelease(sampleBuffer);
         return;
     }
-
+    
     CMBlockBufferRef blockBuffer;
     AudioBufferList audioBufferList;
-
+    
     OSStatus err = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer, NULL, &audioBufferList, sizeof(AudioBufferList), NULL, NULL, kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment, &blockBuffer);
-
+    
     if (err) {
         CFRelease(sampleBuffer);
         return;
     }
-
+    
     for (NSUInteger i = 0; i < audioBufferList.mNumberBuffers; i++) {
         AudioBuffer audioBuffer = audioBufferList.mBuffers[i];
         [self.audioStream writeData:audioBuffer.mData maxLength:audioBuffer.mDataByteSize];
-        //NSLog(@"buffer size: %u", (unsigned int)audioBuffer.mDataByteSize);
+        NSLog(@"buffer size: %u", (unsigned int)audioBuffer.mDataByteSize);
     }
-
+    
     CFRelease(blockBuffer);
     CFRelease(sampleBuffer);
 }
@@ -138,17 +125,17 @@
         case TDAudioStreamEventWantsData:
             [self sendDataChunk];
             break;
-
+            
         case TDAudioStreamEventError:
             // TODO: shit!
-            NSLog(@"AudioOutputStreamer Stream Error");
+            NSLog(@"Stream Error");
             break;
-
+            
         case TDAudioStreamEventEnd:
             // TODO: shit!
-            NSLog(@"AudioOutputStreamer Stream Ended");
+            NSLog(@"Stream Ended");
             break;
-
+            
         default:
             break;
     }

@@ -30,7 +30,7 @@
 @property (nonatomic, readonly) NSArray *disconnectedPeers;
 
 // creates and returns stream for peer via current session
-- (NSOutputStream *)outputStreamForPeer:(MCPeerID *)peer;
+- (NSOutputStream *)outputStreamForPeer:(MCPeerID *)peer withName:(NSString*)streamName;
 
 // Helper method for human readable printing of MCSessionState. This state is per peer.
 - (NSString *)stringForPeerConnectionState:(MCSessionState)state;
@@ -45,6 +45,9 @@
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeers:(NSArray*)peers;
 - (void)sendMessage:(id)msg toPeer:(MCPeerID*)peer;
 - (void)sendMessage:(id)msg toPeers:(NSArray*)peers;
+
+// send audio file to peer
+- (void)sendAudioFileAtPath:(NSString*)filePath toPeer:(id)peerID;
 
 // advertiser and browser controller
 - (void)startAdvertising;
@@ -64,7 +67,14 @@
 // Session changed state - connecting, connected and disconnected peers changed
 - (void)sessionDidChangeState;
 
+// raw audio input ... e.g. - mic
 - (void)session:(MPISessionController *)session didReceiveAudioStream:(NSInputStream *)stream;
+
+// audio file stream
+- (void)session:(MPISessionController *)session didReceiveAudioFileStream:(NSInputStream *)stream;
+
+// recieved audio file
+- (void)session:(MPISessionController *)session didReceiveAudioFileFrom:(NSString*)playerName atPath:(NSString*)filePath;
 
 @end
 

@@ -15,7 +15,8 @@
 #import "MPIInputStreamChannel.h"
 #import "MPIAudioStreamer.h"
 
-
+#import "TDAudioInputStreamer.h"
+#import "TDAudioOutputStreamer.h"
 
 static const int kInputChannelsChangedContext;
 
@@ -40,6 +41,11 @@ static const int kInputChannelsChangedContext;
 @property (nonatomic, retain) AERecorder *fileRecorder;
 // player for recordings
 @property (nonatomic, retain) AEAudioFilePlayer *recordingFilePlayer;
+
+// audio file input streamer
+@property (nonatomic, retain) TDAudioInputStreamer *inputAudioFileStreamer;
+// audio file output streamer
+@property (nonatomic, retain) TDAudioOutputStreamer *outputAudioFileStreamer;
 
 @end
 
@@ -104,23 +110,12 @@ static const int kInputChannelsChangedContext;
     self.audioController = audioController;
     
     _loops = [NSMutableDictionary new];
+    
     // Create the first loop player
-    AEAudioFilePlayer* loop1 = [AEAudioFilePlayer audioFilePlayerWithURL:[[NSBundle mainBundle] URLForResource:@"Southern Rock Drums" withExtension:@"m4a"]
-                                           audioController:_audioController
-                                                     error:NULL];
-    loop1.volume = 1.0;
-    loop1.channelIsMuted = YES;
-    loop1.loop = YES;
-    [_loops setObject:loop1 forKey:@"drums"];
+    AEAudioFilePlayer* loop1 = [self addAudioLoop:@"drums" forURL:[[NSBundle mainBundle] URLForResource:@"Southern Rock Drums" withExtension:@"m4a"]];
     
     // Create the second loop player
-    AEAudioFilePlayer* loop2 = [AEAudioFilePlayer audioFilePlayerWithURL:[[NSBundle mainBundle] URLForResource:@"Southern Rock Organ" withExtension:@"m4a"]
-                                           audioController:_audioController
-                                                     error:NULL];
-    loop2.volume = 1.0;
-    loop2.channelIsMuted = YES;
-    loop2.loop = YES;
-    [_loops setObject:loop2 forKey:@"organ"];
+    AEAudioFilePlayer* loop2 = [self addAudioLoop:@"organ" forURL:[[NSBundle mainBundle] URLForResource:@"Southern Rock Organ" withExtension:@"m4a"]];
     
     // Create a block-based channel, with an implementation of an oscillator
     __block float oscillatorPosition = 0;
@@ -223,6 +218,29 @@ static const int kInputChannelsChangedContext;
     }
 }
 
+-(AEAudioFilePlayer*)addAudioLoop:(NSString*)key forURL:(NSURL *)fileUrl
+{
+    // Create loop player
+    AEAudioFilePlayer* loopPlayer = [AEAudioFilePlayer audioFilePlayerWithURL:fileUrl
+                                                         audioController:_audioController
+                                                                   error:NULL];
+    loopPlayer.volume = 1.0;
+    // default to muted ... require call to 'muteLoop' to unmute
+    loopPlayer.channelIsMuted = YES;
+    loopPlayer.loop = YES;
+    [_loops setObject:loopPlayer forKey:key];
+    return loopPlayer;
+}
+
+-(void)addAudioLoop:(NSString*)key forURL:(NSURL *)fileUrl andPlay:(BOOL)autoPlay
+{
+    AEAudioFilePlayer* loopPlayer = [self addAudioLoop:key forURL:fileUrl];
+    [_audioController addChannels:[NSArray arrayWithObjects:loopPlayer, nil]];
+    if (autoPlay) {
+        loopPlayer.channelIsMuted = NO;
+    }
+}
+
 
 -(void)openMic:(NSOutputStream *)stream
 {
@@ -252,6 +270,30 @@ static const int kInputChannelsChangedContext;
     [_inputStreamChannel stop];
     [_audioController removeChannels:@[_inputStreamChannel]];
     self.inputStreamChannel = nil;
+}
+
+-(void)startAudioFileStream:(NSOutputStream*)stream fromPath:(NSString*)filePath
+{
+    //
+    // TODO: create new output streamer for each file/player
+    //
+    self.outputAudioFileStreamer = [[TDAudioOutputStreamer alloc] initWithOutputStream:stream];
+    [self.outputAudioFileStreamer streamAudioFromURL:[NSURL fileURLWithPath:filePath]];
+    [self.outputAudioFileStreamer start];
+}
+-(void)stopAudioFileStreamFrom:(NSString *)filePath
+{
+    [self.outputAudioFileStreamer stop];
+    self.outputAudioFileStreamer = nil;
+}
+
+
+-(void)playFileStream:(NSInputStream *)stream
+{
+    if (!self.inputAudioFileStreamer) {
+        self.inputAudioFileStreamer = [[TDAudioInputStreamer alloc] initWithInputStream:stream];
+        [self.inputAudioFileStreamer start];
+    }
 }
 
 #pragma mark - recording to playback from file
