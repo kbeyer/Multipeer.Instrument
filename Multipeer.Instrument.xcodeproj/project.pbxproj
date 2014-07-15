@@ -26,7 +26,6 @@
 		088B9EEA19476034006A27E4 /* PropertyUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EE919476034006A27E4 /* PropertyUtil.m */; };
 		088B9EF719476048006A27E4 /* ActionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEC19476048006A27E4 /* ActionMessage.m */; };
 		088B9EF819476048006A27E4 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EEE19476048006A27E4 /* BaseModel.m */; };
-		088B9EF919476048006A27E4 /* Game.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EF019476048006A27E4 /* Game.m */; };
 		088B9EFA19476048006A27E4 /* JoinRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EF219476048006A27E4 /* JoinRequest.m */; };
 		088B9EFB19476048006A27E4 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EF419476048006A27E4 /* Message.m */; };
 		088B9EFC19476048006A27E4 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B9EF619476048006A27E4 /* Player.m */; };
@@ -113,8 +112,6 @@
 		088B9EEC19476048006A27E4 /* ActionMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ActionMessage.m; path = Source/Models/ActionMessage.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		088B9EED19476048006A27E4 /* BaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = BaseModel.h; path = Source/Models/BaseModel.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		088B9EEE19476048006A27E4 /* BaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = BaseModel.m; path = Source/Models/BaseModel.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		088B9EEF19476048006A27E4 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Game.h; path = Source/Models/Game.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		088B9EF019476048006A27E4 /* Game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = Game.m; path = Source/Models/Game.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		088B9EF119476048006A27E4 /* JoinRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = JoinRequest.h; path = Source/Models/JoinRequest.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		088B9EF219476048006A27E4 /* JoinRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = JoinRequest.m; path = Source/Models/JoinRequest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		088B9EF319476048006A27E4 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Message.h; path = Source/Models/Message.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -409,8 +406,6 @@
 				088B9EEC19476048006A27E4 /* ActionMessage.m */,
 				088B9EED19476048006A27E4 /* BaseModel.h */,
 				088B9EEE19476048006A27E4 /* BaseModel.m */,
-				088B9EEF19476048006A27E4 /* Game.h */,
-				088B9EF019476048006A27E4 /* Game.m */,
 				088B9EF119476048006A27E4 /* JoinRequest.h */,
 				088B9EF219476048006A27E4 /* JoinRequest.m */,
 				088B9EF319476048006A27E4 /* Message.h */,
@@ -606,7 +601,6 @@
 				083B3BE219745F000022C6C6 /* TDAudioStreamer.m in Sources */,
 				088B9F131947609C006A27E4 /* MixBoardViewController.m in Sources */,
 				083B3BDB19745F000022C6C6 /* TDAudioQueueBuffer.m in Sources */,
-				088B9EF919476048006A27E4 /* Game.m in Sources */,
 				08ED7337195C8B2800FFCB34 /* MPISongInfoMessage.m in Sources */,
 				088B9F0F1947609C006A27E4 /* AudioManager.m in Sources */,
 				088B9EF819476048006A27E4 /* BaseModel.m in Sources */,
