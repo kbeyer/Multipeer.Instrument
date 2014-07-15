@@ -176,7 +176,7 @@ static int const kTimeSyncIterations = 10;
 
 - (void)session:(MPISessionController *)session didReceiveAudioFileFrom:(NSString*)playerName atPath:(NSString*)filePath
 {
-    // add as new audio loop
+    // add as new audio loop ... but don't play until receiving command
     [_audioManager addAudioLoop:playerName forURL:[NSURL fileURLWithPath:filePath] andPlay:YES];
 }
 
@@ -215,9 +215,10 @@ static int const kTimeSyncIterations = 10;
         //[self notifyVolumeChange];
         [_audioManager setLoopVolume:[msg.val floatValue] name:@"organ"];
         
-        
-        // TODO: set player loop volume
-        //[_audioManager setLoopVolume:[msg.val floatValue] name:msg.]
+        // set player loop volume
+        // using local display name ... since file should be named based on recording from a different
+        // device for my device
+        //[_audioManager setLoopVolume:[msg.val floatValue] name:[_sessionController displayName]];
         
     } else if ([type isEqualToString:@"3"]) {
         MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
@@ -227,14 +228,24 @@ static int const kTimeSyncIterations = 10;
         [_audioManager setLoopVolume:[msg.val floatValue] name:@"drums"];
         
         
+        [_audioManager setLoopVolume:[msg.val floatValue]*1.5 name:[_sessionController displayName]];
+        
     } else if ([type isEqualToString:@"4"]) {
         // timestamp handled by session controller
     } else if ([type isEqualToString:@"5"]) {
         // request for time sync handled by session controller
     } else if ([type isEqualToString:@"6"]) {
+        
         MPISongInfoMessage *msg = [MTLJSONAdapter modelOfClass:[MPISongInfoMessage class] fromJSONDictionary:json error:&error];
         _lastSongMessage = msg;
         [self notifySongChange];
+        
+    } else if ([type isEqualToString:@"7"]) {
+        
+        MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
+        // start / stop play of recording
+        [_audioManager muteLoop:![msg.val boolValue] name:[_sessionController displayName]];
+        
     }
 }
 
@@ -318,9 +329,13 @@ static int const kTimeSyncIterations = 10;
     
     // send when file is done recording
     [_sessionController sendAudioFileAtPath:filePath toPeer:peerID];
-    //
-    // TODO: enable play button only after file transfer is complet
-    //
+    
+    // auto-play there
+    // NOTE: do this as part of file recieve ... since we need to wait for file transfer
+    //[self startPlayRecordingFor:playerName onPeer:peerID];
+    
+    // auto-play here
+    [self startPlayRecordingFor:playerName];
 }
 
 - (void)startPlayRecordingFor:(NSString*)playerID {
@@ -346,6 +361,16 @@ static int const kTimeSyncIterations = 10;
 
 - (void)stopPlayRecordingFor:(NSString *)playerID {
     [_audioManager stopPlayingFromFile];
+}
+
+
+- (void)startPlayRecordingFor:(NSString *)playerID onPeer:peerID {
+    // send play command
+    [_sessionController sendMessage:@"7" value:[[NSNumber alloc] initWithInt:1] toPeer:peerID];
+}
+- (void)stopPlayRecordingFor:(NSString *)playerID onPeer:peerID {
+    // send stop command
+    [_sessionController sendMessage:@"7" value:[[NSNumber alloc] initWithInt:0] toPeer:peerID];
 }
 
 - (void) startup

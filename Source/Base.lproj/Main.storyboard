@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1Ww-dx-4Dv">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
     </dependencies>
     <scenes>
@@ -156,12 +155,21 @@
                                             </connections>
                                         </switch>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wYo-fa-GQe">
-                                            <rect key="frame" x="241" y="137" width="59" height="30"/>
-                                            <state key="normal" title="Play">
+                                            <rect key="frame" x="241" y="137" width="66" height="30"/>
+                                            <state key="normal" title="Play Here">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="playRecording:" destination="EPx-hf-x0v" eventType="touchUpInside" id="zGo-Ep-vmm"/>
+                                                <action selector="playRecordingHere:" destination="EPx-hf-x0v" eventType="touchUpInside" id="rtq-CA-P4t"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h85-eE-fZC">
+                                            <rect key="frame" x="124" y="137" width="73" height="30"/>
+                                            <state key="normal" title="Play There">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="playRecordingThere:" destination="EPx-hf-x0v" eventType="touchUpInside" id="9bi-IJ-Nem"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -170,7 +178,8 @@
                                     <outlet property="colorSlider" destination="Gzu-AM-xL1" id="MNC-AQ-dqi"/>
                                     <outlet property="flashSwitch" destination="IQ2-be-NUn" id="0JT-7u-feG"/>
                                     <outlet property="nameLabel" destination="hSd-p0-MO8" id="fSb-oY-Uq5"/>
-                                    <outlet property="playButton" destination="wYo-fa-GQe" id="zad-Lo-zJ2"/>
+                                    <outlet property="playHereButton" destination="wYo-fa-GQe" id="4iD-sS-qel"/>
+                                    <outlet property="playThereButton" destination="h85-eE-fZC" id="7gt-HO-bYF"/>
                                     <outlet property="recordButton" destination="szU-LI-1mm" id="nao-sF-Xs0"/>
                                     <outlet property="soundSlider" destination="Lmz-ax-QZZ" id="g0O-Dp-KCL"/>
                                 </connections>

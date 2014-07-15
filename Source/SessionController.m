@@ -65,7 +65,6 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
             [[MPIEventLogger sharedInstance] log:source description:@"retrieved existing peerID"];
         }
         
-        
         _connectingPeersOrderedSet = [[NSMutableOrderedSet alloc] init];
         _disconnectedPeersOrderedSet = [[NSMutableOrderedSet alloc] init];
         _invitations = [[NSMutableDictionary alloc] init];
@@ -91,7 +90,9 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         _connectingPeers = [self.connectingPeersOrderedSet array];
         _disconnectedPeers = [self.disconnectedPeersOrderedSet array];
         
-        _displayName = self.session.myPeerID.displayName;
+        //_displayName = self.session.myPeerID.displayName;
+        
+        _displayName = _peerID.displayName;
     }
     
     return self;
@@ -363,6 +364,8 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
             action = @"Sync Request";
         } else if ([msgType isEqualToString:@"6"]) {
             action = @"Song Info";
+        } else if ([msgType isEqualToString:@"7"]) {
+            action = @"Recording play/stop";
         }
         NSDate* start = [[MPIMessage dateFormatter] dateFromString:obj[@"createdAt"]];
         NSDate* end = [NSDate date];
@@ -416,14 +419,14 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
     NSLog(@"didStartReceivingResourceWithName [%@] from %@ with progress [%@]", resourceName, peerID.displayName, progress);
 }
 
-- (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
+- (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)fromPeerID atURL:(NSURL *)localURL withError:(NSError *)error
 {
-    NSLog(@"didFinishReceivingResourceWithName [%@] from %@", resourceName, peerID.displayName);
+    NSLog(@"didFinishReceivingResourceWithName [%@] from %@", resourceName, fromPeerID.displayName);
     
     // If error is not nil something went wrong
     if (error)
     {
-        NSLog(@"Error [%@] receiving resource from %@ ", [error localizedDescription], peerID.displayName);
+        NSLog(@"Error [%@] receiving resource from %@ ", [error localizedDescription], fromPeerID.displayName);
     }
     else
     {
@@ -434,13 +437,10 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         NSString *copyPath = [NSString stringWithFormat:@"%@/%@", [paths firstObject], resourceName];
         NSError* error;
         
-        /*
-         if (![[NSFileManager defaultManager] copyItemAtPath:[localURL path] toPath:copyPath error:&error])
-         {
-         NSLog(@"Error copying resource to documents directory (%@) [%@]", copyPath, error);
-         }
-         */
         
+        //
+        // TODO: verify this works if the file does not exist yet
+        //
         NSURL* resultingURL;
         if (![[NSFileManager defaultManager] replaceItemAtURL:[NSURL fileURLWithPath:copyPath] withItemAtURL:localURL backupItemName:@"audiofile-backup" options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&resultingURL error:&error])
         {
@@ -449,11 +449,10 @@ static NSString * const kMCSessionServiceType = @"mpi-shared";
         else
         {
             // Get a URL for the path we just copied the resource to
-            //NSURL *url = [NSURL fileURLWithPath:copyPath];
             NSLog(@"url = %@, copyPath = %@", resultingURL, copyPath);
             
-            // tell game manager about it
-            [self.delegate session:self didReceiveAudioFileFrom:peerID.displayName atPath:copyPath];
+            // tell game manager about it .. should use self ID ... since it was for self
+            [self.delegate session:self didReceiveAudioFileFrom:_peerID.displayName atPath:copyPath];
         }
     }
 }

@@ -25,9 +25,12 @@
         // setup record button states
         [_recordButton setTitle:@"Record" forState:UIControlStateNormal];
         [_recordButton setTitle:@"Stop" forState:UIControlStateSelected];
-        // setup play button states
-        [_playButton setTitle:@"Play" forState:UIControlStateNormal];
-        [_playButton setTitle:@"Stop" forState:UIControlStateSelected];
+        // setup play here button states
+        [_playHereButton setTitle:@"Play Here" forState:UIControlStateNormal];
+        [_playHereButton setTitle:@"Stop Here" forState:UIControlStateSelected];
+        // setup play there button states
+        [_playThereButton setTitle:@"Play There" forState:UIControlStateNormal];
+        [_playThereButton setTitle:@"Stop There" forState:UIControlStateSelected];
 
     }
     return self;
@@ -71,15 +74,15 @@
     [[MPIGameManager instance] requestSoundChange:_playerID value:[[NSNumber alloc] initWithFloat: _lastSentVolume]];
 }
 
-- (IBAction)playRecording:(id)sender {
-    if (_playButton.selected) {
+- (IBAction)playRecordingHere:(id)sender {
+    if (_playHereButton.selected) {
         // stop local playback
         [[MPIGameManager instance] stopPlayRecordingFor:_playerID.displayName];
         
         // stop streaming
         [[MPIGameManager instance] stopStreamingRecordingFrom:_playerID.displayName];
         
-        _playButton.selected = NO;
+        _playHereButton.selected = NO;
     } else {
         // play locally
         [[MPIGameManager instance] startPlayRecordingFor:_playerID.displayName];
@@ -88,7 +91,7 @@
         [[MPIGameManager instance] startStreamingRecordingTo:_playerID fromPlayerName:_playerID.displayName];
         
         // remember state
-        _playButton.selected = YES;
+        _playHereButton.selected = YES;
     }
 }
 
@@ -96,9 +99,33 @@
     if (_recordButton.selected) {
         [[MPIGameManager instance] stopRecordMicFor:_playerID.displayName withPeer:_playerID];
         _recordButton.selected = NO;
+        _playThereButton.selected = YES;
+        _playHereButton.selected = YES;
     } else {
         [[MPIGameManager instance] startRecordMicFor:_playerID.displayName];
         _recordButton.selected = YES;
+    }
+}
+
+- (IBAction)playRecordingThere:(id)sender {
+    
+    if (_playThereButton.selected) {
+        // stop remote playback
+        [[MPIGameManager instance] stopPlayRecordingFor:_playerID.displayName onPeer:_playerID];
+        
+        // stop streaming
+        //[[MPIGameManager instance] stopStreamingRecordingFrom:_playerID.displayName];
+        
+        _playThereButton.selected = NO;
+    } else {
+        // send message to start playing remotely
+        [[MPIGameManager instance] startPlayRecordingFor:_playerID.displayName onPeer:_playerID];
+        
+        // and stream to associated peer
+        //[[MPIGameManager instance] startStreamingRecordingTo:_playerID fromPlayerName:_playerID.displayName];
+        
+        // remember state
+        _playThereButton.selected = YES;
     }
 }
 

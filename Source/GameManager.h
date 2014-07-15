@@ -45,6 +45,11 @@
 - (void)stopPlayRecordingFor:(NSString*)playerID;
 - (void)stopRecordMicFor:(NSString*)playerID withPeer:(id)peerID;
 
+
+- (void)stopPlayRecordingFor:(NSString*)playerID onPeer:(id)peerID;
+- (void)startPlayRecordingFor:(NSString*)playerID onPeer:(id)peerID;
+
+
 - (void)startStreamingRecordingTo:(id)peerID fromPlayerName:(NSString*)playerName;
 - (void)stopStreamingRecordingFrom:(NSString*)playerName;
 
