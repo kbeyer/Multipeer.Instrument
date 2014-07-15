@@ -220,6 +220,12 @@ static const int kInputChannelsChangedContext;
 
 -(AEAudioFilePlayer*)addAudioLoop:(NSString*)key forURL:(NSURL *)fileUrl
 {
+    //
+    // TODO: clear out previous loops with the same name??
+    // feature or bug :)
+    //
+    
+    
     // Create loop player
     AEAudioFilePlayer* loopPlayer = [AEAudioFilePlayer audioFilePlayerWithURL:fileUrl
                                                          audioController:_audioController
