@@ -315,7 +315,7 @@ static const int kInputChannelsChangedContext;
     self.fileRecorder = [[AERecorder alloc] initWithAudioController:_audioController];
     
     NSError *error = nil;
-    if ( ![_fileRecorder beginRecordingToFileAtPath:filePath fileType:kAudioFileAIFFType error:&error] ) {
+    if ( ![_fileRecorder beginRecordingToFileAtPath:filePath fileType:kAudioFileAIFFType withGain:_recordingGain error:&error] ) {
         [[[UIAlertView alloc] initWithTitle:@"Error"
                                     message:[NSString stringWithFormat:@"Couldn't start recording: %@", [error localizedDescription]]
                                    delegate:nil
@@ -367,7 +367,41 @@ static const int kInputChannelsChangedContext;
     self.recordingFilePlayer = nil;
 }
 
+-(void)enableReverb:(BOOL)on
+{
+    if (on) {
+        self.reverb = [[AEAudioUnitFilter alloc] initWithComponentDescription:AEAudioComponentDescriptionMake(kAudioUnitManufacturer_Apple, kAudioUnitType_Effect, kAudioUnitSubType_Reverb2) audioController:_audioController error:NULL];
+        
+        AudioUnitSetParameter(_reverb.audioUnit, kReverb2Param_DryWetMix, kAudioUnitScope_Global, 0, 100.f, 0);
+        
+        [_audioController addFilter:_reverb];
+    } else {
+        [_audioController removeFilter:_reverb];
+        self.reverb = nil;
+    }
+}
 
+- (void)enableExpander:(BOOL)on
+{
+    if ( on ) {
+        self.limiter = [[AELimiterFilter alloc] initWithAudioController:_audioController];
+        _limiter.level = 0.1;
+        [_audioController addFilter:_limiter];
+    } else {
+        [_audioController removeFilter:_limiter];
+        self.limiter = nil;
+    }
+}
 
+- (void)enableLimiter:(BOOL)on
+{
+    if ( on ) {
+        self.expander = [[AEExpanderFilter alloc] initWithAudioController:_audioController];
+        [_audioController addFilter:_expander];
+    } else {
+        [_audioController removeFilter:_expander];
+        self.expander = nil;
+    }
+}
 
 @end

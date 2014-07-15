@@ -73,6 +73,11 @@ extern NSString * kAERecorderErrorKey;
  */
 - (BOOL)beginRecordingToFileAtPath:(NSString*)path fileType:(AudioFileTypeID)fileType error:(NSError**)error;
 
+// KJB edits to enable gain on recording
+- (BOOL)beginRecordingToFileAtPath:(NSString*)path fileType:(AudioFileTypeID)fileType withGain:(float)gain error:(NSError**)error;
+-(void)processBuffer: (AudioBufferList*) audioBufferList;
+
+
 /*!
  * Prepare to record
  *

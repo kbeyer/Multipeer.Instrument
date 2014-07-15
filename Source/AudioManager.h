@@ -13,6 +13,9 @@
 @interface MPIAudioManager : NSObject
 
 @property (retain, nonatomic) AEAudioController *audioController;
+
+@property (readwrite) float recordingGain;
+
 -(void)muteLoop:(BOOL)mute name:(NSString*)key;
 -(void)setLoopVolume:(float)volume name:(NSString*)key;
 
@@ -39,7 +42,11 @@
 -(void)stopRecordingToFile:(NSString*)filePath;
 
 - (NSString*)recordingFilePathFor:(NSString*)playerID;
-    
+
+-(void)enableReverb:(BOOL)on;
+-(void)enableLimiter:(BOOL)on;
+-(void)enableExpander:(BOOL)on;
+
 // start playing from file
 -(void)startPlayingFromFile:(NSString*)filePath;
 -(void)stopPlayingFromFile;

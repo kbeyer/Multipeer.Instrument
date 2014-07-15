@@ -56,6 +56,11 @@
 - (void)startEcho:(NSOutputStream*)stream;
 - (void)stopEcho;
 
+- (void)changeReverb:(BOOL)on;
+- (void)changeLimiter:(BOOL)on;
+- (void)changeExpander:(BOOL)on;
+- (void)changeRecordingGain:(float)val;
+
 - (void)startup;
 - (void)shutdown;
 @end

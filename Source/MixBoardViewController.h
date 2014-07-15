@@ -20,6 +20,11 @@
 - (IBAction)advertiseChanged:(id)sender;
 - (IBAction)browseChanged:(id)sender;
 - (IBAction)micChanged:(id)sender;
+- (IBAction)logToApiChanged:(id)sender;
+- (IBAction)reverbChanged:(id)sender;
+- (IBAction)gainChanged:(id)sender;
+- (IBAction)limiterChanged:(id)sender;
+- (IBAction)expanderChanged:(id)sender;
 
 
 @end

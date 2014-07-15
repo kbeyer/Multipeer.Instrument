@@ -310,4 +310,29 @@
         [[MPIGameManager instance] stopEcho];
     }
 }
+
+- (IBAction)logToApiChanged:(id)sender {
+    UISwitch* apiSwitch = (UISwitch*)sender;
+    if (apiSwitch.isOn) {
+        [MPIEventLogger sharedInstance].logDestination = MPILogDestinationAPI;
+    } else {
+        [MPIEventLogger sharedInstance].logDestination = MPILogDestinationConsole;
+    }
+}
+
+- (IBAction)reverbChanged:(id)sender {
+    [[MPIGameManager instance] changeReverb:((UISwitch*)sender).isOn];
+}
+
+- (IBAction)gainChanged:(id)sender {
+    [[MPIGameManager instance] changeRecordingGain:((UISlider*)sender).value];
+}
+
+- (IBAction)limiterChanged:(id)sender {
+    [[MPIGameManager instance] changeLimiter:((UISwitch*)sender).isOn];
+}
+
+- (IBAction)expanderChanged:(id)sender {
+    [[MPIGameManager instance] changeExpander:((UISwitch*)sender).isOn];
+}
 @end

@@ -373,6 +373,23 @@ static int const kTimeSyncIterations = 10;
     [_sessionController sendMessage:@"7" value:[[NSNumber alloc] initWithInt:0] toPeer:peerID];
 }
 
+- (void) changeReverb:(BOOL)on
+{
+    [_audioManager enableReverb:on];
+}
+- (void) changeLimiter:(BOOL)on
+{
+    [_audioManager enableLimiter:on];
+}
+- (void) changeExpander:(BOOL)on
+{
+    [_audioManager enableExpander:on];
+}
+- (void) changeRecordingGain:(float)val
+{
+    _audioManager.recordingGain = val;
+}
+
 - (void) startup
 {
     [_sessionController startup];

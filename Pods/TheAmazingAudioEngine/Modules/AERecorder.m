@@ -35,6 +35,7 @@ NSString * kAERecorderErrorKey = @"error";
 @interface AERecorder () {
     BOOL _recording;
     AudioBufferList *_buffer;
+    float _recordingGain;
 }
 @property (nonatomic, retain) AEMixerBuffer *mixer;
 @property (nonatomic, retain) AEAudioFileWriter *writer;
@@ -56,6 +57,7 @@ NSString * kAERecorderErrorKey = @"error";
         [_mixer setAudioDescription:*AEAudioControllerInputAudioDescription(audioController) forSource:AEAudioSourceInput];
     }
     _buffer = AEAllocateAndInitAudioBufferList(audioController.audioDescription, 0);
+    _recordingGain = 1.0;
     
     return self;
 }
@@ -67,6 +69,13 @@ NSString * kAERecorderErrorKey = @"error";
     [super dealloc];
 }
 
+
+-(BOOL)beginRecordingToFileAtPath:(NSString *)path fileType:(AudioFileTypeID)fileType withGain:(float)gain error:(NSError **)error
+{
+    NSLog(@"beginRecordingToFileAtPath with gain %f", gain);
+    _recordingGain = gain;
+    return [self beginRecordingToFileAtPath:path fileType:fileType error:error];
+}
 -(BOOL)beginRecordingToFileAtPath:(NSString *)path fileType:(AudioFileTypeID)fileType error:(NSError **)error {
     BOOL result = [self prepareRecordingToFileAtPath:path fileType:fileType error:error];
     _recording = YES;
@@ -124,7 +133,11 @@ static void audioCallback(id                        receiver,
     
     THIS->_currentTime += AEConvertFramesToSeconds(audioController, frames);
     
+    
     AEMixerBufferDequeue(THIS->_mixer, THIS->_buffer, &bufferLength, NULL);
+    
+    // add gain to mixer output
+    [THIS processBuffer:audio];
     
     if ( bufferLength > 0 ) {
         OSStatus status = AEAudioFileWriterAddAudio(THIS->_writer, THIS->_buffer, bufferLength);
@@ -139,6 +152,71 @@ static void audioCallback(id                        receiver,
 
 -(AEAudioControllerAudioCallback)receiverCallback {
     return audioCallback;
+}
+
+-(void)processBuffer: (AudioBufferList*) audioBufferList
+{
+    
+    for ( int i=0; i < self->_buffer->mNumberBuffers; i++ ) {
+        //AudioBuffer sourceBuffer = audioBufferList->mBuffers[i];
+        
+        /**
+         Here we modify the raw data buffer now.
+         In my example this is a simple input volume gain.
+         iOS 5 has this on board now, but as example quite good.
+         */
+        SInt16 *editBuffer = audioBufferList->mBuffers[i].mData;
+        
+        // loop over every packet
+        for (int nb = 0; nb < (audioBufferList->mBuffers[i].mDataByteSize / 2); nb++) {
+            
+            // we check if the gain has been modified to save resoures
+            if (_recordingGain != 0) {
+                // we need more accuracy in our calculation so we calculate with doubles
+                double gainSample = ((double)editBuffer[nb]) / 32767.0;
+                
+                /*
+                 at this point we multiply with our gain factor
+                 we dont make a addition to prevent generation of sound where no sound is.
+                 
+                 no noise
+                 0*10=0
+                 
+                 noise if zero
+                 0+10=10
+                 */
+                gainSample *= _recordingGain;
+                
+                /**
+                 our signal range cant be higher or lesser -1.0/1.0
+                 we prevent that the signal got outside our range
+                 */
+                gainSample = (gainSample < -1.0) ? -1.0 : (gainSample > 1.0) ? 1.0 : gainSample;
+                
+                /*
+                 This thing here is a little helper to shape our incoming wave.
+                 The sound gets pretty warm and better and the noise is reduced a lot.
+                 Feel free to outcomment this line and here again.
+                 
+                 You can see here what happens here http://silentmatt.com/javascript-function-plotter/
+                 Copy this to the command line and hit enter: plot y=(1.5*x)-0.5*x*x*x
+                 */
+                
+                gainSample = (1.5 * gainSample) - 0.5 * gainSample * gainSample * gainSample;
+                
+                // multiply the new signal back to short
+                gainSample = gainSample * 32767.0;
+                
+                // write calculate sample back to the buffer
+                editBuffer[nb] = (SInt16)gainSample;
+            }
+        }
+        
+        
+        // copy incoming audio data to the audio buffer
+        memcpy(_buffer->mBuffers[i].mData, audioBufferList->mBuffers[i].mData, audioBufferList->mBuffers[i].mDataByteSize);
+    }
+    
 }
 
 @end
