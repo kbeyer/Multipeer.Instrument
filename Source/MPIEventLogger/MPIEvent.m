@@ -71,7 +71,7 @@
         // initialize all properties
         _logLevel = level;
         _source = source;
-        _description = description;
+        description = description;
         _tags = tags;
         _start = start;
         _end = end;
@@ -83,7 +83,7 @@
 }
 
 - (BOOL)isValid {
-    return _source != nil && _start != nil && _description != nil;
+    return _source != nil && _start != nil;
 }
 
 @end
