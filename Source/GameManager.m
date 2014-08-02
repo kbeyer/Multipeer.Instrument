@@ -175,12 +175,12 @@ static int const kHearbeatIntervalSeconds = 2;
 
 - (void)session:(MPISessionController *)session didChangeState:(MPILocalSessionState)state
 {
-    NSLog(@"LocalSession changed state: %ld", state);
+    MPIDebug(@"LocalSession changed state: %ld", state);
 }
 
 - (void)peer:(MCPeerID *)peerID didChangeState:(MPIPeerState)state
 {
-    NSLog(@"Peer (%@) changed state: %ld", peerID.displayName, state);
+    MPIDebug(@"Peer (%@) changed state: %ld", peerID.displayName, state);
     
     // then add to appropriate collection
     switch(state) {
@@ -264,7 +264,7 @@ static int const kHearbeatIntervalSeconds = 2;
     [_sessionController sendMessage:@"5" value:val toPeer:peerID];
 }
 
-- (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type {
+- (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type fromPeer:(id)fromPeerID {
     
     NSError *error = nil;
     if ([type isEqualToString:@"1"]) {
@@ -324,6 +324,14 @@ static int const kHearbeatIntervalSeconds = 2;
         // TODO: save heartbeat timestamp with peer state
         // AND: queue up response
         //
+        
+        if ([_connectingPeers containsObject:fromPeerID]) {
+            // on receipt of first heartbeat ... we know the time sync is complete
+            // notify that peer state is connected and ready to engage
+            [_sessionController.delegate peer:fromPeerID didChangeState:MPIPeerStateConnected];
+        } else if ([_disconnectedPeers containsObject:fromPeerID]) {
+            MPIWarn(@"Heartbeat received from disconnected peer %@", fromPeerID);
+        }
         
     }
 }

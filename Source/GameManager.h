@@ -44,7 +44,7 @@
 // @return NO if timesync should continue, YES if it is complete
 - (BOOL)recievedTimestamp:(id)playerID value:(NSNumber*)val;
 
-- (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type;
+- (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type fromPeer:(id)fromPeerID;
 
 - (void)startPlayRecordingFor:(NSString*)playerID;
 - (void)startRecordMicFor:(NSString*)playerID;

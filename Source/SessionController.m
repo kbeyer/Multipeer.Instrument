@@ -294,7 +294,7 @@ static double const kInitialAdvertiseSeconds = 7.0f;
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
     
-    MPIDebug(@"Peer [%@] changed state to %@.  There are now %d connected.", peerID.displayName, [self stringForPeerConnectionState:state], self.session.connectedPeers.count);
+    MPIDebug(@"Peer [%@] changed state to %@.  There are now %lu connected.", peerID.displayName, [self stringForPeerConnectionState:state], (unsigned long)self.session.connectedPeers.count);
     
     switch (state)
     {
@@ -381,7 +381,8 @@ static double const kInitialAdvertiseSeconds = 7.0f;
         
         NSString* description = [NSString stringWithFormat:@"%@ sent %@", nearbyPeerID.displayName, action];
         NSArray* tags = [[NSArray alloc] initWithObjects:@"Message", action, nil];
-        MPIEventPersistence status = [[MPIEventLogger sharedInstance] debug:source description:description tags:tags start:start end:end data:obj];
+        //MPIEventPersistence status =
+        [[MPIEventLogger sharedInstance] debug:source description:description tags:tags start:start end:end data:obj];
         
         // handle sync and time messages differently
         if([action isEqualToString:@"Sync Request"]) {
@@ -412,14 +413,9 @@ static double const kInitialAdvertiseSeconds = 7.0f;
                 }
                 
             }
-        } else if([action isEqualToString:@"Heartbeat"]) {
-            // on receipt of first heartbeat ... we know the time sync is complete
-            // notify that peer state is connected and ready to engage
-            [self.delegate peer:nearbyPeerID didChangeState:MPIPeerStateConnected];
-            
         } else {
             // default is to let the game manager handle the message
-            [[MPIGameManager instance] handleActionRequest:obj type:msgType];
+            [[MPIGameManager instance] handleActionRequest:obj type:msgType fromPeer:nearbyPeerID];
         }
         
     }
