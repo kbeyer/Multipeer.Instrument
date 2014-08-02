@@ -15,6 +15,15 @@
     #import <Foundation/Foundation.h>
     #import "MPIEventLogger.h"
 
-    #define NSLog(__FORMAT__, ...) MPILog([NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithFormat:(@"[Line %d] " __FORMAT__), __LINE__, ##__VA_ARGS__])
+    // re-route NSLog to MPIEventLogger with default level of INFO
+    #define NSLog(__FORMAT__, ...) MPILog(MPILoggerLevelInfo, [NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithFormat:(@"[Line %d] " __FORMAT__), __LINE__, ##__VA_ARGS__])
+
+    //
+    // custom log methods to simplify capture of source function, line number, and level
+    #define MPIDebug(__FORMAT__, ...) MPILog(MPILoggerLevelDebug, [NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithFormat:(@"[Line %d] " __FORMAT__), __LINE__, ##__VA_ARGS__])
+    #define MPIInfo(__FORMAT__, ...) MPILog(MPILoggerLevelInfo, [NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithFormat:(@"[Line %d] " __FORMAT__), __LINE__, ##__VA_ARGS__])
+    #define MPIWarn(__FORMAT__, ...) MPILog(MPILoggerLevelWarn, [NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithFormat:(@"[Line %d] " __FORMAT__), __LINE__, ##__VA_ARGS__])
+    #define MPIError(__FORMAT__, ...) MPILog(MPILoggerLevelError, [NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithFormat:(@"[Line %d] " __FORMAT__), __LINE__, ##__VA_ARGS__])
+    #define MPIFatal(__FORMAT__, ...) MPILog(MPILoggerLevelFatal, [NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithFormat:(@"[Line %d] " __FORMAT__), __LINE__, ##__VA_ARGS__])
 
 #endif

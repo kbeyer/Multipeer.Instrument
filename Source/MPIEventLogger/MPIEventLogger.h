@@ -11,15 +11,6 @@
 
 #undef MPILog
 
-#if __cplusplus
-extern "C" {
-#endif
-    /* Override for NSLog */
-    void MPILog(NSString* source, NSString *description);
-#if __cplusplus
-}
-#endif
-
 // available log destinations
 typedef NS_ENUM(NSUInteger, MPILogDestination) {
     MPILogDestinationConsole,
@@ -45,8 +36,15 @@ typedef NS_ENUM(NSUInteger, MPIEventPersistence) {
     MPIEventPersistenceError
 };
 
+#if __cplusplus
+extern "C" {
+#endif
+    /* Override for NSLog */
+    void MPILog(MPILoggerLevel level, NSString* source, NSString *description);
+#if __cplusplus
+}
+#endif
 
-//void MPILog(NSString* source, NSString* format, ...);
 
 @interface MPIEventLogger : NSObject
 

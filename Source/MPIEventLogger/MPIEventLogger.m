@@ -11,9 +11,9 @@
 #import "Reachability.h"
 
 /* Override for NSLog */
-void MPILog(NSString *source, NSString* description)
+void MPILog(MPILoggerLevel level, NSString *source, NSString* description)
 {
-    [[MPIEventLogger sharedInstance] log:source description:description];
+    [[MPIEventLogger sharedInstance] log:level source:source description:description];
 }
 
 
