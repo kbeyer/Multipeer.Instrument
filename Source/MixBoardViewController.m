@@ -314,7 +314,7 @@
 - (IBAction)logToApiChanged:(id)sender {
     UISwitch* apiSwitch = (UISwitch*)sender;
     if (apiSwitch.isOn) {
-        [MPIEventLogger sharedInstance].logDestination = MPILogDestinationAPI;
+        [MPIEventLogger sharedInstance].logDestination = MPILogDestinationALL;
     } else {
         [MPIEventLogger sharedInstance].logDestination = MPILogDestinationConsole;
     }
