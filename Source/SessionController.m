@@ -73,23 +73,7 @@ static double const kInitialAdvertiseSeconds = 7.0f;
         }
         
         
-        
         _invitations = [[NSMutableDictionary alloc] init];
-        
-        /*
-        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-        
-        // Register for notifications
-        [defaultCenter addObserver:self
-                          selector:@selector(startServices)
-                              name:UIApplicationWillEnterForegroundNotification
-                            object:nil];
-        
-        [defaultCenter addObserver:self
-                          selector:@selector(stopServices)
-                              name:UIApplicationDidEnterBackgroundNotification
-                            object:nil];
-         */
         
         _displayName = _peerID.displayName;
     }
@@ -164,7 +148,19 @@ static double const kInitialAdvertiseSeconds = 7.0f;
                         toPeers:peers
                        withMode:MCSessionSendDataReliable
                           error:&error]) {
-        NSLog(@"[Error] sending data %@", error);
+        MPIError(@"[Error] sending data %@", error);
+        // if code is 1, then peer is not reachable
+        //
+        // TODO: how to handle case of single peer causing error?
+        //
+        if (error.code == 1) {
+            for ( int i = 0; i < peers.count; i++) {
+                [self.delegate peer:peers[i] didChangeState:MPIPeerStateDisconnected];
+            }
+        }
+        
+        // don't continue if there was an error
+        return;
     }
     
     // log to server
@@ -187,8 +183,7 @@ static double const kInitialAdvertiseSeconds = 7.0f;
     _session = [[MCSession alloc] initWithPeer:self.peerID];
     self.session.delegate = self;
     
-    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
-    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"created session for peerID: %@", self.peerID.displayName]];
+    MPIDebug(@"created session for peerID: %@", self.peerID.displayName);
     
     // update local state
     _mySessionState = MPILocalSessionStateCreated;
@@ -214,8 +209,7 @@ static double const kInitialAdvertiseSeconds = 7.0f;
 
 - (void)shutdown
 {
-    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
-    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"teardown session for peerID: %@", self.peerID.displayName]];
+    MPIDebug(@"teardown session for peerID: %@", self.peerID.displayName);
     
     [self.session disconnect];
     
@@ -239,8 +233,7 @@ static double const kInitialAdvertiseSeconds = 7.0f;
                                                                  serviceType:kMCSessionServiceType];
         self.serviceAdvertiser.delegate = self;
         
-        NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
-        [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"created advertiser for peerID: %@", self.peerID.displayName]];
+        MPIDebug(@"created advertiser for peerID: %@", self.peerID.displayName);
     }
     
     NSLog(@"startAdvertising");
@@ -250,7 +243,7 @@ static double const kInitialAdvertiseSeconds = 7.0f;
 }
 - (void)stopAdvertising
 {
-    NSLog(@"stopAdvertising");
+    MPIDebug(@"stopAdvertising");
     if (_serviceAdvertiser != nil) { [self.serviceAdvertiser stopAdvertisingPeer]; }
     
     // TODO: double check appropriate next state on advertise stop
@@ -264,18 +257,17 @@ static double const kInitialAdvertiseSeconds = 7.0f;
                                                            serviceType:kMCSessionServiceType];
         self.serviceBrowser.delegate = self;
         
-        NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
-        [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"created browser for peerID: %@", self.peerID.displayName]];
+        MPIDebug(@"created browser for peerID: %@", self.peerID.displayName);
     }
     
-    NSLog(@"startBrowsing");
+    MPIDebug(@"startBrowsing");
     [self.serviceBrowser startBrowsingForPeers];
     
     _mySessionState = MPILocalSessionStateBrowsing;
 }
 - (void)stopBrowsing
 {
-    NSLog(@"stopBrowsing");
+    MPIDebug(@"stopBrowsing");
     if (_serviceBrowser != nil) { [self.serviceBrowser stopBrowsingForPeers]; }
     
     // TODO: double check appropriate next state on browsing stop
@@ -293,8 +285,7 @@ static double const kInitialAdvertiseSeconds = 7.0f;
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
     
-    NSString* source = [[NSString alloc] initWithUTF8String:__PRETTY_FUNCTION__];
-    [[MPIEventLogger sharedInstance] debug:source description:[NSString stringWithFormat:@"Peer [%@] changed state to %@", peerID.displayName, [self stringForPeerConnectionState:state]]];
+    MPIDebug(@"Peer [%@] changed state to %@.  There are now %d connected.", peerID.displayName, [self stringForPeerConnectionState:state], self.session.connectedPeers.count);
     
     switch (state)
     {
@@ -540,11 +531,10 @@ static double const kInitialAdvertiseSeconds = 7.0f;
 
 - (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
-    MPIDebug(@"lostPeer %@", peerID.displayName);
+    MPIDebug(@"lostPeer %@, now have %d connected peers", peerID.displayName, self.session.connectedPeers.count);
     
     // update peer connection state
     [self.delegate peer:peerID didChangeState:MPIPeerStateDisconnected];
-    
 }
 
 - (void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error
