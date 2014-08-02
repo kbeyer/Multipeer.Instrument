@@ -69,9 +69,12 @@ typedef NS_ENUM(NSInteger, MPILocalSessionState) {
 - (void)sendTimestamp:(NSNumber*)val toPeer:(MCPeerID*)peer;
 // overloads for sending message with type and val to a single or multiple peers
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeer:(MCPeerID*)peer;
+- (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeer:(MCPeerID*)peer asReliable:(BOOL)reliable;
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeers:(NSArray*)peers;
+- (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeers:(NSArray*)peers asReliable:(BOOL)reliable;
 - (void)sendMessage:(id)msg toPeer:(MCPeerID*)peer;
 - (void)sendMessage:(id)msg toPeers:(NSArray*)peers;
+- (void)sendMessage:(id)msg toPeers:(NSArray*)peers asReliable:(BOOL)reliable;
 
 // send audio file to peer
 - (void)sendAudioFileAtPath:(NSString*)filePath toPeer:(id)peerID;

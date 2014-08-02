@@ -106,16 +106,22 @@ static double const kInitialAdvertiseSeconds = 7.0f;
     [self sendMessage:@"4" value:time toPeer:peer];
 }
 
-- (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeer:(MCPeerID*)peer{
+- (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeer:(MCPeerID*)peer {
+    [self sendMessage:type value:val toPeer:peer asReliable:YES];
+}
+- (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeer:(MCPeerID*)peer asReliable:(BOOL)reliable {
     
     // convert single peer to array
     NSArray *peers = [[NSArray alloc] initWithObjects:peer, nil];
     
     // call overriden method
-    [self sendMessage:type value:val toPeers:peers];
+    [self sendMessage:type value:val toPeers:peers asReliable:reliable];
 }
 
 - (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeers:(NSArray *)peers{
+    [self sendMessage:type value:val toPeers:peers asReliable:YES];
+}
+- (void)sendMessage:(NSString*)type value:(NSNumber*)val toPeers:(NSArray *)peers asReliable:(BOOL)reliable {
     NSDate* sendDt = [NSDate date];
     // create message object
     MPIMessage *msg = [[MPIMessage alloc] init];
@@ -136,6 +142,9 @@ static double const kInitialAdvertiseSeconds = 7.0f;
 }
 
 - (void) sendMessage:(id)msg toPeers:(NSArray *)peers {
+    [self sendMessage:msg toPeers:peers asReliable:YES];
+}
+- (void) sendMessage:(id)msg toPeers:(NSArray *)peers asReliable:(BOOL)reliable {
      
     // serialize as JSON dictionary
     NSDictionary* json = [MTLJSONAdapter JSONDictionaryFromModel:msg];
@@ -146,7 +155,7 @@ static double const kInitialAdvertiseSeconds = 7.0f;
     // send message to specified peers ... using current session
     if (![self.session sendData:msgData
                         toPeers:peers
-                       withMode:MCSessionSendDataReliable
+                       withMode:(reliable ? MCSessionSendDataReliable : MCSessionSendDataUnreliable)
                           error:&error]) {
         MPIError(@"[Error] sending data %@", error);
         // if code is 1, then peer is not reachable
@@ -529,9 +538,19 @@ static double const kInitialAdvertiseSeconds = 7.0f;
     }
 }
 
+- (NSString*)printSessionConnectedPeers
+{
+    NSString* output = @"";
+    for (int i = 0; i < self.session.connectedPeers.count; i++) {
+        MCPeerID* peerID = self.session.connectedPeers[i];
+        output = [output stringByAppendingString:peerID.displayName];
+    }
+    return output;
+}
+
 - (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
-    MPIDebug(@"lostPeer %@, now have %d connected peers", peerID.displayName, self.session.connectedPeers.count);
+    MPIDebug(@"lostPeer %@. session.connectedPeers: %@", peerID.displayName, [self printSessionConnectedPeers]);
     
     // update peer connection state
     [self.delegate peer:peerID didChangeState:MPIPeerStateDisconnected];
