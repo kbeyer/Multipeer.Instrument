@@ -17,10 +17,12 @@
 @property (nonatomic, strong) MPIAudioManager *audioManager;
 @property double lastSendTimestamp;
 @property (nonatomic, strong) NSMutableArray *timeLatencies;
+@property (nonatomic, strong) NSTimer* heartbeatTimer;
 @end
 
 
 static int const kTimeSyncIterations = 10;
+static int const kHearbeatIntervalSeconds = 2;
 
 @implementation MPIGameManager
 
@@ -180,36 +182,47 @@ static int const kTimeSyncIterations = 10;
 {
     NSLog(@"Peer (%@) changed state: %ld", peerID.displayName, state);
     
-    // default to removing from all collections
-    [self.connectingPeers removeObject:peerID];
-    [self.connectedPeers removeObject:peerID];
-    [self.disconnectedPeers removeObject:peerID];
-    
     // then add to appropriate collection
     switch(state) {
         case MPIPeerStateConnected:
             [self.connectedPeers addObject:peerID];
+            [self.connectingPeers removeObject:peerID];
+            [self.disconnectedPeers removeObject:peerID];
             break;
         case MPIPeerStateDisconnected:
             [self.disconnectedPeers addObject:peerID];
+            [self.connectingPeers removeObject:peerID];
+            [self.connectedPeers removeObject:peerID];
             break;
         case MPIPeerStateDiscovered:
             [self.connectingPeers addObject:peerID];
+            [self.connectedPeers removeObject:peerID];
+            [self.disconnectedPeers removeObject:peerID];
             break;
         case MPIPeerStateInvited:
             [self.connectingPeers addObject:peerID];
+            [self.connectedPeers removeObject:peerID];
+            [self.disconnectedPeers removeObject:peerID];
             break;
         case MPIPeerStateInviteAccepted:
             [self.connectedPeers addObject:peerID];
+            [self.connectingPeers removeObject:peerID];
+            [self.disconnectedPeers removeObject:peerID];
             break;
         case MPIPeerStateInviteDeclined:
             [self.disconnectedPeers addObject:peerID];
+            [self.connectingPeers removeObject:peerID];
+            [self.connectedPeers removeObject:peerID];
             break;
         case MPIPeerStateSyncingTime:
             [self.connectingPeers addObject:peerID];
+            [self.connectedPeers removeObject:peerID];
+            [self.disconnectedPeers removeObject:peerID];
             break;
         case MPIPeerStateStale:
             [self.disconnectedPeers addObject:peerID];
+            [self.connectingPeers removeObject:peerID];
+            [self.connectedPeers removeObject:peerID];
             break;
     }
     
@@ -242,10 +255,10 @@ static int const kTimeSyncIterations = 10;
     [_sessionController sendMessage:@"1" value:val toPeer:peerID];
 }
 - (void)requestSoundChange:(id)peerID value:(NSNumber*)val {
-    [_sessionController sendMessage:@"2" value:val toPeer:peerID];
+    [_sessionController sendMessage:@"2" value:val toPeer:peerID asReliable:NO];
 }
 - (void)requestColorChange:(id)peerID value:(NSNumber*)val {
-    [_sessionController sendMessage:@"3" value:val toPeer:peerID];
+    [_sessionController sendMessage:@"3" value:val toPeer:peerID asReliable:NO];
 }
 - (void)requestTimeSync:(id)peerID value:(NSNumber *)val {
     [_sessionController sendMessage:@"5" value:val toPeer:peerID];
@@ -460,6 +473,10 @@ static int const kTimeSyncIterations = 10;
 {
     [_sessionController startup];
     //[[MPIMotionManager instance] start];
+    
+    // try to send heartbeat to all connected peers
+    _heartbeatTimer = [NSTimer scheduledTimerWithTimeInterval:kHearbeatIntervalSeconds target:self
+                                                     selector:@selector(broadcastHeartbeat:) userInfo:nil repeats:YES];
 }
 - (void) shutdown
 {
@@ -474,14 +491,28 @@ static int const kTimeSyncIterations = 10;
     [self.disconnectedPeers removeAllObjects];
 }
 
+// every kHeartbeatIntervalSeconds ... to all peers
+- (void) broadcastHeartbeat:(NSTimer *)incomingTimer
+{
+    double timestamp = [[NSDate date] timeIntervalSince1970];
+    // NOTE: sending to each individually ... to enable better understanding of connection status via send msg error
+    for (int i = 0; i < _connectedPeers.count; i++) {
+        MCPeerID* peerID = _connectedPeers[i];
+        [_sessionController sendMessage:@"8" value:[[NSNumber alloc] initWithDouble:timestamp] toPeer:peerID asReliable:NO];
+    }
+}
+
+// one time ... on sync complete
 - (void) startHeartbeatWithPeer:(id)peerID
 {
     double timestamp = [[NSDate date] timeIntervalSince1970];
-    [_sessionController sendMessage:@"8" value:[[NSNumber alloc] initWithDouble:timestamp] toPeer:peerID];
+    [_sessionController sendMessage:@"8" value:[[NSNumber alloc] initWithDouble:timestamp] toPeer:peerID asReliable:NO];
     
     //
-    // TODO: expect response
+    // TODO: expect response ??
+    // NO: ... for now we are just sending without expectation
     //
+    
 }
 
 @end
