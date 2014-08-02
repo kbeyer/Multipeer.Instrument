@@ -20,8 +20,8 @@ typedef NS_ENUM(NSUInteger, MPILoggerLevel);
 @property (nonatomic, copy) NSString* deviceID;
 // tags are used as non-herarchical categories for events
 @property (nonatomic, copy) NSArray* tags;
-// the description is used as display string and console text
-@property (nonatomic, copy) NSString* description;
+// the displayText is used as display string and console text
+@property (nonatomic, copy) NSString* displayText;
 // the start time is when the event happened
 @property (nonatomic, copy) NSDate* start;
 // (optional) the end time is used to calculate duration where applicable
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, MPILoggerLevel);
 // overloaded init method to create MPIEvent from MPIEventLogger.log methods
 - (id)init:(MPILoggerLevel)level
     source:(NSString*)source
-description:(NSString*)description
+displayText:(NSString*)displayText
       tags:(NSArray*)tags
      start:(NSDate*)start
        end:(NSDate*)end

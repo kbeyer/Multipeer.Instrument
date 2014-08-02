@@ -38,7 +38,7 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
              @"source": @"source",
-             @"description": @"description",
+             @"displayText": @"description",
              @"start": @"start",
              @"end": @"end",
              @"tags": @"tags",
@@ -54,11 +54,11 @@
  * The log functions are overloaded to help create with default values
  *
  * @param source - string to identify the source of the Event
- * @param description - friendly display text for the Event
+ * @param displayText - friendly display text for the Event
  */
 - (id)init:(MPILoggerLevel)level
             source:(NSString*)source
-            description:(NSString*)description
+            displayText:(NSString*)displayText
             tags:(NSArray*)tags
             start:(NSDate*)start
             end:(NSDate*)end
@@ -71,7 +71,7 @@
         // initialize all properties
         _logLevel = level;
         _source = source;
-        description = description;
+        _displayText = displayText;
         _tags = tags;
         _start = start;
         _end = end;
@@ -83,7 +83,7 @@
 }
 
 - (BOOL)isValid {
-    return _source != nil && _start != nil;
+    return _source != nil && _start != nil && _displayText != nil;
 }
 
 @end

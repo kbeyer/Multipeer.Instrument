@@ -167,7 +167,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [MPIGameManager instance].sessionController.connectedPeers.count;
+    return [MPIGameManager instance].connectedPeers.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -175,7 +175,7 @@
     static NSString *CellIdentifier = @"PlayerCell";
     MPIMixBoardTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    NSArray *peers = [MPIGameManager instance].sessionController.connectedPeers;
+    NSArray *peers = [[MPIGameManager instance].connectedPeers array];
     NSInteger peerIndex = indexPath.row;
     if ((peers.count > 0) && (peerIndex < peers.count))
     {
@@ -236,7 +236,7 @@
     // TODO: refactor type into MPISongInfoMessage object
     info.type = @"6";
     info.createdAt = [[MPIEventLogger sharedInstance] timeWithOffset:[NSDate date]];
-    NSArray *peers = [[MPIGameManager instance].sessionController connectedPeers];
+    NSArray *peers = [[MPIGameManager instance].connectedPeers array];
     
     // TODO: send song info and stream to all peers
     if (peers.count) {
@@ -296,7 +296,7 @@
     UISwitch* micSwitch = (UISwitch*)sender;
     
     if (micSwitch.isOn) {
-        NSArray *peers = [[MPIGameManager instance].sessionController connectedPeers];
+        NSArray *peers = [[MPIGameManager instance].connectedPeers array];
         NSOutputStream *outputStream = nil;
         
         //

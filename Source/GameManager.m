@@ -35,6 +35,17 @@ static int const kTimeSyncIterations = 10;
 }
 
 - (void)configure {
+    
+    
+    //
+    // TODO: refactor into single list with [PeerID, State]
+    //
+    _connectingPeers = [[NSMutableOrderedSet alloc] init];
+    _connectedPeers = [[NSMutableOrderedSet alloc] init];
+    _disconnectedPeers = [[NSMutableOrderedSet alloc] init];
+    
+    
+    
     // configure MCSession handling
     _sessionController = [[MPISessionController alloc] init];
     self.sessionController.delegate = self;
@@ -84,7 +95,7 @@ static int const kTimeSyncIterations = 10;
     return [NSDate dateWithTimeIntervalSinceNow:_timeDeltaSeconds];
 }
 
-- (void)recievedTimestamp:(id)playerID value:(NSNumber *)val
+- (BOOL)recievedTimestamp:(id)playerID value:(NSNumber *)val
 {
     NSLog(@"%lu", (unsigned long)_timeLatencies.count);
     
@@ -115,7 +126,9 @@ static int const kTimeSyncIterations = 10;
         [MPIEventLogger sharedInstance].timeDeltaSeconds = _timeDeltaSeconds;
         
         NSLog(@"TimeSync Complete. Delta: %f", _timeDeltaSeconds);
-        return;
+        
+        // tell caller that we are done
+        return YES;
         
     } else if (_timeLatencies.count == 1) {
         
@@ -132,6 +145,8 @@ static int const kTimeSyncIterations = 10;
     
     //NSLog(@"local: %f, server: %f, latency: %f, lastSend: %f",
     //      localTimestamp, serverTimestamp, latency, _lastSendTimestamp);
+    
+    return NO;
     
 }
 
@@ -156,13 +171,54 @@ static int const kTimeSyncIterations = 10;
 
 #pragma mark - SessionControllerDelegate protocol conformance
 
-- (void)sessionDidChangeState
+- (void)session:(MPISessionController *)session didChangeState:(MPILocalSessionState)state
 {
+    NSLog(@"LocalSession changed state: %ld", state);
+}
+
+- (void)peer:(MCPeerID *)peerID didChangeState:(MPIPeerState)state
+{
+    NSLog(@"Peer (%@) changed state: %ld", peerID.displayName, state);
+    
+    // default to removing from all collections
+    [self.connectingPeers removeObject:peerID];
+    [self.connectedPeers removeObject:peerID];
+    [self.disconnectedPeers removeObject:peerID];
+    
+    // then add to appropriate collection
+    switch(state) {
+        case MPIPeerStateConnected:
+            [self.connectedPeers addObject:peerID];
+            break;
+        case MPIPeerStateDisconnected:
+            [self.disconnectedPeers addObject:peerID];
+            break;
+        case MPIPeerStateDiscovered:
+            [self.connectingPeers addObject:peerID];
+            break;
+        case MPIPeerStateInvited:
+            [self.connectingPeers addObject:peerID];
+            break;
+        case MPIPeerStateInviteAccepted:
+            [self.connectedPeers addObject:peerID];
+            break;
+        case MPIPeerStateInviteDeclined:
+            [self.disconnectedPeers addObject:peerID];
+            break;
+        case MPIPeerStateSyncingTime:
+            [self.connectingPeers addObject:peerID];
+            break;
+        case MPIPeerStateStale:
+            [self.disconnectedPeers addObject:peerID];
+            break;
+    }
+    
     // Ensure UI updates occur on the main queue.
     dispatch_async(dispatch_get_main_queue(), ^{
         [self notifyPlayersChange];
     });
 }
+
 
 - (void)session:(MPISessionController *)session didReceiveAudioStream:(NSInputStream *)stream
 {
@@ -245,6 +301,16 @@ static int const kTimeSyncIterations = 10;
         MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
         // start / stop play of recording
         [_audioManager muteLoop:![msg.val boolValue] name:[_sessionController displayName]];
+        
+    } else if ([type isEqualToString:@"8"]) {
+        
+        //MPIMessage *msg = [MTLJSONAdapter modelOfClass:[MPIMessage class] fromJSONDictionary:json error:&error];
+        //NSLog(@"Received hearbeat from %@", msg.senderID);
+        
+        //
+        // TODO: save heartbeat timestamp with peer state
+        // AND: queue up response
+        //
         
     }
 }
@@ -401,6 +467,21 @@ static int const kTimeSyncIterations = 10;
     [_avSession stopRunning];
     _avSession = nil;
     [[MPIMotionManager instance] stop];
+    
+    
+    [self.connectingPeers removeAllObjects];
+    [self.connectedPeers removeAllObjects];
+    [self.disconnectedPeers removeAllObjects];
+}
+
+- (void) startHeartbeatWithPeer:(id)peerID
+{
+    double timestamp = [[NSDate date] timeIntervalSince1970];
+    [_sessionController sendMessage:@"8" value:[[NSNumber alloc] initWithDouble:timestamp] toPeer:peerID];
+    
+    //
+    // TODO: expect response
+    //
 }
 
 @end

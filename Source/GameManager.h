@@ -26,6 +26,11 @@
 - (NSDate*)currentTime;
 
 
+@property (nonatomic, readonly) NSMutableOrderedSet *connectingPeers;
+@property (nonatomic, readonly) NSMutableOrderedSet *connectedPeers;
+@property (nonatomic, readonly) NSMutableOrderedSet *disconnectedPeers;
+
+
 @property (readwrite) NSNumber* volume;
 @property (readwrite) NSNumber* color;
 @property (readwrite) MPISongInfoMessage *lastSongMessage;
@@ -36,7 +41,8 @@
 - (void)requestTimeSync:(id)playerID value:(NSNumber*)val;
 
 // handles time sync process
-- (void)recievedTimestamp:(id)playerID value:(NSNumber*)val;
+// @return NO if timesync should continue, YES if it is complete
+- (BOOL)recievedTimestamp:(id)playerID value:(NSNumber*)val;
 
 - (void)handleActionRequest:(NSDictionary*)json type:(NSString*)type;
 
@@ -63,4 +69,6 @@
 
 - (void)startup;
 - (void)shutdown;
+
+- (void)startHeartbeatWithPeer:(id)peerID;
 @end

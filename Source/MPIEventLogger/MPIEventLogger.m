@@ -127,7 +127,7 @@ description:(NSString*)description
     NSString* deviceName = [[UIDevice currentDevice] name];
     MPIEvent* evt = [[MPIEvent alloc] init:level
                                     source:source
-                               description:description
+                               displayText:description
                                       tags:tags
                                      start:[self timeWithOffset:start]
                                        end:[self timeWithOffset:end]
